@@ -25,6 +25,7 @@ python3 "${CLAUDE_SKILL_DIR}/autopilot.py" flatten                          # ca
 python3 "${CLAUDE_SKILL_DIR}/autopilot.py" rebalance --dry-run --no-telegram   # preview
 python3 "${CLAUDE_SKILL_DIR}/autopilot.py" rebalance --if-first-day          # scheduled, 10:05 NY
 python3 "${CLAUDE_SKILL_DIR}/autopilot.py" health --no-telegram              # monthly time machine
+python3 "${CLAUDE_SKILL_DIR}/autopilot.py" outlook --no-telegram             # 10,000 possible next months
 ```
 Capital: $10,000 basis. 50% in SPY, 50% equally across the 10 most traded stocks (20-day average over $100M, price
 over $10) with the highest 12-month return skipping the last month. Portfolio value = the
@@ -32,7 +33,11 @@ $6,000 basis + (account equity − $100,000), so it needs no stored state. Sells
 buys with dollar (fractional) market orders; differences under $25 are skipped. Plain card
 on Telegram, ending with the health check: the same rules replayed month by month over the
 last 12 months vs the S&P 500 alone (warns after 3 months in a row behind; changes nothing by
-itself). Settings in `autopilot.json` → `portfolio`. Chosen on 2026-11-13 from the
+itself), and the outlook: 10,000 simulated next months drawing random days of the last year
+for all holdings at once (real swings), with each stock's own past trend replaced by a prudent
+15%/year drift (`outlook_annual_return`), shown as typical result, 9-in-10 range, chance of a
+losing month and a 1-in-100 bad case. The outlook also goes out every Friday evening.
+Settings in `autopilot.json` → `portfolio`. Chosen on 2026-11-13 from the
 10-year backtests (`trader-research/backtest.py momentum --min-dv 1e8 --blends`).
 
 ## Day trading (`run`, `flatten`): switched off (`"day_trading": false`)

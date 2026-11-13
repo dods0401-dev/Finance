@@ -709,6 +709,77 @@ def cmd_health(args):
     return 0
 
 
+def portfolio_outlook(p, weights, value, sims=10000, horizon=21, seed=19):
+    """Time machine for the portfolio: 10,000 possible next months, built by drawing random
+    trading days of the last year (all holdings on the same day, so they move together)."""
+    import random
+    sys.path.insert(0, os.path.join(SKILLS, "trader-research"))
+    import data as D
+    syms = [x for x in weights if weights[x] > 0]
+    start = (J.now_utc().date() - dt.timedelta(days=400)).isoformat()
+    got = {}
+    for i in range(0, len(syms), 100):
+        got.update(D.bars_multi(syms[i:i + 100], "1Day", start))
+    ret = {}
+    for sym, bs in got.items():
+        c = {b["t"][:10]: b["c"] for b in bs}
+        ds = sorted(c)
+        r = {ds[k]: c[ds[k]] / c[ds[k - 1]] - 1 for k in range(1, len(ds))}
+        r = {d: v for d, v in r.items() if d >= ds[max(0, len(ds) - 253)]}
+        mu = sum(r.values()) / len(r) if r else 0.0
+        # keep the size of the swings, replace each stock's own past trend with a prudent drift
+        drift = (1 + p.get("outlook_annual_return", 0.15)) ** (1 / 252) - 1
+        ret[sym] = {d: v - mu + drift for d, v in r.items()}
+    days = sorted(set().union(*[set(r) for r in ret.values()]))[-252:] if ret else []
+    if len(days) < 120:
+        return None
+    rng = random.Random(seed)
+    outs = []
+    for _ in range(sims):
+        pick = [rng.choice(days) for _ in range(horizon)]
+        tot = 0.0
+        for sym, w in weights.items():
+            g = 1.0
+            r = ret.get(sym, {})
+            for d in pick:
+                g *= 1 + r.get(d, 0.0)
+            tot += w * g
+        outs.append(value * (tot / sum(weights.values()) - 1))
+    outs.sort()
+    q = lambda f: outs[int(f * (len(outs) - 1))]
+    return {"median": q(0.5), "p05": q(0.05), "p95": q(0.95), "p01": q(0.01),
+            "p_loss": sum(1 for x in outs if x < 0) / len(outs), "value": value}
+
+
+def outlook_text(o):
+    if not o:
+        return "🔮 Simulazione del prossimo mese non disponibile (dati insufficienti)."
+    return ("🔮 <b>Il prossimo mese, in 10.000 simulazioni</b> (oscillazioni reali dell'ultimo anno dei titoli in "
+            "portafoglio, crescita media prudente del 15%% annuo):\n"
+            "• caso tipico: <b>%s</b>\n• 9 volte su 10 tra %s e %s\n• probabilità di chiudere il mese in perdita: %d%%\n"
+            "• caso molto negativo (1 volta su 100): %s" % (
+                J.usd(round(o["median"]), True), J.usd(round(o["p05"]), True), J.usd(round(o["p95"]), True),
+                round(100 * o["p_loss"]), J.usd(round(o["p01"]), True)))
+
+
+def current_weights(p):
+    acct = J.alpaca_get("/v2/account")
+    value = float(p["basis_usd"]) + float(acct["equity"]) - float(p["account_start_equity"])
+    pos = {x["symbol"]: float(x["market_value"]) for x in J.alpaca_get("/v2/positions") or []}
+    return pos, value
+
+
+def cmd_outlook(args):
+    p = portfolio_settings()
+    pos, value = current_weights(p)
+    if not pos:
+        text = "🔮 Portafoglio ancora vuoto: la simulazione partirà dopo la prima costruzione."
+    else:
+        text = outlook_text(J.safe(portfolio_outlook, p, pos, value))
+    print(text if args.no_telegram else J.telegram(text))
+    return 0
+
+
 def cmd_rebalance(args):
     p, s = portfolio_settings(), settings()
     now = ny_now(args)
@@ -783,6 +854,7 @@ def cmd_rebalance(args):
         out.append("⚠️ Non riusciti: " + J.esc(", ".join("%s (%s)" % (x[0], x[2]) for x in failed)))
     out.append("Prossimo ribilanciamento: il primo giorno di borsa del mese prossimo.")
     out.append(health_text(J.safe(strategy_health, p, now.date())))
+    out.append(outlook_text(J.safe(portfolio_outlook, p, dict(target), sleeve)))
     text = "\n".join(out)
     print(text if args.no_telegram else J.telegram(text))
     return 0 if not failed else 1
@@ -799,12 +871,13 @@ def main(argv=None):
     for n in ("run", "flatten", "status"):
         sub.add_parser(n, parents=[common])
     sub.add_parser("health", parents=[common])
+    sub.add_parser("outlook", parents=[common])
     rb = sub.add_parser("rebalance", parents=[common])
     rb.add_argument("--if-first-day", action="store_true", help="only on the first trading day of the month")
     args = ap.parse_args(argv)
     if args.no_telegram:
         J.DRY_RUN = True
-    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance, "health": cmd_health}[args.cmd](args)
+    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance, "health": cmd_health, "outlook": cmd_outlook}[args.cmd](args)
 
 
 if __name__ == "__main__":

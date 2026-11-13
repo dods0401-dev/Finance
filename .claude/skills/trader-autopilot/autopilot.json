@@ -24,6 +24,7 @@
     "skip_days": 21,
     "min_trade_usd": 25,
     "basis_usd": 10000,
-    "account_start_equity": 100000
+    "account_start_equity": 100000,
+    "outlook_annual_return": 0.15
   }
 }
