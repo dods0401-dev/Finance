@@ -1,0 +1,12 @@
+{
+  "enabled": false,
+  "max_candidates": 40,
+  "min_price": 10,
+  "max_open_positions": 1,
+  "min_tm_avg_r": 0.05,
+  "min_history_trades": 8,
+  "max_chase_r": 0.25,
+  "targets": ["1.5R", "2R"],
+  "orb_stop": "or-mid",
+  "level_stop": "atr:1"
+}
