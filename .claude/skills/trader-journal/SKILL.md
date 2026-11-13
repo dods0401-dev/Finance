@@ -17,12 +17,32 @@ python3 "${CLAUDE_SKILL_DIR}/journal.py" review --days 7       # last week's ent
 python3 "${CLAUDE_SKILL_DIR}/journal.py" notify "test"          # Telegram test
 python3 "${CLAUDE_SKILL_DIR}/journal.py" chat-id                # find your chat id (setup)
 python3 "${CLAUDE_SKILL_DIR}/journal.py" monitor --minutes 65   # fills since, read only
+python3 "${CLAUDE_SKILL_DIR}/journal.py" morning               # morning briefing
+python3 "${CLAUDE_SKILL_DIR}/journal.py" perf --period week     # performance (day|week|month|all)
+python3 "${CLAUDE_SKILL_DIR}/journal.py" eod                   # end-of-day report
+python3 "${CLAUDE_SKILL_DIR}/journal.py" --dry-run morning     # print instead of sending
 ```
 
 The hook (`.claude/settings.json`, PostToolUse on `mcp__alpaca__place_stock_order`,
 `cancel_order_by_id`, `replace_order_by_id`, `close_position`) runs `journal.py hook`.
 It writes `trader/journal/journal.jsonl` and sends the Telegram message. It never
 blocks or changes an order.
+
+## Telegram messages (HTML, in Italian)
+- **ACQUISTO** (hook, buy order): quantity, entry, stop, target, $ risk and % of the
+  $6,000 basis, R:R, position value, setup, why, Time Machine verdict, flat-by time,
+  today's count (trades n/3, P/L, losses vs the $240 daily limit).
+- **ESEGUITO** (monitor, buy fill): fill price and time, stop/target, why.
+- **TARGET / STOP / USCITA** (monitor, position back to flat): P/L in $ and R,
+  entry → exit, duration, today's line, equity on the $6,000 basis, stop warning
+  after 2 losses in a row or the daily loss limit.
+- **POSIZIONI APERTE**, **PERFORMANCE** (day/week/month/all: P/L, W/L, win rate,
+  average R, profit factor, best/worst, max drawdown, drawdown brake),
+  **BUONGIORNO** (session hours in Italian time, futures, VIX, 10Y, oil, gold,
+  EUR/USD, BTC, movers >= $5, watchlist, account, today's rules, checklist),
+  **CHIUSURA** (today's trades + performance + open-position warning).
+Performance is rebuilt from Alpaca fills (round trips flat->long->flat, FIFO); R uses
+the plan's max_loss, else entry-stop, else the config max loss per trade.
 
 ## After each trade
 1. Add the outcome and a one-sentence lesson: append a JSON line to
