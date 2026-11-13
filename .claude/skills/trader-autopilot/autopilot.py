@@ -201,8 +201,8 @@ def guards(args, cfg, st, now):
         why.append("giorno Fed: niente entrate prima delle 14:30 NY")
     if st["entries"] >= int(cfg["max_trades_per_day"]):
         why.append("già %d trade oggi (max %d)" % (st["entries"], cfg["max_trades_per_day"]))
-    if st["streak"] >= 2:
-        why.append("2 perdite di fila: giornata chiusa")
+    if st["streak"] >= int(cfg.get("max_losses_in_a_row", 2)):
+        why.append("%d perdite di fila: giornata chiusa" % st["streak"])
     if st["losses"] >= float(cfg["max_daily_loss_usd"]):
         why.append("limite di perdita giornaliero raggiunto")
     if len(st["snap"]["positions"]) >= int(s["max_open_positions"]):

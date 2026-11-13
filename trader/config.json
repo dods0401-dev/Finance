@@ -21,5 +21,6 @@
   "allow_margin": false,
   "allow_short": false,
   "pdt_guard": false,
-  "sec_user_agent": "SET-ME Name email@example.com"
+  "sec_user_agent": "SET-ME Name email@example.com",
+  "max_losses_in_a_row": 5
 }

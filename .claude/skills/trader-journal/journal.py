@@ -493,8 +493,8 @@ def exit_card(t, snap, cfg):
         out.append("<b>Perché era entrato</b>: %s" % esc(t["why"]))
     out += [LINE, today_line(snap, cfg), equity_line(snap)]
     streak = loss_streak(snap["trades"])
-    if streak >= 2:
-        out.append("⛔ <b>2 perdite di fila: stop per oggi</b> (regola del playbook)")
+    if streak >= int(cfg.get("max_losses_in_a_row", 2)):
+        out.append("⛔ <b>%d perdite di fila: stop per oggi</b> (regola del playbook)" % streak)
     start = period_start("day")
     lost = -sum(x["pnl"] for x in snap["trades"] if in_period(x, start) and x["pnl"] < 0)
     if lost >= num(cfg["max_daily_loss_usd"], 240):
@@ -636,10 +636,10 @@ def morning_card(cfg):
     if trading_day:
         out += ["📏 <b>Regole di oggi</b>",
                 "<pre>%s</pre>" % esc(
-                    "Rischio/trade  %s%s\nStop giornata  %s o 2 perdite\nMax trade      %d\n"
+                    "Rischio/trade  %s%s\nStop giornata  %s o %d perdite\nMax trade      %d\n"
                     "Entrate        %s–%s ITA\nFlat entro     %s ITA\nR:R minimo     %s"
                     % (usd(risk_per_trade(snap, cfg)), " (freno)" if snap.get("brake") else "",
-                       usd(cfg["max_daily_loss_usd"]), int(cfg["max_trades_per_day"]),
+                       usd(cfg["max_daily_loss_usd"]), int(cfg.get("max_losses_in_a_row", 2)), int(cfg["max_trades_per_day"]),
                        ny_to_it(cfg["no_entries_before"]), ny_to_it(cfg["no_entries_after"]), ny_to_it(flat),
                        str(cfg.get("min_reward_risk", 1.5)).replace(".", ","))),
                 "✅ Checklist: notizie e 8-K sulla watchlist · niente titoli con utili oggi/domani · "

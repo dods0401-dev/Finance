@@ -23,8 +23,8 @@ python3 "${CLAUDE_SKILL_DIR}/autopilot.py" flatten                          # ca
 ## Decision pass (`run`)
 1. **Guards** (any one stops the pass): `autopilot.json` `enabled: false`; a `/pausa`
    on Telegram newer than any `/riprendi` (last 24h of bot messages); market closed;
-   outside 09:45–15:30 New York; FOMC day before 14:30; 3 entries today; 2 losses in a
-   row today; $240 lost today; an open position (one at a time).
+   outside 09:45–15:30 New York; FOMC day before 14:30; max_trades_per_day entries today;
+   max_losses_in_a_row losses in a row today; $240 lost today; max_open_positions (5) already open.
 2. **Room for today** from Alpaca: max loss per trade = min($120, or $60 under the
    drawdown brake, the daily room left after today's losses and the open stop risk).
 3. **Candidates**: `trader/watchlist.json` from `scan.py daily` (run if missing), the
@@ -41,7 +41,8 @@ python3 "${CLAUDE_SKILL_DIR}/autopilot.py" flatten                          # ca
    past cases) the setup's history has a positive average R. Coin flips are skipped.
 8. **Budget** (`size.py`) and **risk check** (`check.py`) with today's config; PASS only.
 9. **Order**: market bracket (stop and target live at Alpaca), journal entry with the
-   reason, Telegram card. The best candidate only.
+   reason, Telegram card. Best candidates first, one per free slot; each sized on free
+   cash with a 1/5-of-capital cap, the daily loss room recomputed after each order.
 
 Every pass sends a Telegram summary of what it checked and why it did or did not trade.
 
