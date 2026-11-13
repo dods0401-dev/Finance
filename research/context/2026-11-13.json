@@ -1,0 +1,1542 @@
+{
+ "date": "2026-11-13",
+ "created_at": "2026-11-13T20:52:16+00:00",
+ "data": {
+  "regime": {
+   "SPY": {
+    "close": 754.19,
+    "r1": -0.39,
+    "r5": 2.57,
+    "r20": -1.19,
+    "a50": false,
+    "a200": true,
+    "hi20": false,
+    "lo20": false,
+    "rvol": 0.55
+   },
+   "QQQ": {
+    "close": 680.92,
+    "r1": -1.05,
+    "r5": 3.78,
+    "r20": -4.07,
+    "a50": false,
+    "a200": false,
+    "hi20": false,
+    "lo20": false,
+    "rvol": 0.66
+   },
+   "IWM": {
+    "close": 277.79,
+    "r1": -0.24,
+    "r5": 1.5,
+    "r20": 2.72,
+    "a50": false,
+    "a200": false,
+    "hi20": false,
+    "lo20": false,
+    "rvol": 0.6
+   },
+   "VIX": {
+    "close": 19.22,
+    "r1": 2.78
+   },
+   "breadth": {
+    "pct_above_50d": 53.5,
+    "pct_above_200d": 52.5,
+    "new_20d_highs": 181,
+    "new_20d_lows": 141,
+    "stocks": 2781
+   }
+  },
+  "sectors": {
+   "Altro": {
+    "n": 230,
+    "r1": 0.33,
+    "r5": 0.49,
+    "r20": 1.97,
+    "pct_above_50d": 56.1,
+    "rvol": 0.49,
+    "leaders": [
+     [
+      "LINC",
+      29.9
+     ],
+     [
+      "LUNR",
+      26.0
+     ],
+     [
+      "CTEV",
+      19.2
+     ],
+     [
+      "MBGL",
+      18.2
+     ],
+     [
+      "ENTG",
+      16.1
+     ]
+    ],
+    "laggards": [
+     [
+      "CTVA",
+      -21.0
+     ],
+     [
+      "PAYS",
+      -35.6
+     ],
+     [
+      "RMIX",
+      -40.2
+     ]
+    ],
+    "etf": null,
+    "news_count": 64,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:12",
+      "symbols": [
+       "SE"
+      ],
+      "headline": "JP Morgan Maintains Overweight on Sea, Lowers Price Target to $132",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:06",
+      "symbols": [
+       "V"
+      ],
+      "headline": "Nancy Pelosi’s Nvidia Bet Just Cost Her Most Of A Year’s Pay — Thanks To Jensen Huang",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:04",
+      "symbols": [
+       "MBGL"
+      ],
+      "headline": "JP Morgan Maintains Neutral on Mobility Global, Raises Price Target to $25",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "UBER"
+      ],
+      "headline": "Uber Reports Personal Data Exposure Following Third-Party Security Incident",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "NFLX"
+      ],
+      "headline": "Netflix Announces New Animated Series 'PLANESWALKER' Based on Magic: The Gathering",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "NFLX"
+      ],
+      "headline": "Netflix Renews 'Virgin River' for Ninth Season",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T20:00",
+      "symbols": [
+       "MELI"
+      ],
+      "headline": "Here’s How Much You Would Have Made Owning MercadoLibre Stock In The Last 15 Years",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:57",
+      "symbols": [
+       "CTVA"
+      ],
+      "headline": "JP Morgan Maintains Overweight on Corteva, Lowers Price Target to $16",
+      "source": "benzinga"
+     }
+    ]
+   },
+   "Comunicazioni": {
+    "n": 69,
+    "r1": 0.37,
+    "r5": 3.09,
+    "r20": 4.8,
+    "pct_above_50d": 63.8,
+    "rvol": 0.46,
+    "leaders": [
+     [
+      "NMAX",
+      32.0
+     ],
+     [
+      "GTN",
+      21.6
+     ],
+     [
+      "CHTR",
+      17.5
+     ],
+     [
+      "AMCX",
+      13.0
+     ],
+     [
+      "SBGI",
+      10.7
+     ]
+    ],
+    "laggards": [
+     [
+      "TU",
+      -6.3
+     ],
+     [
+      "AD",
+      -8.8
+     ],
+     [
+      "AEHL",
+      -34.0
+     ]
+    ],
+    "etf": {
+     "symbol": "XLC",
+     "r1": 1.14,
+     "r5": 3.81,
+     "r20": -1.39
+    },
+    "news_count": 5,
+    "headlines": [
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "GSAT"
+      ],
+      "headline": "Globalstar CFO Rebecca Clary Sells $2 Million in Company Stock",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:01",
+      "symbols": [
+       "CMCSA"
+      ],
+      "headline": "Tom Wlodkowski of Comcast Recognized at 6th Annual Audio Description Awards Gala",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T18:36",
+      "symbols": [
+       "FOXA"
+      ],
+      "headline": "Deal Dispatch: Morgan Stanley Buys Vinyl Equity, Fox Completes Roku Acquisition, Children's Place Files for Chapter 11",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T14:28",
+      "symbols": [
+       "FUBO"
+      ],
+      "headline": "B. Riley Securities Maintains Buy on FuboTV, Lowers Price Target to $16",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T14:04",
+      "symbols": [
+       "FUBO"
+      ],
+      "headline": "B. Riley Lowers FuboTV Price Target to $16 From $18, Maintains Buy Rating",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Consumi di base": {
+    "n": 57,
+    "r1": 1.4,
+    "r5": 1.46,
+    "r20": 3.61,
+    "pct_above_50d": 75.4,
+    "rvol": 0.48,
+    "leaders": [
+     [
+      "SENEA",
+      16.4
+     ],
+     [
+      "BRBR",
+      14.7
+     ],
+     [
+      "DAR",
+      11.3
+     ],
+     [
+      "JBSS",
+      7.6
+     ],
+     [
+      "PRMB",
+      7.1
+     ]
+    ],
+    "laggards": [
+     [
+      "BYND",
+      -10.7
+     ],
+     [
+      "TPB",
+      -15.0
+     ],
+     [
+      "FLO",
+      -18.9
+     ]
+    ],
+    "etf": {
+     "symbol": "XLP",
+     "r1": 1.32,
+     "r5": 2.43,
+     "r20": 5.3
+    },
+    "news_count": 11,
+    "headlines": [
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "TAP"
+      ],
+      "headline": "Molson Coors Employee Recognized in 2026 Beer Institute BEST IN BREW Honors",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "CAG"
+      ],
+      "headline": "Conagra Brands to Close Facility",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T18:01",
+      "symbols": [
+       "BUD"
+      ],
+      "headline": "Anheuser-Busch InBev Reaches Agreement to Acquire Distribution Rights from Straub Distributing Company",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T16:00",
+      "symbols": [
+       "KO",
+       "PEP"
+      ],
+      "headline": "Consumer Staples Leads Sectors As Technology Trails",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T15:16",
+      "symbols": [
+       "TSN"
+      ],
+      "headline": "How to Earn $500 a Month From Tyson Foods Stock Ahead of Q4 Earnings",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T14:54",
+      "symbols": [
+       "OFRM"
+      ],
+      "headline": "TD Cowen Maintains Hold on Once Upon a Farm, Lowers Price Target to $10",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T14:32",
+      "symbols": [
+       "GIS"
+      ],
+      "headline": "Piper Sandler Downgrades General Mills to Neutral",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T14:32",
+      "symbols": [
+       "SAM"
+      ],
+      "headline": "The Boston Beer Company Executive Recognized in 2026 BEST IN BREW Honors",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Consumi discrezionali": {
+    "n": 285,
+    "r1": 0.3,
+    "r5": 1.62,
+    "r20": 4.96,
+    "pct_above_50d": 69.8,
+    "rvol": 0.46,
+    "leaders": [
+     [
+      "MOD",
+      42.2
+     ],
+     [
+      "GRDN",
+      16.6
+     ],
+     [
+      "WWW",
+      15.7
+     ],
+     [
+      "CHA",
+      15.6
+     ],
+     [
+      "FUN",
+      15.3
+     ]
+    ],
+    "laggards": [
+     [
+      "RIVN",
+      -10.3
+     ],
+     [
+      "STUB",
+      -13.6
+     ],
+     [
+      "ADIG",
+      -44.7
+     ]
+    ],
+    "etf": {
+     "symbol": "XLY",
+     "r1": -0.29,
+     "r5": 2.16,
+     "r20": 6.81
+    },
+    "news_count": 92,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:46",
+      "symbols": [
+       "AMZN"
+      ],
+      "headline": "‘Amazon Revives Deal With Troubled Data Centre Venture Backed By Rick Perry’ - FT",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:37",
+      "symbols": [
+       "AMZN"
+      ],
+      "headline": "Josh Kushner Bets Big on Elon Musk, More Than Doubles Thrive Capital Stake in SpaceX Stock in Q3",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:30",
+      "symbols": [
+       "FAST"
+      ],
+      "headline": "$1000 Invested In Fastenal 10 Years Ago Would Be Worth This Much Today",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:06",
+      "symbols": [
+       "TSLA"
+      ],
+      "headline": "Nancy Pelosi’s Nvidia Bet Just Cost Her Most Of A Year’s Pay — Thanks To Jensen Huang",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:02",
+      "symbols": [
+       "BJ"
+      ],
+      "headline": "JP Morgan Maintains Neutral on BJ's Wholesale Club Hldgs, Raises Price Target to $113",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "TSLA"
+      ],
+      "headline": "Texas Attorney General Threatens Potential Tesla-SpaceX Merger",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:51",
+      "symbols": [
+       "DKNG"
+      ],
+      "headline": "'Meta Testing New Prediction-Market App With Employees'- WSJ",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:45",
+      "symbols": [
+       "TSLA"
+      ],
+      "headline": "Elon Musk's SpaceX–Tesla Merger 'Almost Inconceivable' to Avoid, Biographer Says",
+      "source": "benzinga"
+     }
+    ]
+   },
+   "Energia": {
+    "n": 139,
+    "r1": 0.73,
+    "r5": 4.83,
+    "r20": -4.19,
+    "pct_above_50d": 33.1,
+    "rvol": 0.43,
+    "leaders": [
+     [
+      "CKX",
+      50.4
+     ],
+     [
+      "GFR",
+      38.3
+     ],
+     [
+      "GRNT",
+      19.1
+     ],
+     [
+      "PUMP",
+      17.8
+     ],
+     [
+      "NBR",
+      15.9
+     ]
+    ],
+    "laggards": [
+     [
+      "VIST",
+      -2.7
+     ],
+     [
+      "SSL",
+      -3.6
+     ],
+     [
+      "CLMT",
+      -13.9
+     ]
+    ],
+    "etf": {
+     "symbol": "XLE",
+     "r1": 0.69,
+     "r5": 5.12,
+     "r20": -5.08
+    },
+    "news_count": 38,
+    "headlines": [
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "DK"
+      ],
+      "headline": "Mizuho Maintains Neutral Rating on Delek US",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "KGS"
+      ],
+      "headline": "Kodiak Gas Services Receives Analyst Coverage Updates",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "EC"
+      ],
+      "headline": "Ecopetrol in Talks for Venezuela Gas Supply Deal",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "OXY"
+      ],
+      "headline": "Barclays and J.P. Morgan Adjust Price Targets for Occidental Petroleum",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "DVN"
+      ],
+      "headline": "Wall Street Analysts Update Ratings and Price Targets for Devon Energy",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "CVE"
+      ],
+      "headline": "Cenovus Energy CEO Comments on WCS Differential and Export Strategy",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:01",
+      "symbols": [
+       "SU"
+      ],
+      "headline": "Suncor Energy Confirms Resolved Steam Leak at Firebag Oil Sands Site",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:01",
+      "symbols": [
+       "KMI"
+      ],
+      "headline": "Goldman Sachs Maintains Buy Rating and $36 Price Target for Kinder Morgan",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Finanza": {
+    "n": 443,
+    "r1": 0.21,
+    "r5": 1.07,
+    "r20": 3.13,
+    "pct_above_50d": 56.9,
+    "rvol": 0.42,
+    "leaders": [
+     [
+      "CORZ",
+      23.7
+     ],
+     [
+      "SECZ",
+      16.8
+     ],
+     [
+      "FIGR",
+      12.6
+     ],
+     [
+      "LB",
+      12.4
+     ],
+     [
+      "LMND",
+      12.0
+     ]
+    ],
+    "laggards": [
+     [
+      "XRPN",
+      -24.5
+     ],
+     [
+      "NAVI",
+      -25.9
+     ],
+     [
+      "APPS",
+      -26.6
+     ]
+    ],
+    "etf": {
+     "symbol": "XLF",
+     "r1": 0.58,
+     "r5": 2.42,
+     "r20": 5.45
+    },
+    "news_count": 109,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:45",
+      "symbols": [
+       "ASST"
+      ],
+      "headline": "Strive's Bitcoin Strategy That 'Could Even Survive an 80% Crash'",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:37",
+      "symbols": [
+       "OSCR",
+       "SECZ"
+      ],
+      "headline": "Josh Kushner Bets Big on Elon Musk, More Than Doubles Thrive Capital Stake in SpaceX Stock in Q3",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "AXP"
+      ],
+      "headline": "American Express Partners with OpenAI for ChatGPT Wallet",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "GS"
+      ],
+      "headline": "Goldman Sachs Advises TruGreen and CD&R on Transaction",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:26",
+      "symbols": [
+       "JPM"
+      ],
+      "headline": "Jensen Huang Joins Wall Street’s Fallen-Founder Hall of Fame: 13 Founders Who Fell Before Him",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:04",
+      "symbols": [
+       "MARA"
+      ],
+      "headline": "Macquarie Adjusts MARA Holdings Price Target to $20 from $26",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "HGTY"
+      ],
+      "headline": "AM Best Revises Outlooks for Hagerty Reinsurance Limited and Drivers Edge Insurance Company",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "PIPR"
+      ],
+      "headline": "Piper Sandler Adjusts Price Target on Cisco Systems",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Immobiliare": {
+    "n": 143,
+    "r1": 0.36,
+    "r5": -0.26,
+    "r20": 4.16,
+    "pct_above_50d": 62.2,
+    "rvol": 0.43,
+    "leaders": [
+     [
+      "CBL",
+      15.4
+     ],
+     [
+      "SVC",
+      9.6
+     ],
+     [
+      "CXW",
+      9.1
+     ],
+     [
+      "OUT",
+      8.6
+     ],
+     [
+      "HHH",
+      7.2
+     ]
+    ],
+    "laggards": [
+     [
+      "NMRK",
+      -10.1
+     ],
+     [
+      "NHI",
+      -11.4
+     ],
+     [
+      "REAX",
+      -15.7
+     ]
+    ],
+    "etf": {
+     "symbol": "XLRE",
+     "r1": -0.1,
+     "r5": 0.72,
+     "r20": 5.11
+    },
+    "news_count": 22,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:08",
+      "symbols": [
+       "BN"
+      ],
+      "headline": "JP Morgan Maintains Overweight on Brookfield, Lowers Price Target to $64",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:22",
+      "symbols": [
+       "CCI",
+       "SBAC"
+      ],
+      "headline": "FCC Announces Start of Upper C-Band Auction on April 27, 2027",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "CXW"
+      ],
+      "headline": "US Senator Hassan Launches Investigation into DHS Acquisition of CoreCivic Detention Facility",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "CWK"
+      ],
+      "headline": "Cushman & Wakefield Releases 'Global Office Supply: The Development Drought' Report",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "LINE"
+      ],
+      "headline": "Piper Sandler Maintains Hold Rating on Lineage, Inc. and Raises Price Target",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "VTR"
+      ],
+      "headline": "JPMorgan Adjusts Price Target on Ventas to $99 From $104",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "BXP"
+      ],
+      "headline": "UBS Maintains Hold Rating on BXP, Inc. and Lowers Price Target",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T17:24",
+      "symbols": [
+       "SVC"
+      ],
+      "headline": "Reported Earlier, Service Properties Trust Board Issues Letter To Blackwells; Unanimously Concluded That Its Requests Are Not In The Best Interests Of SVC's Sha",
+      "source": "benzinga"
+     }
+    ]
+   },
+   "Industria": {
+    "n": 349,
+    "r1": -0.12,
+    "r5": 2.93,
+    "r20": 3.8,
+    "pct_above_50d": 52.4,
+    "rvol": 0.41,
+    "leaders": [
+     [
+      "AAON",
+      40.9
+     ],
+     [
+      "LGN",
+      26.1
+     ],
+     [
+      "AVEX",
+      25.0
+     ],
+     [
+      "FLY",
+      23.2
+     ],
+     [
+      "AMRC",
+      18.4
+     ]
+    ],
+    "laggards": [
+     [
+      "GRPN",
+      -19.8
+     ],
+     [
+      "AGLT",
+      -27.1
+     ],
+     [
+      "CDNL",
+      -55.3
+     ]
+    ],
+    "etf": {
+     "symbol": "XLI",
+     "r1": -0.45,
+     "r5": 3.69,
+     "r20": 0.54
+    },
+    "news_count": 65,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:06",
+      "symbols": [
+       "MWH"
+      ],
+      "headline": "JP Morgan Maintains Overweight on SOLV Energy, Raises Price Target to $36",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "UNP"
+      ],
+      "headline": "Agricultural Groups Formally Oppose Union Pacific-Norfolk Southern Merger",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "DE"
+      ],
+      "headline": "John Deere to Sponsor Farm Progress AGTech Reception & Field Demos at Organic Grower Summit 2026",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:45",
+      "symbols": [
+       "YSS"
+      ],
+      "headline": "Jefferies Downgrades York Space Systems to Hold, Lowers Price Target to $6",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:41",
+      "symbols": [
+       "FLY"
+      ],
+      "headline": "Jefferies Maintains Buy on Firefly Aerospace, Lowers Price Target to $30",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:30",
+      "symbols": [
+       "PLOW"
+      ],
+      "headline": "Freedom Broker Maintains Buy on Douglas Dynamics, Lowers Price Target to $55",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:20",
+      "symbols": [
+       "UNP"
+      ],
+      "headline": "'Railroad CEO’s Loose Lips Threaten to Torpedo His $72 Billion Megadeal'-WSJ",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:04",
+      "symbols": [
+       "FLY"
+      ],
+      "headline": "Jefferies Adjusts Price Target on Firefly Aerospace",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Materiali": {
+    "n": 174,
+    "r1": -0.57,
+    "r5": -0.33,
+    "r20": -4.04,
+    "pct_above_50d": 30.5,
+    "rvol": 0.44,
+    "leaders": [
+     [
+      "TANH",
+      244.8
+     ],
+     [
+      "DPC",
+      19.0
+     ],
+     [
+      "SOLS",
+      13.7
+     ],
+     [
+      "BOOM",
+      11.6
+     ],
+     [
+      "CLF",
+      10.9
+     ]
+    ],
+    "laggards": [
+     [
+      "HYMC",
+      -14.4
+     ],
+     [
+      "MUX",
+      -23.1
+     ],
+     [
+      "CTGO",
+      -23.5
+     ]
+    ],
+    "etf": {
+     "symbol": "XLB",
+     "r1": -0.32,
+     "r5": 0.43,
+     "r20": 2.46
+    },
+    "news_count": 25,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:45",
+      "symbols": [
+       "LIN"
+      ],
+      "headline": "$1000 Invested In Linde 20 Years Ago Would Be Worth This Much Today",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:31",
+      "symbols": [
+       "SGML"
+      ],
+      "headline": "Sigma Lithium Reports 3Q 2026 Financial Results and Debt Refinancing",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:43",
+      "symbols": [
+       "DPC"
+      ],
+      "headline": "Jefferies Maintains Buy on DPC Holdings, Lowers Price Target to $55",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "NG"
+      ],
+      "headline": "NovaGold Resources Inc. Announces Closing Date for Donlin Gold Acquisition",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "CLF"
+      ],
+      "headline": "Cleveland-Cliffs to Recall Laid-Off Workers at Canadian Steel Operation",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "DD"
+      ],
+      "headline": "DuPont Receives 2026 Legal Innovator Award from Wolters Kluwer",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T18:41",
+      "symbols": [
+       "ALM"
+      ],
+      "headline": "AMD Sinks 10.5% as Chip Rally Unwinds, Nasdaq 100 Falls 1.7%: Stock Market Today",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T17:30",
+      "symbols": [
+       "CLF"
+      ],
+      "headline": "Cleveland-Cliffs’ Subsidiary Stelco To Restart Hamilton Finishing Operations, Recall 175 Workers",
+      "source": "benzinga"
+     }
+    ]
+   },
+   "Salute": {
+    "n": 377,
+    "r1": 0.06,
+    "r5": 1.03,
+    "r20": 7.1,
+    "pct_above_50d": 53.8,
+    "rvol": 0.47,
+    "leaders": [
+     [
+      "DCTH",
+      39.4
+     ],
+     [
+      "LQDA",
+      30.2
+     ],
+     [
+      "IAM",
+      28.6
+     ],
+     [
+      "ANRO",
+      19.4
+     ],
+     [
+      "TNGX",
+      18.4
+     ]
+    ],
+    "laggards": [
+     [
+      "CADL",
+      -29.9
+     ],
+     [
+      "JANX",
+      -35.2
+     ],
+     [
+      "FTH",
+      -53.5
+     ]
+    ],
+    "etf": {
+     "symbol": "XLV",
+     "r1": 0.47,
+     "r5": 2.11,
+     "r20": 6.79
+    },
+    "news_count": 127,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:24",
+      "symbols": [
+       "BLTE"
+      ],
+      "headline": "Leerink Partners Maintains Outperform on Belite Bio, Raises Price Target to $215",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:19",
+      "symbols": [
+       "KARD"
+      ],
+      "headline": "Leerink Partners Maintains Outperform on Kardigan, Lowers Price Target to $36",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:16",
+      "symbols": [
+       "TWST"
+      ],
+      "headline": "Leerink Partners Maintains Outperform on Twist Bioscience, Lowers Price Target to $175",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:01",
+      "symbols": [
+       "BMY"
+      ],
+      "headline": "Bristol Myers Squibb Independent Director Sells Shares",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:19",
+      "symbols": [
+       "INSP"
+      ],
+      "headline": "Freedom Capital Markets Maintains Buy on Inspire Medical Systems, Lowers Price Target to $93",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:04",
+      "symbols": [
+       "CON"
+      ],
+      "headline": "Wells Fargo Maintains Overweight Rating and Raises Price Target for Concentra Group",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "ACAD"
+      ],
+      "headline": "Morgan Stanley Lowers Price Target for ACADIA Pharmaceuticals Inc.",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:03",
+      "symbols": [
+       "ARQT"
+      ],
+      "headline": "Arcutis Presents New Caregiver-Reported Outcomes Data for ZORYVE Cream in Infants",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Tecnologia": {
+    "n": 439,
+    "r1": -0.62,
+    "r5": 2.96,
+    "r20": -1.06,
+    "pct_above_50d": 42.6,
+    "rvol": 0.46,
+    "leaders": [
+     [
+      "FCUV",
+      155.5
+     ],
+     [
+      "TLS",
+      54.4
+     ],
+     [
+      "ZIP",
+      47.2
+     ],
+     [
+      "LFTO",
+      33.5
+     ],
+     [
+      "SENS",
+      23.2
+     ]
+    ],
+    "laggards": [
+     [
+      "SHLS",
+      -17.7
+     ],
+     [
+      "GILT",
+      -22.3
+     ],
+     [
+      "BZ",
+      -26.7
+     ]
+    ],
+    "etf": {
+     "symbol": "XLK",
+     "r1": -1.9,
+     "r5": 3.48,
+     "r20": -7.09
+    },
+    "news_count": 190,
+    "headlines": [
+     {
+      "t": "2026-11-13T20:37",
+      "symbols": [
+       "FIG",
+       "SHOP",
+       "SPCX"
+      ],
+      "headline": "Josh Kushner Bets Big on Elon Musk, More Than Doubles Thrive Capital Stake in SpaceX Stock in Q3",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:28",
+      "symbols": [
+       "NVDA"
+      ],
+      "headline": "Nvidia In Process Of Selecting Search Firm, No Formal Candidates Engaged To Succeed Jensen Huang - CNBC",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:14",
+      "symbols": [
+       "MSFT"
+      ],
+      "headline": "Microsoft Says Infrastructure Stabilizes As Queued Messages Drain And Traffic Rebalances, With No ETA For Full Recovery",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:09",
+      "symbols": [
+       "CLBT"
+      ],
+      "headline": "JP Morgan Maintains Overweight on Cellebrite DI, Lowers Price Target to $15",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T20:06",
+      "symbols": [
+       "NVDA"
+      ],
+      "headline": "Nancy Pelosi’s Nvidia Bet Just Cost Her Most Of A Year’s Pay — Thanks To Jensen Huang",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:59",
+      "symbols": [
+       "AMAT"
+      ],
+      "headline": "JP Morgan Maintains Overweight on Applied Materials, Lowers Price Target to $500",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:58",
+      "symbols": [
+       "AVGO",
+       "NVDA"
+      ],
+      "headline": "QUICK SPARK: Broadcom Scores Historic Win Over Nvidia as AVGO-NVDA Gap Explodes",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T19:52",
+      "symbols": [
+       "CBRS"
+      ],
+      "headline": "Cerebras Stock Jumps on Q3 Cloud Revenue Up 265%, Raised Outlook (CORRECTED)",
+      "source": "benzinga"
+     }
+    ]
+   },
+   "Utility": {
+    "n": 76,
+    "r1": 0.48,
+    "r5": 1.42,
+    "r20": 5.77,
+    "pct_above_50d": 77.6,
+    "rvol": 0.44,
+    "leaders": [
+     [
+      "FRVO",
+      27.8
+     ],
+     [
+      "CEG",
+      12.0
+     ],
+     [
+      "TLN",
+      10.8
+     ],
+     [
+      "NRG",
+      9.8
+     ],
+     [
+      "VST",
+      6.2
+     ]
+    ],
+    "laggards": [
+     [
+      "MSEX",
+      -4.3
+     ],
+     [
+      "KEP",
+      -9.1
+     ],
+     [
+      "GFL",
+      -9.4
+     ]
+    ],
+    "etf": {
+     "symbol": "XLU",
+     "r1": 0.49,
+     "r5": 2.08,
+     "r20": 4.3
+    },
+    "news_count": 12,
+    "headlines": [
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "NRG"
+      ],
+      "headline": "SiebertWilliams Shank Adjusts NRG Energy Price Target",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:02",
+      "symbols": [
+       "CMS"
+      ],
+      "headline": "Consumers Energy Declares Quarterly Dividend on Preferred Stock",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T19:01",
+      "symbols": [
+       "AWK"
+      ],
+      "headline": "American Water Shares Tips on How to Manage Customer Accounts and Stay Informed About Water and Wastewater Services",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T16:42",
+      "symbols": [
+       "CWST"
+      ],
+      "headline": "Jana Partners Takes New Stake In Casella Waste Systems With 1,812,493 Shares",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T16:01",
+      "symbols": [
+       "D"
+      ],
+      "headline": "Dominion Energy Charitable Foundation Awards $4.5 Million in Grants",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-13T14:45",
+      "symbols": [
+       "OKLO"
+      ],
+      "headline": "Truist Securities Maintains Hold on Oklo, Lowers Price Target to $28",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T14:42",
+      "symbols": [
+       "ENLT"
+      ],
+      "headline": "Truist Securities Maintains Buy on Enlight Renewable Energy, Lowers Price Target to $102",
+      "source": "benzinga"
+     },
+     {
+      "t": "2026-11-13T14:41",
+      "symbols": [
+       "CWEN"
+      ],
+      "headline": "Truist Securities Maintains Buy on Clearway Energy, Raises Price Target to $42",
+      "source": "benzinga"
+     }
+    ]
+   }
+  },
+  "positions": [],
+  "news_total": 1500,
+  "universe": 4208
+ },
+ "assessment": {
+  "market": {
+   "tone": 0,
+   "regime_change_risk": "medio",
+   "summary": "Rimbalzo settimanale (SPY +2,6% in 5 giorni) ma oggi debole, con la tecnologia in testa ai cali; SPY e QQQ sotto la media a 50 giorni, ampiezza neutra (53% sopra 50g) e VIX in salita verso 19: rimbalzo non ancora confermato."
+  },
+  "sectors": {
+   "Energia": {
+    "tone": 1,
+    "trend_change_risk": "alto",
+    "deep_dive": true,
+    "drivers": "XLE +5,1% in 5 giorni dopo un mese a -4,2%; solo il 33% dei titoli sopra la media a 50g; notizie su Venezuela/gas (Ecopetrol) e revisioni di target (OXY).",
+    "why": "Possibile inversione da ipervenduto: rimbalzo forte ma base debole, da verificare se diventa trend o resta un rimbalzo."
+   },
+   "Comunicazioni": {
+    "tone": 1,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "Trend sano (20g +4,8%, 64% sopra 50g), XLC +3,8% in 5 giorni; Fox chiude l'acquisizione di Roku.",
+    "why": "Forza coerente su più orizzonti."
+   },
+   "Tecnologia": {
+    "tone": -1,
+    "trend_change_risk": "alto",
+    "deep_dive": true,
+    "drivers": "Oggi -0,6% con QQQ -1,1%, sotto le medie a 50 e 200 giorni; solo il 43% dei titoli sopra 50g; notizie sulla successione di Jensen Huang in Nvidia e disservizio Microsoft.",
+    "why": "Il settore guida del mercato è sotto le medie: se il rimbalzo di 5 giorni fallisce, rischio di nuova gamba ribassista. Da monitorare NVDA/MSFT."
+   },
+   "Industria": {
+    "tone": 1,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "20g +3,8%, 5g +2,9%, XLI +3,7%; tema fusione Union Pacific-Norfolk Southern.",
+    "why": "Trend positivo e diffuso."
+   },
+   "Consumi discrezionali": {
+    "tone": 1,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "70% dei titoli sopra 50g, 20g +5%; notizie Amazon (data center).",
+    "why": "Ampiezza tra le migliori del mercato."
+   },
+   "Consumi di base": {
+    "tone": 1,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Miglior settore di oggi (+1,4%), 75% sopra 50g: rotazione difensiva mentre la tecnologia scende.",
+    "why": "Forza difensiva: segnale di prudenza del mercato più che di crescita."
+   },
+   "Utility": {
+    "tone": 1,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "20g +5,8%, 78% sopra 50g, la più ampia; CEG e TLN forti (tema energia per data center).",
+    "why": "Trend solido, difensivo con componente AI/energia."
+   },
+   "Finanza": {
+    "tone": 0,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "Movimenti contenuti (5g +1,1%, 20g +3,1%); partnership American Express-OpenAI; titoli legati a bitcoin volatili.",
+    "why": "Neutro, nessun catalizzatore di settore."
+   },
+   "Salute": {
+    "tone": 1,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "20g +7,1% (il migliore a 20 giorni), ma 5g solo +1%; molte revisioni di target sulle biotech.",
+    "why": "Forza di medio periodo che rallenta: da tenere d'occhio."
+   },
+   "Altro": {
+    "tone": 0,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "Gruppo eterogeneo senza direzione comune; incidente di sicurezza dati Uber.",
+    "why": "Non è un vero settore: non va interpretato."
+   },
+   "Immobiliare": {
+    "tone": 0,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "5g -0,3% dopo 20g +4,2%; XLRE +0,7%; asta FCC sulla banda C (torri CCI/SBAC) nel 2027.",
+    "why": "Stallo dopo il recupero: dipende dai tassi."
+   },
+   "Materiali": {
+    "tone": -1,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Debole su tutti gli orizzonti (20g -4%), solo il 30% sopra 50g; leader isolati e speculativi.",
+    "why": "Il più debole per ampiezza: evitare finché non cambia la struttura."
+   }
+  },
+  "positions": {},
+  "watch": [
+   "XLE",
+   "OXY",
+   "NVDA",
+   "MSFT",
+   "CEG",
+   "UNP",
+   "AMZN"
+  ],
+  "assessed_at": "2026-11-13T20:52:54+00:00"
+ }
+}

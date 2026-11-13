@@ -5,3 +5,6 @@ trader/*
 
 __pycache__/
 *.pyc
+
+# research: bulky price caches stay local
+research/cache/
