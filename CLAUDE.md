@@ -8,3 +8,8 @@
 - Broker: Alpaca **paper** via the `alpaca` MCP server (`.mcp.json`). Keys are
   injected by the environment's network proxy: never ask for, print or store them.
   Never switch to live.
+- Manual orders (placed in a chat) always need the user's explicit "yes" plus the permission card.
+- Exception (user decision 2026-11-13): trader-autopilot may place orders on the PAPER
+  account by itself, only from its scheduled tasks, only via autopilot.py, within all
+  limits of rules.md, reporting every decision to Telegram. Kill switch: /pausa on
+  Telegram or "enabled": false in .claude/skills/trader-autopilot/autopilot.json. Never live.
