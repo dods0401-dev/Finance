@@ -7,7 +7,8 @@ Last updated: 2026-11-13. Paper trading on Alpaca until I decide otherwise.
 - Risk per trade: **2% = $120** max loss at the stop.
 - Daily loss limit: **4% = $240**. Hit it, and the day is over.
 - **Two losing trades in a row = stop for the day** (no revenge trading).
-- Max **3 trades per day**.
+- Max **20 trades per day**, at most **5 positions open at the same time**: the capital is
+  split in 5 slots, so one position is at most 1/5 of it ($1,200).
 - Drawdown brake: if equity (on the $6,000 basis) falls below **$5,400 (-10%)**,
   risk per trade drops to **1% ($60)** until it is back above $6,000.
 - Reward to risk at least **1.5R** at entry.

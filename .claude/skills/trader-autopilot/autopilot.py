@@ -206,18 +206,25 @@ def guards(args, cfg, st, now):
     if st["losses"] >= float(cfg["max_daily_loss_usd"]):
         why.append("limite di perdita giornaliero raggiunto")
     if len(st["snap"]["positions"]) >= int(s["max_open_positions"]):
-        why.append("già %d posizione aperta (max %d alla volta)" % (len(st["snap"]["positions"]), s["max_open_positions"]))
+        why.append("già %d posizioni aperte (max %d alla volta)" % (len(st["snap"]["positions"]), s["max_open_positions"]))
     return why
 
 
-def run_config(cfg, st):
-    """The config handed to budget and risk for this pass: the brake, today's room."""
+def run_config(cfg, st, extra_risk=0.0, extra_value=0.0, extra_entries=0):
+    """The config handed to budget and risk for this order: the brake, today's room, and
+    the capital split in max_open_positions slots (cash = basis minus what is invested)."""
     c = dict(J.load(os.path.join(TRADER, "config.json"), {}) or {})
+    slots = max(1, int(settings()["max_open_positions"]))
+    basis = float(st["snap"]["budget"])
+    invested = sum(abs(float(p.get("market_value") or 0)) for p in st["snap"]["positions"]) + extra_value
     risk = J.risk_per_trade(st["snap"], cfg)
-    room = float(cfg["max_daily_loss_usd"]) - st["losses"] - st["open_risk"]
+    room = float(cfg["max_daily_loss_usd"]) - st["losses"] - st["open_risk"] - extra_risk
     c["max_loss_per_trade_usd"] = round(max(0.0, min(risk, room)), 2)
     c["max_daily_loss_usd"] = round(max(0.0, room), 2)
-    c["max_trades_per_day"] = max(0, int(cfg["max_trades_per_day"]) - st["entries"])
+    c["max_trades_per_day"] = max(0, int(cfg["max_trades_per_day"]) - st["entries"] - extra_entries)
+    c["budget"] = round(max(0.0, basis - invested), 2)          # free cash on the training basis
+    c["max_order_usd"] = round(min(float(c.get("max_order_usd") or basis), basis / slots), 2)
+    c["max_position_pct"] = 100                                  # the slot size above is the cap
     c["paper"] = True
     path = os.path.join(WORK, "config.json")
     with open(path, "w") as f:
@@ -344,7 +351,6 @@ def cmd_run(args):
     if stop:
         log.append("nessuna ricerca: " + "; ".join(stop))
     else:
-        cfg_path, rcfg = run_config(cfg, st)
         wl, err = ensure_watchlist(now, args)
         if err:
             log.append(err)
@@ -363,8 +369,25 @@ def cmd_run(args):
             good.append(best)
             log.append("%s (%s): OK, %s, R medio %+.2f" % (c["symbol"], c["setup"], best["verdict"].split(":")[0], best["avg_r"]))
         good.sort(key=lambda v: -v["avg_r"])
-        for v in good[:1]:
-            sent_order = place(v, cfg_path, rcfg, args, dry, log, cfg, st)
+        slots = int(s["max_open_positions"]) - len(st["snap"]["positions"])
+        left = int(cfg["max_trades_per_day"]) - st["entries"]
+        used_risk = used_value = 0.0
+        n = 0
+        for v in good:
+            if n >= min(slots, left):
+                log.append("%s: OK ma slot o trade del giorno esauriti" % v["c"]["symbol"])
+                continue
+            cfg_path, rcfg = run_config(cfg, st, used_risk, used_value, n)
+            if rcfg["max_loss_per_trade_usd"] < 5 or rcfg["budget"] < 100:
+                log.append("%s: niente spazio (rischio residuo %s, cassa %s)" % (
+                    v["c"]["symbol"], J.usd(rcfg["max_loss_per_trade_usd"]), J.usd(rcfg["budget"])))
+                break
+            o = place(v, cfg_path, rcfg, args, dry, log, cfg, st)
+            if o:
+                sent_order = o
+                n += 1
+                used_risk += float(o["plan"].get("max_loss") or 0)
+                used_value += float(o["qty"]) * float(o["plan"].get("entry") or 0)
     header = "🤖 <b>AUTOPILOT · %s NY</b>%s" % (now.strftime("%H:%M"), "  <i>(prova, nessun ordine)</i>" if dry else "")
     if sent_order is None and args.quiet and not any("scartato" in l or "OK" in l for l in log):
         print("\n".join(log))
