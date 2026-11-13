@@ -18,7 +18,8 @@ public (titles, summaries, show notes, transcripts published by the outlet).
 - Chat With Traders
 - Top Traders Unplugged
 - Macro Voices
-- Black Box (finance podcast; also FT Unhedged "Inside the traders' black box", Mar 2024)
+- **Black Box** by Cora Media (finance and markets podcast; English version on Apple Podcasts:
+  https://podcasts.apple.com/us/podcast/black-box-english-version/id1708270552). Priority source for the user.
 - The Market Huddle, Real Vision (public episodes)
 
 ## Research and regulators (strongest evidence)
