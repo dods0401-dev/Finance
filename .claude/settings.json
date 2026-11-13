@@ -1,5 +1,7 @@
 {
-  "enabledMcpjsonServers": ["alpaca"],
+  "enabledMcpjsonServers": [
+    "alpaca"
+  ],
   "permissions": {
     "allow": [
       "mcp__alpaca__get_account_info",
@@ -24,6 +26,20 @@
       "mcp__alpaca__cancel_all_orders",
       "mcp__alpaca__exercise_options_position",
       "mcp__alpaca__do_not_exercise_options_position"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "mcp__alpaca__(place_stock_order|cancel_order_by_id|replace_order_by_id|close_position)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/skills/trader-journal/journal.py\" hook",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   }
 }

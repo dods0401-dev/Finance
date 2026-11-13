@@ -1,1 +1,4 @@
-trader/
+# trader/ holds per-day working files; keep only the rules and the journal in git
+trader/*
+!trader/config.json
+!trader/journal/
