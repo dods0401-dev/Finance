@@ -10,7 +10,10 @@
       "mcp__alpaca__get_orders",
       "mcp__alpaca__get_clock",
       "mcp__alpaca__get_stock_snapshot",
-      "mcp__alpaca__get_stock_latest_quote"
+      "mcp__alpaca__get_stock_latest_quote",
+      "mcp__alpaca__get_stock_latest_quote",
+      "Bash(python3 .claude/skills/trader-autopilot/autopilot.py:*)"
+    ],
     ],
     "ask": [
       "mcp__alpaca__place_stock_order",
