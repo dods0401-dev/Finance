@@ -13,3 +13,5 @@
   account by itself, only from its scheduled tasks, only via autopilot.py, within all
   limits of rules.md, reporting every decision to Telegram. Kill switch: /pausa on
   Telegram or "enabled": false in .claude/skills/trader-autopilot/autopilot.json. Never live.
+- After each trade: lesson in the journal, then commit and push `trader/journal/`.
+- Reply to the user in Italian.
