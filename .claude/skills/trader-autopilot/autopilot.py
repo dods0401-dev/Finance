@@ -393,6 +393,8 @@ SETUP_PLAIN = {"orb": "ha superato il prezzo massimo della prima mezz'ora di con
 
 
 def log_decisions(now, rows):
+    if not rows:
+        return
     path = os.path.join(TRADER, "journal", "decisions.jsonl")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "a") as f:
