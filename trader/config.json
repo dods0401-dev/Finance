@@ -1,5 +1,5 @@
 {
-  "budget": 6000,
+  "budget": 10000,
   "cash_buffer_pct": 10,
   "max_position_pct": 75,
   "max_order_usd": 4500,
@@ -22,5 +22,6 @@
   "allow_short": false,
   "pdt_guard": false,
   "sec_user_agent": "SET-ME Name email@example.com",
-  "max_losses_in_a_row": 5
+  "max_losses_in_a_row": 5,
+  "brake_equity": 9000
 }

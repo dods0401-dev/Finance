@@ -3,7 +3,8 @@
 Last updated: 2026-11-13. Paper trading on Alpaca until I decide otherwise.
 
 ## Main strategy: monthly portfolio (decided 2026-11-13, after the 10-year backtests)
-- Capital: the **$6,000** basis plus everything gained or lost since the start.
+- Capital: the **$10,000** basis (raised from $6,000 on 2026-11-13) plus everything gained or
+  lost since the start.
 - **50% in the S&P 500 index (SPY)**, held.
 - **50% split equally across the 10 most traded stocks (over $100M a day, price over $10)
   that rose most over the last 12 months, skipping the last month.**
@@ -11,6 +12,9 @@ Last updated: 2026-11-13. Paper trading on Alpaca until I decide otherwise.
   held overnight and for weeks; no stop and no target (the backtests showed stops and market
   filters cut the return more than the losses).
 - Expect swings: in the 2022–2026 test the worst fall from a peak was about −33%.
+- Monthly health check after each rebalance: the same rules replayed on the last 12 months
+  versus the S&P 500. If the strategy trails the index for 3 months in a row, the user is
+  warned and we review it together (nothing changes automatically).
 - No margin, no short selling, no options, no crypto.
 
 ## Day trading (switched OFF on 2026-11-13: no edge after costs in the backtests)

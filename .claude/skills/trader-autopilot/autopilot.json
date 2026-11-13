@@ -23,7 +23,7 @@
     "lookback_days": 252,
     "skip_days": 21,
     "min_trade_usd": 25,
-    "basis_usd": 6000,
+    "basis_usd": 10000,
     "account_start_equity": 100000
   }
 }

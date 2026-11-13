@@ -644,6 +644,13 @@ def morning_card(cfg):
     else:
         snap = {"brake": False}
     flat = cfg.get("flat_by", "15:55")
+    ap = load(os.path.join(ROOT, ".claude", "skills", "trader-autopilot", "autopilot.json"), {}) or {}
+    if ap.get("day_trading") is False:
+        pf = ap.get("portfolio") or {}
+        out += ["📅 <b>Portafoglio</b>: %d%% nell'indice S&P 500 e %d%% sulle %d aziende più forti dell'ultimo anno. "
+                "Si ribilancia da solo il primo giorno di borsa di ogni mese." % (
+                    round(100 * pf.get("core_weight", 0.5)), round(100 * (1 - pf.get("core_weight", 0.5))), pf.get("satellite_n", 10))]
+        trading_day = False
     if trading_day:
         out += ["📏 <b>Regole di oggi</b>: perdo al massimo %s per operazione e %s in tutta la giornata%s; "
                 "fino a %d operazioni, %d alla volta; compro solo tra le %s e le %s e chiudo tutto entro le %s."

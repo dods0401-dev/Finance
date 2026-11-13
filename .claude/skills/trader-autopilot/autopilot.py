@@ -632,6 +632,83 @@ def first_trading_day_of_month(today):
     return bool(cal) and cal[0]["date"] == today.isoformat()
 
 
+def strategy_health(p, today):
+    """The monthly time machine: replays the same rules month by month over the last 12 months
+    (Alpaca daily bars, today's liquid list) and compares them with the S&P 500 alone."""
+    sys.path.insert(0, os.path.join(SKILLS, "trader-research"))
+    import data as D
+    uni = [r["symbol"] for r in D.load_universe() if r["type"] == "stock" and float(r["adv_usd"]) >= p["min_dollar_volume"] / 2]
+    start = (today - dt.timedelta(days=760)).isoformat()
+    closes, dvol = {}, {}
+    for i in range(0, len(uni) + 1, 100):
+        chunk = uni[i:i + 100] + ([p["core"]] if i == 0 else [])
+        try:
+            got = D.bars_multi(chunk, "1Day", start)
+        except Exception:
+            continue
+        for sym, bs in got.items():
+            closes[sym] = {b["t"][:10]: b["c"] for b in bs}
+            dvol[sym] = {b["t"][:10]: b["c"] * b["v"] for b in bs}
+    core = closes.get(p["core"]) or {}
+    days = sorted(core)
+    if len(days) < 300:
+        return None
+    starts = [i for i in range(1, len(days)) if days[i][5:7] != days[i - 1][5:7]][-13:]
+    months = []
+    for a_, b_ in zip(starts[:-1], starts[1:]):
+        d0, d1 = days[a_ - 1], days[b_ - 1]
+        if a_ - 1 - p["lookback_days"] < 0:
+            continue
+        dl, ds = days[a_ - 1 - p["lookback_days"]], days[a_ - 1 - p["skip_days"]]
+        last20 = days[a_ - 21:a_ - 1]
+        score = {}
+        for sym, c in closes.items():
+            if sym == p["core"] or d0 not in c or dl not in c or ds not in c or c[d0] < p["min_price"]:
+                continue
+            v = [dvol[sym].get(x, 0) for x in last20]
+            if sum(v) / 20 < p["min_dollar_volume"]:
+                continue
+            score[sym] = c[ds] / c[dl] - 1
+        picks = sorted(score, key=lambda x: -score[x])[:int(p["satellite_n"])]
+        rs = [closes[x][d1] / closes[x][d0] - 1 for x in picks if d1 in closes[x]]
+        sat = sum(rs) / len(rs) if rs else 0.0
+        idx = core[d1] / core[d0] - 1
+        months.append((d0[:7], p["core_weight"] * idx + (1 - p["core_weight"]) * sat, idx))
+    if not months:
+        return None
+    strat = mkt = 1.0
+    for _, s_, m_ in months:
+        strat *= 1 + s_
+        mkt *= 1 + m_
+    behind = 0
+    for _, s_, m_ in reversed(months):
+        if s_ < m_:
+            behind += 1
+        else:
+            break
+    return {"months": len(months), "strategy": strat - 1, "market": mkt - 1, "behind_streak": behind,
+            "last": months[-1]}
+
+
+def health_text(h):
+    if not h:
+        return "🩺 Controllo della strategia non disponibile questo mese (dati insufficienti)."
+    line = "🩺 <b>Controllo della strategia</b>: con le stesse regole, negli ultimi %d mesi avrebbe fatto <b>%s</b> contro %s del solo mercato." % (
+        h["months"], J.pct(100 * h["strategy"], True, 0), J.pct(100 * h["market"], True, 0))
+    if h["behind_streak"] >= 3:
+        return line + "\n⚠️ Da %d mesi di fila fa peggio del mercato: è il momento di rivederla insieme." % h["behind_streak"]
+    if h["strategy"] >= h["market"]:
+        return line + "\n✅ Sta funzionando: fa meglio del semplice indice."
+    return line + "\n➖ Per ora fa un po' peggio dell'indice, ma non abbastanza a lungo da preoccuparsi."
+
+
+def cmd_health(args):
+    h = strategy_health(portfolio_settings(), ny_now(args).date())
+    text = health_text(h)
+    print(text if args.no_telegram else J.telegram(text))
+    return 0
+
+
 def cmd_rebalance(args):
     p, s = portfolio_settings(), settings()
     now = ny_now(args)
@@ -705,6 +782,7 @@ def cmd_rebalance(args):
     if failed:
         out.append("⚠️ Non riusciti: " + J.esc(", ".join("%s (%s)" % (x[0], x[2]) for x in failed)))
     out.append("Prossimo ribilanciamento: il primo giorno di borsa del mese prossimo.")
+    out.append(health_text(J.safe(strategy_health, p, now.date())))
     text = "\n".join(out)
     print(text if args.no_telegram else J.telegram(text))
     return 0 if not failed else 1
@@ -720,12 +798,13 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     for n in ("run", "flatten", "status"):
         sub.add_parser(n, parents=[common])
+    sub.add_parser("health", parents=[common])
     rb = sub.add_parser("rebalance", parents=[common])
     rb.add_argument("--if-first-day", action="store_true", help="only on the first trading day of the month")
     args = ap.parse_args(argv)
     if args.no_telegram:
         J.DRY_RUN = True
-    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance}[args.cmd](args)
+    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance, "health": cmd_health}[args.cmd](args)
 
 
 if __name__ == "__main__":
