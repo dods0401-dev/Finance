@@ -21,6 +21,8 @@ Assessment schema (all keys required, tone in -2..2, risk in basso|medio|alto):
   {"market": {"tone": 0, "regime_change_risk": "basso", "summary": "..."},
    "sectors": {"<sector>": {"tone": 1, "trend_change_risk": "medio", "deep_dive": false,
                             "drivers": "...", "why": "..."}},
+   "themes": {"<theme>": {"tone": 0, "outlook": "in rafforzamento|stabile|in indebolimento",
+                          "impact": "who is exposed and how (sectors, tickers, spillovers)", "why": "..."}},
    "positions": {"<SYM>": {"hold_bias": "tenere|chiudere|neutro", "why": "..."}},
    "watch": ["SYM", ...]}
 Read only towards the broker. Standard library only.
@@ -43,6 +45,92 @@ CTX = os.path.join(D.RES, "context")
 TONES = {-2, -1, 0, 1, 2}
 RISKS = {"basso", "medio", "alto"}
 BIAS = {"tenere", "chiudere", "neutro"}
+OUTLOOK = {"in rafforzamento", "stabile", "in indebolimento"}
+
+
+def load_themes():
+    return J.load(os.path.join(D.RES, "themes.json"), {}) or {}
+
+
+import re
+
+_RX = {}
+
+
+def has_any(text, words):
+    """Whole-word (or whole-phrase) match, case-insensitive."""
+    for w in words:
+        rx = _RX.get(w)
+        if rx is None:
+            rx = _RX[w] = re.compile(r"(?<![a-z0-9])" + re.escape(w.strip().lower()) + r"(?![a-z0-9])")
+        if rx.search(text):
+            return True
+    return False
+
+
+def headline_text(n):
+    return (n.get("headline", "") + " " + (n.get("summary") or "")).lower()
+
+
+_NAMES = None
+
+
+def about(n, sym):
+    """Is this article really about sym? Yes if it tags at most 2 companies, or names it in the headline."""
+    global _NAMES
+    if _NAMES is None:
+        _NAMES = {r["symbol"]: r["name"] for r in D.load_universe()}
+    syms = n.get("symbols") or []
+    if len(syms) <= 2:
+        return True
+    h = n.get("headline", "")
+    if re.search(r"(?<![A-Za-z])" + re.escape(sym) + r"(?![A-Za-z])", h):
+        return True
+    first = (_NAMES.get(sym) or "").split(" ")[0].strip(",.")
+    return len(first) >= 4 and first.lower() in h.lower()
+
+
+def theme_stats(news, m, themes, day):
+    """News count, basket returns and top headlines per theme; heat vs the last 10 diaries."""
+    past = []
+    if os.path.isdir(CTX):
+        for f in sorted(os.listdir(CTX))[-11:]:
+            if f.endswith(".json") and f[:10] < day:
+                past.append((J.load(os.path.join(CTX, f), {}) or {}).get("data", {}).get("themes") or {})
+    out = {}
+    for name, t in themes.items():
+        kws = [k.lower() for k in t.get("keywords", [])]
+        hits = [n for n in news if has_any(headline_text(n), kws)]
+        b = [x for x in t.get("basket", []) if x in m]
+        hist = [p[name]["news_count"] for p in past if name in p]
+        avg = stx.mean(hist) if hist else None
+        out[name] = {"news_count": len(hits), "news_avg_prev": round(avg, 1) if avg is not None else None,
+                     "heat": round(len(hits) / avg, 2) if avg else None,
+                     "basket_r1": med(m[x]["r1"] for x in b), "basket_r5": med(m[x]["r5"] for x in b),
+                     "basket_r20": med(m[x]["r20"] for x in b),
+                     "movers": sorted([[x, round(m[x]["r1"], 1)] for x in b if m[x]["r1"] is not None], key=lambda z: z[1])[:2]
+                     + sorted([[x, round(m[x]["r1"], 1)] for x in b if m[x]["r1"] is not None], key=lambda z: -z[1])[:2],
+                     "headlines": [{"t": n["created_at"][:16], "symbols": (n.get("symbols") or [])[:4],
+                                    "headline": n["headline"][:160]} for n in hits[:8]]}
+    return out
+
+
+def red_flags(news, words):
+    """Companies with risk headlines: 1 severe or 2+ warning headlines in 24h."""
+    sev = [w.lower() for w in words.get("severe", [])]
+    warn = [w.lower() for w in words.get("warning", [])]
+    per = {}
+    for n in news:
+        h = n.get("headline", "").lower()
+        level = "grave" if has_any(h, sev) else "attenzione" if has_any(h, warn) else None
+        if not level:
+            continue
+        for sym in [x for x in (n.get("symbols") or []) if about(n, x)][:3]:
+            x = per.setdefault(sym, {"grave": 0, "attenzione": 0, "headlines": []})
+            x[level] += 1
+            if len(x["headlines"]) < 4:
+                x["headlines"].append(n["headline"][:160])
+    return {k: v for k, v in per.items() if v["grave"] >= 1 or v["attenzione"] >= 2}
 
 
 def pct(a, b):
@@ -118,6 +206,7 @@ def cmd_snapshot(a):
                          "new_20d_highs": sum(1 for s in stocks if m[s]["hi20"]),
                          "new_20d_lows": sum(1 for s in stocks if m[s]["lo20"]), "stocks": len(stocks)}
     news = news_24h(a.news_pages)
+    th = load_themes()
     sectors = {}
     for sec in sorted({sec_of[s] for s in stocks}):
         ss = [s for s in stocks if sec_of[s] == sec]
@@ -142,6 +231,8 @@ def cmd_snapshot(a):
                           "headlines": [n["headline"][:160] for n in news if s in (n.get("symbols") or [])][:6]})
     doc = {"date": day, "created_at": J.now_utc().isoformat(timespec="seconds"),
            "data": {"regime": regime, "sectors": sectors, "positions": positions,
+                    "themes": theme_stats(news, m, th.get("themes", {}), day),
+                    "red_flags": red_flags(news, th.get("red_flag_words", {})),
                     "news_total": len(news), "universe": len(uni)}, "assessment": None}
     path = os.path.join(CTX, day + ".json")
     old = J.load(path, {}) or {}
@@ -176,6 +267,21 @@ def digest(doc):
             s["news_count"], ", ".join("%s %+.1f" % (x, y) for x, y in s["leaders"][:3])))
         for h in s["headlines"][:4]:
             out.append("    · [%s] %s (%s)" % (",".join(h["symbols"]), h["headline"], h["source"]))
+    if d.get("themes"):
+        out += ["", "## Temi (notizie 24h, temperatura = notizie / media dei giorni precedenti; paniere di titoli esposti)"]
+        for name, t in d["themes"].items():
+            out.append("- %s: notizie %d%s, paniere 1g %s%% 5g %s%% 20g %s%%, movimenti %s" % (
+                name, t["news_count"], (" (temperatura %.1fx)" % t["heat"]) if t.get("heat") else "",
+                fmt(t["basket_r1"]), fmt(t["basket_r5"]), fmt(t["basket_r20"]),
+                ", ".join("%s %+.1f" % (x, y) for x, y in t["movers"])))
+            for h in t["headlines"][:5]:
+                out.append("    · [%s] %s" % (",".join(h["symbols"]), h["headline"]))
+    if d.get("red_flags"):
+        out += ["", "## Bandierine rosse (indagini, cause, dimissioni... nelle ultime 24h)"]
+        for sym, x in sorted(d["red_flags"].items(), key=lambda kv: -(kv[1]["grave"] * 3 + kv[1]["attenzione"]))[:15]:
+            out.append("- %s: gravi %d, attenzione %d" % (sym, x["grave"], x["attenzione"]))
+            for h in x["headlines"][:2]:
+                out.append("    · " + h)
     if d["positions"]:
         out += ["", "## Posizioni aperte"]
         for p in d["positions"]:
@@ -186,7 +292,7 @@ def digest(doc):
     return "\n".join(out)
 
 
-def validate(a, sectors, positions):
+def validate(a, sectors, positions, themes=()):
     errs = []
     mk = a.get("market") or {}
     if mk.get("tone") not in TONES or mk.get("regime_change_risk") not in RISKS or not mk.get("summary"):
@@ -199,6 +305,10 @@ def validate(a, sectors, positions):
     missing = [s for s in sectors if s not in (a.get("sectors") or {})]
     if missing:
         errs.append("settori mancanti: %s" % ", ".join(missing))
+    for k in themes:
+        v = (a.get("themes") or {}).get(k)
+        if not v or v.get("tone") not in TONES or v.get("outlook") not in OUTLOOK or not v.get("impact") or not v.get("why"):
+            errs.append("tema %s: tone, outlook (in rafforzamento|stabile|in indebolimento), impact, why" % k)
     for k, v in (a.get("positions") or {}).items():
         if k not in positions or v.get("hold_bias") not in BIAS:
             errs.append("posizione %s: hold_bias tenere|chiudere|neutro" % k)
@@ -212,7 +322,7 @@ def cmd_assess(a):
         print("no snapshot for", a.date)
         return 1
     ass = json.load(open(a.from_file))
-    errs = validate(ass, doc["data"]["sectors"], {p["symbol"] for p in doc["data"]["positions"]})
+    errs = validate(ass, doc["data"]["sectors"], {p["symbol"] for p in doc["data"]["positions"]}, doc["data"].get("themes") or {})
     if errs:
         print("assessment refused:\n- " + "\n- ".join(errs))
         return 1
@@ -227,26 +337,36 @@ def telegram_card(doc):
     d, a = doc["data"], doc["assessment"]
     r = d["regime"]
     face = {2: "🟢🟢", 1: "🟢", 0: "⚪", -1: "🔴", -2: "🔴🔴"}
+    trend = {"in rafforzamento": "↗️ si rafforza", "stabile": "➡️ stabile", "in indebolimento": "↘️ si indebolisce"}
+    risk = {"basso": "basso", "medio": "medio", "alto": "alto ⚠️"}
+    out = ["🧭 <b>Il mercato stasera · %s</b>" % doc["date"],
+           "%s %s" % (face.get(a["market"]["tone"], ""), J.esc(a["market"]["summary"])),
+           "Rischio che la tendenza cambi: <b>%s</b>" % risk.get(a["market"]["regime_change_risk"], "")]
+    if a.get("themes"):
+        out += ["", "🌍 <b>Grandi temi</b>"]
+        for name, x in a["themes"].items():
+            t = (d.get("themes") or {}).get(name, {})
+            hot = " 🔥" if (t.get("heat") or 0) >= 1.5 else ""
+            out.append("%s <b>%s</b>%s: %s. %s" % (face.get(x["tone"], ""), J.esc(name), hot, trend.get(x["outlook"], ""),
+                                                  J.esc(x["why"])))
     rows = []
     for sec, s in sorted(d["sectors"].items(), key=lambda kv: -(kv[1]["r5"] or 0)):
         x = a["sectors"].get(sec, {})
-        rows.append("%-3s %-14s %6s%% %s%s" % (face.get(x.get("tone"), "?"), sec[:14], fmt(s["r5"]),
-                                               "⚠" if x.get("trend_change_risk") == "alto" else " ",
-                                               "🔎" if x.get("deep_dive") else ""))
-    out = ["🧭 <b>CONTESTO · %s</b>" % doc["date"],
-           "%s Mercato: %s" % (face.get(a["market"]["tone"], ""), J.esc(a["market"]["summary"])),
-           "SPY 5g %s%% · VIX %s · %s%% titoli sopra media 50g" % (fmt((r.get("SPY") or {}).get("r5")),
-                                                                  (r.get("VIX") or {}).get("close"), r["breadth"]["pct_above_50d"]),
-           "Rischio cambio di regime: <b>%s</b>" % a["market"]["regime_change_risk"],
-           "<pre>%s</pre>" % J.esc("\n".join(rows)),
-           "<i>tono 🟢/🔴 · ⚠ rischio inversione alto · 🔎 da approfondire · % = 5 giorni</i>"]
+        rows.append("%-3s %-14s %6s%%%s" % (face.get(x.get("tone"), "?"), sec[:14], fmt(s["r5"]),
+                                          "  ⚠" if x.get("trend_change_risk") == "alto" else ""))
+    out += ["", "📊 <b>Settori</b> (andamento ultima settimana)", "<pre>%s</pre>" % J.esc("\n".join(rows)),
+            "<i>🟢 clima positivo · 🔴 negativo · ⚠ possibile cambio di direzione</i>"]
     deep = [k for k, v in a["sectors"].items() if v.get("deep_dive")]
     for k in deep[:3]:
-        out.append("🔎 <b>%s</b>: %s" % (J.esc(k), J.esc(a["sectors"][k].get("why") or a["sectors"][k].get("drivers") or "")))
+        out.append("🔎 <b>Da approfondire: %s</b>. %s" % (J.esc(k), J.esc(a["sectors"][k].get("why") or "")))
+    flags = sorted((d.get("red_flags") or {}).items(), key=lambda kv: -(kv[1]["grave"] * 3 + kv[1]["attenzione"]))[:5]
+    if flags:
+        out.append("🚩 <b>Aziende con notizie preoccupanti</b> (non le compro per qualche giorno): " + J.esc(", ".join(k for k, _ in flags)))
     for k, v in (a.get("positions") or {}).items():
-        out.append("📂 %s → <b>%s</b>: %s" % (J.esc(k), v["hold_bias"], J.esc(v.get("why") or "")))
+        word = {"tenere": "la terrei", "chiudere": "la chiuderei", "neutro": "nessuna preferenza"}[v["hold_bias"]]
+        out.append("📂 %s: %s. %s" % (J.esc(k), word, J.esc(v.get("why") or "")))
     if a.get("watch"):
-        out.append("👀 Da guardare: " + J.esc(", ".join(a["watch"][:10])))
+        out.append("👀 Da guardare domani: " + J.esc(", ".join(a["watch"][:10])))
     return "\n".join(out)
 
 
@@ -295,7 +415,7 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("snapshot")
     s.add_argument("--date")
-    s.add_argument("--news-pages", type=int, default=30)
+    s.add_argument("--news-pages", type=int, default=80)
     s = sub.add_parser("assess")
     s.add_argument("date")
     s.add_argument("--from", dest="from_file", required=True)

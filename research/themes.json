@@ -1,0 +1,37 @@
+{
+  "_note": "Big themes the context diary tracks every evening: news flow (headline keywords, case-insensitive, matched as substrings) and the price of a basket of exposed tickers. Edit freely: add a theme, a keyword or a ticker.",
+  "themes": {
+    "Intelligenza artificiale": {
+      "keywords": ["artificial intelligence", " ai ", "ai chip", "gpu", "data center", "datacenter", "openai", "anthropic", "llm", "inference", "hyperscaler"],
+      "basket": ["NVDA", "AMD", "AVGO", "TSM", "MU", "MSFT", "GOOGL", "META", "AMZN", "ORCL", "SMH"]
+    },
+    "Energia per l'AI": {
+      "keywords": ["power demand", "nuclear", "electricity", "grid", "utility", "power plant", "small modular", "smr", "data center power"],
+      "basket": ["CEG", "VST", "TLN", "NRG", "GEV", "OKLO", "SMR", "ETN", "VRT", "XLU"]
+    },
+    "Petrolio e gas": {
+      "keywords": ["oil", "crude", "opec", "brent", "wti", "natural gas", "lng", "refiner", "barrel"],
+      "basket": ["XOM", "CVX", "OXY", "COP", "SLB", "HAL", "XLE", "XOP"]
+    },
+    "Guerra e difesa": {
+      "keywords": ["war", "military", "missile", "defense", "defence", "pentagon", "nato", "ukraine", "russia", "israel", "iran", "gaza", "taiwan strait", "sanction", "drone strike", "ceasefire"],
+      "basket": ["LMT", "NOC", "RTX", "GD", "LHX", "PLTR", "ITA", "GLD"]
+    },
+    "Tassi e Fed": {
+      "keywords": ["federal reserve", "fed ", "powell", "rate cut", "rate hike", "interest rate", "treasury yield", "inflation", "cpi", "jobs report", "payrolls"],
+      "basket": ["TLT", "KRE", "XLF", "XLRE", "ITB", "IWM"]
+    },
+    "Cina e dazi": {
+      "keywords": ["china", "chinese", "beijing", "tariff", "export control", "trade war", "xi jinping"],
+      "basket": ["BABA", "PDD", "JD", "FXI", "KWEB", "NVDA", "AAPL"]
+    },
+    "Cripto": {
+      "keywords": ["bitcoin", "crypto", "ethereum", "stablecoin", "blockchain"],
+      "basket": ["COIN", "MSTR", "MARA", "RIOT", "HOOD", "IBIT"]
+    }
+  },
+  "red_flag_words": {
+    "severe": ["indict", "fraud", "spy", "espionage", "bankruptcy", "chapter 11", "restatement", "ousted", "subpoena", "sec charges", "criminal", "raid", "delist", "going concern"],
+    "warning": ["probe", "investigation", "investigat", "lawsuit", "class action", "sued", "resign", "steps down", "stepping down", "departure", "successor", "succession", "antitrust", "recall", "short seller", "short report", "guidance cut", "cuts guidance", "lowers guidance", "whistleblower", "scandal", "allegation"]
+  }
+}

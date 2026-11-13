@@ -187,26 +187,26 @@ def guards(args, cfg, st, now):
     """Reasons not to look for a new entry now (empty list = go)."""
     s, why = settings(), []
     if not s.get("enabled", True):
-        why.append("autopilot disattivato (autopilot.json)")
+        why.append("il pilota automatico è spento")
     if not args.now and telegram_paused():
-        why.append("in pausa da Telegram (/pausa): scrivi /riprendi per ripartire")
+        why.append("sono in pausa (scrivi /riprendi per ripartire)")
     if not args.now:
         clock = J.alpaca_get("/v2/clock")
         if not clock.get("is_open"):
-            why.append("mercato chiuso")
+            why.append("la borsa è chiusa")
     m = now.hour * 60 + now.minute
     if m < hhmm(cfg["no_entries_before"]) or m > hhmm(cfg["no_entries_after"]):
-        why.append("fuori dalla finestra di entrata %s-%s NY" % (cfg["no_entries_before"], cfg["no_entries_after"]))
+        why.append("compro solo tra le %s e le %s" % (J.ny_to_it(cfg["no_entries_before"]), J.ny_to_it(cfg["no_entries_after"])))
     if now.date().isoformat() in FOMC_DAYS and m < hhmm("14:30"):
-        why.append("giorno Fed: niente entrate prima delle 14:30 NY")
+        why.append("oggi decide la Fed: aspetto la sua decisione")
     if st["entries"] >= int(cfg["max_trades_per_day"]):
-        why.append("già %d trade oggi (max %d)" % (st["entries"], cfg["max_trades_per_day"]))
+        why.append("ho già fatto %d operazioni, il massimo di oggi" % st["entries"])
     if st["streak"] >= int(cfg.get("max_losses_in_a_row", 2)):
-        why.append("%d perdite di fila: giornata chiusa" % st["streak"])
+        why.append("%d perdite di fila, per oggi mi fermo" % st["streak"])
     if st["losses"] >= float(cfg["max_daily_loss_usd"]):
-        why.append("limite di perdita giornaliero raggiunto")
+        why.append("ho raggiunto la perdita massima di oggi")
     if len(st["snap"]["positions"]) >= int(s["max_open_positions"]):
-        why.append("già %d posizioni aperte (max %d alla volta)" % (len(st["snap"]["positions"]), s["max_open_positions"]))
+        why.append("ho già %d posizioni aperte, il massimo (%d)" % (len(st["snap"]["positions"]), s["max_open_positions"]))
     return why
 
 
@@ -313,7 +313,7 @@ def evaluate(c, s, args, now, snaps):
             continue
         rps = plan["entry"] - plan["stop"]
         if trig and rps > 0 and px - trig > s["max_chase_r"] * rps:
-            return None, "prezzo %.2f troppo sopra il segnale %.2f (oltre %.2fR): non insegue" % (px, trig, s["max_chase_r"])
+            return None, ("chase", "prezzo %.2f, segnale %.2f, oltre %.2fR" % (px, trig, s["max_chase_r"]))
         tm, err = run_json([TM, "run", "--plan", ppath, "--until", "15:55", "--json",
                             "--write", os.path.join(d, "tm_%s.json" % tgt)] + now_flag, timeout=240)
         if not tm or "mc" not in tm:
@@ -324,80 +324,174 @@ def evaluate(c, s, args, now, snaps):
         if best is None or v["avg_r"] > best["avg_r"]:
             best = v
     if not best:
-        return None, "; ".join(notes) or "nessun piano valido"
+        return None, ("noplan", "; ".join(str(n) for n in notes) or "nessun piano valido")
     head = best["verdict"].split(":")[0]
     h = best["hist"]
+    if "toward the stop" in head:
+        return None, ("tm_bad", "%s, avgR %+.2f" % (head, best["avg_r"]))
     if "toward the target" not in head:
-        return None, "Time Machine: %s (R medio %+.2f)" % (head, best["avg_r"])
+        return None, ("tm_flip", "%s, avgR %+.2f" % (head, best["avg_r"]))
     if best["avg_r"] < s["min_tm_avg_r"]:
-        return None, "R medio simulato %+.2f sotto la soglia %+.2f" % (best["avg_r"], s["min_tm_avg_r"])
+        return None, ("tm_small", "avgR %+.2f < %+.2f" % (best["avg_r"], s["min_tm_avg_r"]))
     if setup == "orb" and (h.get("triggered") or 0) >= s["min_history_trades"] and (h.get("avg_R") or 0) <= 0:
-        return None, "storico del setup negativo: %d casi, R medio %+.2f" % (h["triggered"], h.get("avg_R") or 0)
+        return None, ("hist_bad", "%d casi, avgR %+.2f" % (h["triggered"], h.get("avg_R") or 0))
     return best, None
 
 
+# ---------------------------------------------------------------- context diary (exogenous factors)
+CTXDIR = os.path.join(ROOT, "research", "context")
+
+
+def recent_contexts(now, days=5):
+    if not os.path.isdir(CTXDIR):
+        return []
+    files = sorted(f for f in os.listdir(CTXDIR) if f.endswith(".json") and f[:10] <= now.date().isoformat())
+    return [J.load(os.path.join(CTXDIR, f)) for f in files[-days:]]
+
+
+def red_flags(now):
+    """{symbol: reason} for companies with risk headlines (probes, lawsuits, departures...) in the last 5 diaries."""
+    out = {}
+    for doc in recent_contexts(now):
+        for sym, x in ((doc or {}).get("data", {}).get("red_flags") or {}).items():
+            out[sym] = "; ".join(x.get("headlines", [])[:2])
+    return out
+
+
+def sector_note(sym):
+    try:
+        import csv
+        sec = {r["symbol"]: r["sector"] for r in csv.DictReader(open(os.path.join(ROOT, "research", "universe.csv")))}.get(sym)
+        doc = recent_contexts(J.now_utc().astimezone(NY), 1)[-1]
+        a = ((doc or {}).get("assessment") or {}).get("sectors", {}).get(sec)
+    except Exception:
+        return ""
+    if not a:
+        return ""
+    mood = {2: "molto positivo", 1: "positivo", 0: "neutro", -1: "negativo", -2: "molto negativo"}.get(a.get("tone"), "")
+    return "Clima del settore %s: %s." % (sec, mood) if mood else ""
+
+
 # ---------------------------------------------------------------- commands
+REASONS = {
+    "earnings": "conti in arrivo o appena usciti: troppo imprevedibile",
+    "chase": "era già salito troppo: comprarlo ora vorrebbe dire rincorrerlo",
+    "noplan": "il prezzo era già ricaduto sotto il livello di rottura",
+    "tm_bad": "sui dati passati operazioni così hanno perso più spesso che guadagnato",
+    "tm_flip": "sui dati passati il risultato è da testa o croce",
+    "tm_small": "il guadagno atteso era troppo piccolo",
+    "hist_bad": "in passato questo segnale su questo titolo ha fatto perdere",
+    "redflag": "notizie negative recenti sull'azienda (indagini, cause, dimissioni...)",
+    "budget": "con i limiti di rischio la posizione sarebbe stata troppo piccola",
+    "risk": "bloccato dai controlli di sicurezza",
+    "slots": "buono, ma ho già il numero massimo di posizioni aperte",
+    "room": "buono, ma per oggi ho già usato il rischio disponibile",
+    "rejected": "il broker ha rifiutato l'ordine",
+}
+SETUP_PLAIN = {"orb": "ha superato il prezzo massimo della prima mezz'ora di contrattazione",
+               "level": "ha superato il prezzo massimo di ieri"}
+
+
+def log_decisions(now, rows):
+    path = os.path.join(TRADER, "journal", "decisions.jsonl")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "a") as f:
+        for r in rows:
+            f.write(json.dumps(dict(r, ts=J.now_utc().isoformat(timespec="seconds"), ny=now.strftime("%Y-%m-%d %H:%M")),
+                               ensure_ascii=False) + "\n")
+
+
 def cmd_run(args):
     os.makedirs(WORK, exist_ok=True)
     cfg, s, now = J.config(), settings(), ny_now(args)
     dry = args.dry_run or bool(args.now)
-    log, sent_order = [], None
+    log, sent_order, dec, checked = [], None, [], 0
     try:
         st = day_state(cfg, now)
     except Exception as e:
-        J.telegram("🤖 <b>AUTOPILOT</b> · errore lettura Alpaca: %s" % J.esc(type(e).__name__))
+        J.telegram("🤖 Non riesco a leggere il conto (%s): controllo saltato." % J.esc(type(e).__name__))
         return 1
     stop = guards(args, cfg, st, now)
-    if stop:
-        log.append("nessuna ricerca: " + "; ".join(stop))
-    else:
+    if not stop:
         wl, err = ensure_watchlist(now, args)
         if err:
             log.append(err)
         found, snaps = find_triggers(wl, st, args, s, log)
+        checked = len([h for h in wl.get("hits") or []][:int(s["max_candidates"])])
+        flags = red_flags(now)
         good = []
         for c in found:
-            blocked, why = earnings_block(c["symbol"], now.date(), cfg)
+            sym = c["symbol"]
+            if sym in flags:
+                dec.append({"symbol": sym, "outcome": "skip", "code": "redflag", "detail": flags[sym]})
+                continue
+            blocked, why = earnings_block(sym, now.date(), cfg)
             if blocked:
-                log.append("%s: scartato, %s" % (c["symbol"], why))
+                dec.append({"symbol": sym, "outcome": "skip", "code": "earnings", "detail": why})
                 continue
             best, why = evaluate(c, s, args, now, snaps)
             if not best:
-                log.append("%s (%s): scartato, %s" % (c["symbol"], c["setup"], why))
+                dec.append({"symbol": sym, "outcome": "skip", "code": why[0], "detail": why[1], "setup": c["setup"]})
                 continue
             best["c"] = c
             good.append(best)
-            log.append("%s (%s): OK, %s, R medio %+.2f" % (c["symbol"], c["setup"], best["verdict"].split(":")[0], best["avg_r"]))
         good.sort(key=lambda v: -v["avg_r"])
         slots = int(s["max_open_positions"]) - len(st["snap"]["positions"])
         left = int(cfg["max_trades_per_day"]) - st["entries"]
         used_risk = used_value = 0.0
         n = 0
         for v in good:
+            sym = v["c"]["symbol"]
             if n >= min(slots, left):
-                log.append("%s: OK ma slot o trade del giorno esauriti" % v["c"]["symbol"])
+                dec.append({"symbol": sym, "outcome": "skip", "code": "slots"})
                 continue
             cfg_path, rcfg = run_config(cfg, st, used_risk, used_value, n)
             if rcfg["max_loss_per_trade_usd"] < 5 or rcfg["budget"] < 100:
-                log.append("%s: niente spazio (rischio residuo %s, cassa %s)" % (
-                    v["c"]["symbol"], J.usd(rcfg["max_loss_per_trade_usd"]), J.usd(rcfg["budget"])))
-                break
-            o = place(v, cfg_path, rcfg, args, dry, log, cfg, st)
+                dec.append({"symbol": sym, "outcome": "skip", "code": "room"})
+                continue
+            o, code, detail = place(v, cfg_path, rcfg, args, dry, cfg, st)
             if o:
                 sent_order = o
                 n += 1
                 used_risk += float(o["plan"].get("max_loss") or 0)
                 used_value += float(o["qty"]) * float(o["plan"].get("entry") or 0)
-    header = "🤖 <b>AUTOPILOT · %s NY</b>%s" % (now.strftime("%H:%M"), "  <i>(prova, nessun ordine)</i>" if dry else "")
-    if sent_order is None and args.quiet and not any("scartato" in l or "OK" in l for l in log):
-        print("\n".join(log))
+                dec.append({"symbol": sym, "outcome": "would_buy" if dry else "bought", "qty": o["qty"],
+                            "plan": o["plan"], "avg_r": v["avg_r"], "verdict": v["verdict"]})
+            else:
+                dec.append({"symbol": sym, "outcome": "skip", "code": code, "detail": detail})
+    if not dry:
+        log_decisions(now, dec + ([{"outcome": "no_search", "detail": stop}] if stop else []))
+    text = summary_text(now, stop, checked, dec, log, dry)
+    if args.quiet and stop:
+        print(text)
         return 0
-    text = header + "\n" + "\n".join("• " + J.esc(l) for l in log[:25])
     print(J.telegram(text) if not args.no_telegram else text)
     return 0
 
 
-def place(v, cfg_path, rcfg, args, dry, log, cfg, st):
+def summary_text(now, stop, checked, dec, log, dry):
+    it = now.astimezone(J.IT).strftime("%H:%M")
+    head = "🤖 <b>Controllo delle %s</b>%s" % (it, "  <i>(prova, nessun ordine)</i>" if dry else "")
+    if stop:
+        return head + "\nOggi non cerco nuove operazioni: " + J.esc("; ".join(stop)) + "."
+    bought = [d for d in dec if d["outcome"] in ("bought", "would_buy")]
+    skipped = [d for d in dec if d["outcome"] == "skip"]
+    out = [head, "Ho guardato %d titoli: %d avevano un segnale d'acquisto." % (checked, len(bought) + len(skipped))]
+    for d in bought:
+        out.append("✅ %s %s (%s azioni)" % ("Comprerei" if dry else "Comprato", J.esc(d["symbol"]), d["qty"]))
+    if skipped:
+        by = {}
+        for d in skipped:
+            by.setdefault(d.get("code"), []).append(d["symbol"])
+        out.append("❌ Non comprati:")
+        for code, syms in sorted(by.items(), key=lambda kv: -len(kv[1])):
+            out.append("• %s: %s" % (REASONS.get(code, code), J.esc(", ".join(syms[:6]) + ("…" if len(syms) > 6 else ""))))
+    if not bought and not skipped:
+        out.append("Nessun segnale d'acquisto in questo momento.")
+    return "\n".join(out)
+
+
+def place(v, cfg_path, rcfg, args, dry, cfg, st):
     sym, plan = v["c"]["symbol"], v["plan"]
     d = os.path.join(WORK, sym)
     opath = os.path.join(d, "orders.json")
@@ -406,46 +500,43 @@ def place(v, cfg_path, rcfg, args, dry, log, cfg, st):
                         "--portfolio", os.path.join(d, "portfolio.json")] + now_flag)
     orders = (J.load(opath, {}) or {}).get("orders") or []
     if not orders:
-        log.append("%s: il budget rifiuta l'ordine (%s)" % (sym, (sz or {}).get("error") or err or "stop troppo largo per il rischio"))
-        return None
+        return None, "budget", str((sz or {}).get("error") or err or "stop too wide")
     rk, err = run_json([RISK, "--orders", opath, "--config", cfg_path, "--state", os.path.join(d, "broker.json"),
                         "--portfolio", os.path.join(d, "portfolio.json"), "--out", os.path.join(d, "risk.json"),
                         "--json"] + now_flag)
     res = ((rk or {}).get("results") or [{}])[0]
     if res.get("verdict") != "PASS":
-        log.append("%s: BLOCCATO dal controllo rischio: %s" % (sym, "; ".join(res.get("reasons") or [err or "?"])))
-        return None
+        return None, "risk", "; ".join(res.get("reasons") or [str(err or "?")])
     o = orders[0]
-    why = "AUTOPILOT %s: %s. Time Machine %s, R medio simulato %+.2f%s. %s" % (
-        "rottura range di apertura" if v["c"]["setup"] == "orb" else "rottura del massimo di ieri %.2f" % v["c"].get("level", 0),
-        v["target"], v["verdict"].split(":")[0], v["avg_r"],
-        (", storico %d casi R medio %+.2f" % (v["hist"]["triggered"], v["hist"].get("avg_R") or 0)) if v["hist"].get("triggered") else "",
-        o.get("why") or "")
+    h = v["hist"]
+    why = "%s; %s%s." % (SETUP_PLAIN.get(v["c"]["setup"], "segnale d'acquisto"), J.verdict_it(v["verdict"]),
+                         (" e nelle ultime %d volte in cui si è presentato su questo titolo ha guadagnato in media" % h["triggered"])
+                         if (h.get("triggered") or 0) >= 8 and (h.get("avg_R") or 0) > 0 else "")
+    ctx = sector_note(sym)
+    if ctx:
+        why += " " + ctx
     body = {"symbol": sym, "qty": str(o["qty"]), "side": "buy", "type": "market", "time_in_force": "day",
             "order_class": "bracket", "take_profit": {"limit_price": str(o["take_profit_limit_price"])},
             "stop_loss": {"stop_price": str(o["stop_loss_stop_price"])},
             "client_order_id": "ap-%s-%s" % (J.now_utc().strftime("%Y%m%d%H%M%S"), sym)}
     if dry:
-        log.append("%s: COMPREREI %s az. (stop %s, target %s, rischio %s)" % (
-            sym, o["qty"], o["stop_loss_stop_price"], o["take_profit_limit_price"], J.usd(o["plan"].get("max_loss"))))
-        print(J.telegram("🧪 <b>PROVA</b> (nessun ordine inviato)\n" + J.buy_card(
-            {"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"}, o["plan"], why, v["verdict"], cfg)) if not args.no_telegram else "")
-        return o
+        card = "🧪 <b>PROVA</b> (nessun ordine inviato)\n" + J.buy_card(
+            {"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"}, o["plan"], why, v["verdict"], cfg)
+        print(card if args.no_telegram else J.telegram(card))
+        return o, None, None
     try:
         resp = alpaca_send("POST", "/v2/orders", body)
     except Exception as e:
         detail = e.read().decode()[:200] if hasattr(e, "read") else type(e).__name__
-        log.append("%s: ordine RIFIUTATO da Alpaca: %s" % (sym, detail))
-        return None
+        return None, "rejected", detail
     J.append_journal({"ts": J.now_utc().isoformat(timespec="seconds"), "event": "place_stock_order", "paper": True,
                       "autopilot": True, "symbol": sym, "side": "buy", "qty": o["qty"], "input": body,
                       "order_id": resp.get("id"), "why": why, "plan": o["plan"], "timemachine": v["verdict"],
                       "tm_avg_r": v["avg_r"], "response": json.dumps(resp)[:600]})
-    log.append("%s: ORDINE INVIATO, %s az. (id %s)" % (sym, o["qty"], str(resp.get("id"))[:8]))
     snap = J.safe(J.snapshot, cfg)
     J.telegram("🤖 " + J.buy_card({"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"},
                                   o["plan"], why, v["verdict"], cfg, snap))
-    return o
+    return o, None, None
 
 
 def cmd_flatten(args):

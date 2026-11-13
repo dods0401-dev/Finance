@@ -102,14 +102,113 @@ def cmd_hold(a):
     return 0
 
 
+def fetch_news(sym, since):
+    """Alpaca news archive for one symbol, cached in research/cache/news/SYM.json.gz."""
+    import json as _j
+    import urllib.parse as _u
+    path = os.path.join(D.CACHE, "news", sym + ".json.gz")
+    if os.path.exists(path):
+        with gzip.open(path, "rt") as f:
+            return _j.load(f)
+    out, tok = [], None
+    while True:
+        q = {"symbols": sym, "start": since + "T00:00:00Z", "limit": 50, "sort": "asc"}
+        if tok:
+            q["page_token"] = tok
+        try:
+            d = D.gj(D.DATA + "/v1beta1/news?" + _u.urlencode(q), D.H)
+        except Exception:
+            break
+        out += [{"t": n["created_at"], "h": n["headline"], "s": n.get("symbols") or []} for n in d.get("news") or []]
+        tok = d.get("next_page_token")
+        if not tok:
+            break
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with gzip.open(path, "wt") as f:
+        _j.dump(out, f)
+    return out
+
+
+def cmd_news(a):
+    """Event study: what happens to a stock after red-flag headlines or a sudden news spike?"""
+    import json as _j
+    sys.path.insert(0, HERE)
+    import context as C
+    words = (_j.load(open(os.path.join(D.RES, "themes.json"))) or {}).get("red_flag_words", {})
+    sev, warn = words.get("severe", []), words.get("warning", [])
+    uni = [r for r in D.load_universe() if r["type"] == "stock" and r["sector"] in D.SECTOR_ETF][:a.symbols]
+    etf = {sec: {d: c for d, o, h, l, c, v in (load(t) or [])} for sec, t in D.SECTOR_ETF.items()}
+    ev = {"grave": [], "attenzione": [], "picco notizie": [], "picco + calo del giorno": [], "picco + rialzo del giorno": []}
+    for k, r in enumerate(uni):
+        sym = r["symbol"]
+        news = fetch_news(sym, a.since)
+        bars = load(sym)
+        if not bars or not news:
+            continue
+        print("…", k + 1, "/", len(uni), sym, len(news), "notizie", flush=True)
+        idx = {b[0]: i for i, b in enumerate(bars)}
+        days = [b[0] for b in bars]
+        per_day, flag = {}, {}
+        for n in news:
+            # news after 16:00 New York belongs to the next session: approximate with UTC 21:00
+            d = n["t"][:10] if n["t"][11:13] < "21" else None
+            if d is None:
+                nxt = [x for x in days if x > n["t"][:10]][:1]
+                d = nxt[0] if nxt else None
+            if not d or d not in idx:
+                continue
+            per_day[d] = per_day.get(d, 0) + 1
+            if not C.about({"symbols": n["s"], "headline": n["h"]}, sym):
+                continue
+            h = n["h"].lower()
+            lvl = "grave" if C.has_any(h, sev) else "attenzione" if C.has_any(h, warn) else None
+            if lvl and flag.get(d) != "grave":
+                flag[d] = lvl
+        ec = etf.get(r["sector"]) or {}
+        last_flag = -99
+        for i in range(25, len(bars) - 21):
+            d = bars[i][0]
+            if d < a.since or d not in ec or bars[i + 20][0] not in ec:
+                continue
+            c0 = bars[i][4]
+            def ab(j):
+                e0, e1 = ec.get(d), ec.get(bars[i + j][0])
+                return (bars[i + j][4] / c0 - 1) - ((e1 / e0 - 1) if e0 and e1 else 0)
+            day_ret = c0 / bars[i - 1][4] - 1
+            if d in flag and i - last_flag > 10:   # first flag after 10 quiet sessions
+                ev[flag[d]].append((ab(1), ab(5), ab(20), day_ret))
+                last_flag = i
+            elif d in flag:
+                last_flag = i
+            base = [per_day.get(bars[j][0], 0) for j in range(i - 20, i)]
+            avg = sum(base) / 20
+            if per_day.get(d, 0) >= max(5, 3 * avg):
+                ev["picco notizie"].append((ab(1), ab(5), ab(20), day_ret))
+                ev["picco + calo del giorno" if day_ret < 0 else "picco + rialzo del giorno"].append((ab(1), ab(5), ab(20), day_ret))
+    print("\nRendimento del titolo MENO il suo settore, dalla chiusura del giorno dell'evento")
+    for k, xs in ev.items():
+        if len(xs) < 30:
+            print("%-26s n=%d (pochi)" % (k, len(xs)))
+            continue
+        def m(j):
+            v = [x[j] for x in xs]
+            return "%+5.2f%% ±%.2f" % (100 * stx.mean(v), 100 * stx.pstdev(v) / len(v) ** 0.5)
+        print("%-26s n=%5d | giorno dell'evento %s | 1 giorno dopo %s | 5 giorni %s | 20 giorni %s" % (
+            k, len(xs), m(3), m(0), m(1), m(2)))
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     h = sub.add_parser("hold")
     h.add_argument("--split", default="2022-01-01")
     h.add_argument("--min-adv", type=float, default=2e7)
+    n = sub.add_parser("news")
+    n.add_argument("--symbols", type=int, default=80, help="most traded stocks to study")
+    n.add_argument("--since", default="2022-01-01")
     a = ap.parse_args(argv)
-    return {"hold": cmd_hold}[a.cmd](a)
+    return {"hold": cmd_hold, "news": cmd_news}[a.cmd](a)
 
 
 if __name__ == "__main__":

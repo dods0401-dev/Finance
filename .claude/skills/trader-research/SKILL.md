@@ -30,11 +30,27 @@ python3 "${CLAUDE_SKILL_DIR}/context.py" show [DATE]
    - for **every** sector: `tone`, `trend_change_risk`, `deep_dive` (true when news flow,
      relative volume or a turn in the 5/20-day numbers make it worth a closer look),
      `drivers` (what moves it, citing headlines/data), `why`;
+   - for **every theme** in `research/themes.json` (AI, energy for AI, oil, war, rates,
+     China, crypto): `tone`, `outlook` in rafforzamento|stabile|in indebolimento, `impact`
+     (who is exposed and how, including spillovers: e.g. a scandal at NVDA → AI suppliers,
+     hyperscalers, the semiconductor ETF), `why` (news temperature vs previous days, basket
+     moves, the decisive headlines). Distinguish rumors from confirmed facts;
    - for each open position: `hold_bias` tenere|chiudere|neutro and why (news after the
      close, sector tone, earnings, extension);
    - `watch`: up to 10 tickers worth a look tomorrow.
 3. `context.py assess DATE --from FILE` validates, stores and sends the 🧭 card.
+   Write every text field for a non-expert reader, in plain Italian: no jargon (no R,
+   bps, RSI, "breakout"), short sentences, concrete numbers in $ and %.
 4. Commit and push `research/context/`.
+
+**Red flags**: companies with risk headlines in the last 24h (1 severe word such as fraud,
+indictment, spy, bankruptcy, or 2+ warning words such as probe, lawsuit, resignation) are
+stored in `data.red_flags`; the autopilot does not buy them for 5 diaries. `backtest.py news`
+measures on 2022–today what such events and sudden news spikes did next.
+
+**Plain language everywhere**: every message for the user (Telegram, replies) speaks
+business, not trading jargon: what was bought, why in one sentence, how much can be won or
+lost in $, and the result.
 
 The assessments are a **hypothesis log**: `evaluate` measures over time whether a positive
 tone beat the median sector over the next 5 days. Only what proves useful there may later

@@ -53,8 +53,8 @@ LINE = "━━━━━━━━━━━━━━━"
 GIORNI = ["lun", "mar", "mer", "gio", "ven", "sab", "dom"]
 MESI = ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"]
 DRY_RUN = False
-SETUP_IT = {"breakout_20d": "rottura 20gg", "bull_flag": "bull flag", "reclaim_ma20": "sopra MA20",
-            "oversold": "ipervenduto", "oversold_bounce": "rimbalzo"}
+SETUP_IT = {"breakout_20d": "nuovo massimo del mese", "bull_flag": "pausa dopo un rialzo", "reclaim_ma20": "torna a salire",
+            "oversold": "sceso molto", "oversold_bounce": "rimbalza dopo un calo"}
 
 DEFAULTS = {"budget": 6000, "max_loss_per_trade_usd": 120, "max_daily_loss_usd": 240,
             "max_trades_per_day": 3, "no_entries_before": "09:45", "no_entries_after": "15:30",
@@ -385,15 +385,15 @@ def today_line(snap, cfg):
     entries_today = len(today) + len(snap["positions"])
     lost = -sum(t["pnl"] for t in today if t["pnl"] < 0)
     s = stats(today)
-    return ("Oggi: trade %d/%d · P/L %s · %dW %dL · perdite %s / %s"
-            % (entries_today, int(cfg["max_trades_per_day"]), usd(s["pnl"], True), s["w"], s["l"],
+    return ("Oggi: %d operazioni (max %d) · bilancio %s · perdite %s su un massimo di %s"
+            % (entries_today, int(cfg["max_trades_per_day"]), usd(s["pnl"], True),
                usd(lost), usd(cfg["max_daily_loss_usd"])))
 
 
 def equity_line(snap):
     ch = snap["equity"] - snap["budget"]
-    return "Capitale (base %s): <b>%s</b> (%s)" % (usd(snap["budget"]), usd(snap["equity"]),
-                                                   pct(100.0 * ch / snap["budget"]))
+    return "Capitale: <b>%s</b> (%s rispetto ai %s iniziali)" % (usd(snap["equity"]), pct(100.0 * ch / snap["budget"]),
+                                                                 usd(snap["budget"]))
 
 
 def risk_per_trade(snap, cfg):
@@ -428,6 +428,27 @@ def fmt_plan(plan):
     return ", ".join(parts)
 
 
+def verdict_it(v):
+    """Time Machine verdict -> plain Italian."""
+    v = (v or "").lower()
+    if "strongly toward the target" in v:
+        return "le simulazioni sui dati passati sono nettamente favorevoli"
+    if "leans toward the target" in v:
+        return "le simulazioni sui dati passati sono leggermente favorevoli"
+    if "strongly toward the stop" in v:
+        return "le simulazioni sui dati passati sono nettamente sfavorevoli"
+    if "leans toward the stop" in v:
+        return "le simulazioni sui dati passati sono leggermente sfavorevoli"
+    if "coin flip" in v or "break-even" in v:
+        return "le simulazioni danno un risultato da testa o croce"
+    return ""
+
+
+def qty_s(q):
+    q = num(q, 0.0)
+    return str(int(q)) if q == int(q) else str(q)
+
+
 def buy_card(ti, plan, why, verdict, cfg, snap=None):
     sym, qty = ti.get("symbol"), num(ti.get("qty"), 0.0)
     plan = plan or {}
@@ -435,82 +456,75 @@ def buy_card(ti, plan, why, verdict, cfg, snap=None):
     stop = num(plan.get("stop")) or num(ti.get("stop_loss_stop_price")) or num((ti.get("stop_loss") or {}).get("stop_price"))
     target = num(plan.get("target")) or num(ti.get("take_profit_limit_price")) or num((ti.get("take_profit") or {}).get("limit_price"))
     budget = num(cfg["budget"], 6000)
-    kind = (ti.get("type") or "market").lower()
-    rows = ["Quantità  %s az. @ %s (%s)" % (int(qty) if qty == int(qty) else qty, price(entry), kind)]
-    risk = None
+    out = ["🟢 <b>Ho comprato %s</b>  <i>(conto di prova)</i>" % esc(sym)]
+    if entry and qty:
+        out.append("%s azioni a %s $ → investiti <b>%s</b> (%s del capitale)" % (
+            qty_s(qty), price(entry), usd(entry * qty), pct(100.0 * entry * qty / budget, False, 0)))
+    if why:
+        out.append("<b>Perché</b>: %s" % esc(why))
+    vi = verdict_it(verdict)
+    if vi and (not why or vi not in why):
+        out.append("📈 " + vi.capitalize() + ".")
+    if entry and target:
+        out.append("✅ Se va bene vendo a %s $ → <b>%s</b>" % (price(target), usd((target - entry) * qty, True)))
     if entry and stop:
         risk = num(plan.get("max_loss")) or (entry - stop) * qty
-        rows.append("Stop      %s  (−%s/az.)" % (price(stop), price(entry - stop)))
-    if entry and target:
-        rows.append("Target    %s  (+%s/az.)" % (price(target), price(target - entry)))
-    if risk is not None:
-        rows.append("Rischio   %s · %s del capitale" % (usd(risk), pct(100.0 * risk / budget, False)))
-    if entry and stop and target and entry > stop:
-        rows.append("R:R       %s" % ("%.1f" % ((target - entry) / (entry - stop))).replace(".", ","))
-    if entry and qty:
-        rows.append("Valore    %s · %s del budget" % (usd(entry * qty), pct(100.0 * entry * qty / budget, False, 0)))
-    out = ["🟢 <b>ACQUISTO · %s</b>  <i>paper</i>" % esc(sym), "<pre>%s</pre>" % esc("\n".join(rows))]
-    if why or plan.get("setup") or verdict:
-        if plan.get("setup"):
-            out.append("<b>Setup</b>: %s" % esc(plan["setup"]))
-        if why:
-            out.append("<b>Perché</b>: %s" % esc(why))
-        if verdict:
-            out.append("<b>Time Machine</b>: %s" % esc(verdict))
-    else:
-        out.append("⚠️ Nessun motivo trovato in trader/orders.json")
-    flat = cfg.get("flat_by", "15:55")
-    out.append("Flat entro %s ITA (%s NY)" % (ny_to_it(flat), flat))
+        out.append("🛑 Se va male vendo a %s $ → <b>%s</b> (il massimo che posso perdere, %s del capitale)" % (
+            price(stop), usd(-risk, True), pct(100.0 * risk / budget, False)))
+        if target and entry > stop:
+            out.append("Per ogni 1 $ che rischio ne posso guadagnare %s." % ("%.1f" % ((target - entry) / (entry - stop))).replace(".", ",").replace(",0", ""))
+    out.append("Chiudo comunque entro le %s." % ny_to_it(cfg.get("flat_by", "15:55")))
     if snap:
         out += [LINE, today_line(snap, cfg)]
     return "\n".join(out)
 
 
 def generic_card(tool, ti, why, plan):
-    title = {"cancel_order_by_id": "❎ ORDINE ANNULLATO", "replace_order_by_id": "✏️ ORDINE MODIFICATO",
-             "close_position": "🚪 POSIZIONE CHIUSA", "place_stock_order": "🔴 ORDINE DI VENDITA"}[tool]
-    out = ["<b>%s</b>  <i>paper</i>" % title]
-    sym = ti.get("symbol") or ti.get("symbol_or_asset_id")
-    if sym:
-        out.append("%s %s %s" % (esc((ti.get("side") or "").upper()), esc(ti.get("qty") or ""), esc(sym)))
-    if plan:
-        out.append(esc(fmt_plan(plan)))
+    sym = ti.get("symbol") or ti.get("symbol_or_asset_id") or ""
+    title = {"cancel_order_by_id": "❎ Ordine annullato", "replace_order_by_id": "✏️ Ordine modificato",
+             "close_position": "🚪 Posizione chiusa", "place_stock_order": "🔴 Ordine di vendita"}[tool]
+    out = ["<b>%s %s</b>  <i>(conto di prova)</i>" % (title, esc(sym))]
+    if ti.get("qty"):
+        out.append("%s azioni" % esc(ti.get("qty")))
     if why:
         out.append("<b>Perché</b>: %s" % esc(why))
-    if tool != "place_stock_order":
-        out.append("<code>%s</code>" % esc(json.dumps(ti, ensure_ascii=False)[:300]))
     return "\n".join(out)
+
+
+EXIT_WHY = {"TARGET": "ha raggiunto il prezzo obiettivo", "STOP": "è sceso fino al prezzo di sicurezza (stop)",
+            "USCITA IN UTILE": "chiusura in guadagno", "USCITA IN PERDITA": "chiusura in perdita",
+            "USCITA A PAREGGIO": "chiusura a pareggio"}
 
 
 def exit_card(t, snap, cfg):
     icon, label = exit_kind(t)
-    q = int(t["sold"]) if t["sold"] == int(t["sold"]) else t["sold"]
-    out = ["%s <b>%s · %s</b>  %s (%s)" % (icon, label, esc(t["symbol"]), usd(t["pnl"], True), rfmt(t.get("r"))),
-           "<pre>%s</pre>" % esc("Entrata  %s\nUscita   %s\nQuantità %s az.\nDurata   %s"
-                                  % (price(t.get("entry")), price(t.get("exit")), q,
-                                     duration(t.get("open_ts"), t.get("close_ts")) or "—"))]
+    cost = (t.get("entry") or 0) * t["sold"]
+    out = ["%s <b>Venduto %s: %s</b> (%s)" % (icon, esc(t["symbol"]), usd(t["pnl"], True),
+                                              pct(100.0 * t["pnl"] / cost if cost else 0)),
+           "Comprato a %s $, venduto a %s $%s" % (price(t.get("entry")), price(t.get("exit")),
+                                                  (" dopo " + duration(t.get("open_ts"), t.get("close_ts"))) if t.get("open_ts") else ""),
+           "Motivo: %s" % EXIT_WHY.get(label, label.lower())]
     if t.get("why"):
-        out.append("<b>Perché era entrato</b>: %s" % esc(t["why"]))
+        out.append("Era entrato perché: %s" % esc(t["why"]))
     out += [LINE, today_line(snap, cfg), equity_line(snap)]
     streak = loss_streak(snap["trades"])
     if streak >= int(cfg.get("max_losses_in_a_row", 2)):
-        out.append("⛔ <b>%d perdite di fila: stop per oggi</b> (regola del playbook)" % streak)
+        out.append("⛔ <b>%d perdite di fila: per oggi mi fermo</b>" % streak)
     start = period_start("day")
     lost = -sum(x["pnl"] for x in snap["trades"] if in_period(x, start) and x["pnl"] < 0)
     if lost >= num(cfg["max_daily_loss_usd"], 240):
-        out.append("⛔ <b>Limite di perdita giornaliero raggiunto: giornata finita</b>")
-    out.append("📝 Scrivi la lezione nel diario.")
+        out.append("⛔ <b>Raggiunta la perdita massima di oggi: per oggi mi fermo</b>")
     return "\n".join(out)
 
 
 def fill_entry_card(f, j):
-    out = ["📥 <b>ESEGUITO · %s</b>  <i>paper</i>" % esc(f.get("symbol")),
-           "Acquistate %s az. @ %s alle %s ITA" % (esc(f.get("qty")), price(f.get("price")),
-                                                   hm(parse_ts(f.get("transaction_time")) or now_utc()))]
+    out = ["📥 <b>Acquisto eseguito: %s</b>  <i>(conto di prova)</i>" % esc(f.get("symbol")),
+           "%s azioni a %s $ alle %s" % (esc(f.get("qty")), price(f.get("price")),
+                                         hm(parse_ts(f.get("transaction_time")) or now_utc()))]
     if j.get("plan"):
         p = j["plan"]
-        out.append("Stop %s · Target %s" % (price(p.get("stop")), price(p.get("target"))))
-    out.append("<b>Perché</b>: %s" % esc(j.get("why") or "non trovato nel diario (ordine fatto fuori da Claude?)"))
+        out.append("Vendo a %s $ se va bene, a %s $ se va male." % (price(p.get("target")), price(p.get("stop"))))
+    out.append("<b>Perché</b>: %s" % esc(j.get("why") or "non lo trovo nel diario (ordine fatto a mano?)"))
     return "\n".join(out)
 
 
@@ -519,37 +533,36 @@ def positions_card(positions, cfg):
         return None
     rows = []
     for p in positions:
-        rows.append("%-5s %4s @ %s  %s (%s)" % (p.get("symbol"), p.get("qty"), price(p.get("avg_entry_price")),
-                                               usd(p.get("unrealized_pl"), True),
-                                               pct(100 * num(p.get("unrealized_plpc"), 0.0))))
-    flat = cfg.get("flat_by", "15:55")
-    return "📂 <b>POSIZIONI APERTE</b>  <i>paper</i>\n<pre>%s</pre>Flat entro %s ITA" % (
-        esc("\n".join(rows)), ny_to_it(flat))
+        rows.append("%-5s %s az.  %s (%s)" % (p.get("symbol"), p.get("qty"), usd(p.get("unrealized_pl"), True),
+                                             pct(100 * num(p.get("unrealized_plpc"), 0.0))))
+    return "📂 <b>Posizioni aperte</b> (guadagno o perdita finora)\n<pre>%s</pre>Le chiudo entro le %s." % (
+        esc("\n".join(rows)), ny_to_it(cfg.get("flat_by", "15:55")))
 
 
 def perf_card(snap, cfg, period="week"):
-    labels = {"day": "OGGI", "week": "SETTIMANA", "month": "MESE", "all": "DALL'INIZIO"}
-    out = ["📊 <b>PERFORMANCE · %s</b> · %s" % (labels[period], it_date(now_utc())), equity_line(snap)]
-    rows = []
+    labels = {"day": "oggi", "week": "questa settimana", "month": "questo mese", "all": "dall'inizio"}
+    out = ["📊 <b>Come stiamo andando · %s</b>" % it_date(now_utc()), equity_line(snap)]
+    parts = []
     for p in ("day", "week", "month", "all"):
-        s = stats([t for t in snap["trades"] if in_period(t, period_start(p))])
-        rows.append("%-11s %9s  %2d trade  %dW %dL" % (labels[p].capitalize(), usd(s["pnl"], True), s["n"], s["w"], s["l"]))
-    out.append("<pre>%s</pre>" % esc("\n".join(rows)))
+        st = stats([t for t in snap["trades"] if in_period(t, period_start(p))])
+        parts.append("%s %s" % (labels[p].capitalize(), usd(st["pnl"], True)))
+    out.append(" · ".join(parts))
     s = stats([t for t in snap["trades"] if in_period(t, period_start(period))])
     if s["n"]:
-        out.append("<b>%s</b>: win rate %s · R medio %s · profit factor %s" % (
-            labels[period].capitalize(), pct(s["winrate"], False, 0), rfmt(s["avg_r"]),
-            ("%.2f" % s["pf"]).replace(".", ",") if s["pf"] is not None else "∞" if s["w"] else "—"))
-        out.append("Migliore %s %s · Peggiore %s %s" % (esc(s["best"]["symbol"]), usd(s["best"]["pnl"], True),
-                                                        esc(s["worst"]["symbol"]), usd(s["worst"]["pnl"], True)))
+        wins = [t["pnl"] for t in snap["trades"] if in_period(t, period_start(period)) and t["pnl"] > 0]
+        losses = [t["pnl"] for t in snap["trades"] if in_period(t, period_start(period)) and t["pnl"] < 0]
+        out.append("%s: %d operazioni, %d in guadagno e %d in perdita." % (labels[period].capitalize(), s["n"], s["w"], s["l"]))
+        if wins and losses:
+            out.append("Quando vinco guadagno in media %s, quando perdo perdo in media %s." % (
+                usd(sum(wins) / len(wins)), usd(-sum(losses) / len(losses))))
+        out.append("Migliore: %s %s · Peggiore: %s %s" % (esc(s["best"]["symbol"]), usd(s["best"]["pnl"], True),
+                                                          esc(s["worst"]["symbol"]), usd(s["worst"]["pnl"], True)))
     else:
-        out.append("Nessun trade chiuso in questo periodo.")
-    out.append("Max drawdown %s · P/L aperto %s" % (usd(snap["maxdd"], True), usd(snap["unreal"], True)))
+        out.append("Nessuna operazione chiusa %s." % labels[period])
+    if snap["maxdd"] < 0:
+        out.append("Il momento peggiore finora: %s rispetto al massimo raggiunto." % usd(snap["maxdd"], True))
     if snap["brake"]:
-        out.append("🧯 <b>Freno drawdown ATTIVO</b>: rischio per trade %s finché il capitale non torna sopra %s"
-                   % (usd(cfg.get("brake_risk_usd", 60)), usd(snap["budget"])))
-    else:
-        out.append("Freno drawdown: off · rischio per trade %s" % usd(risk_per_trade(snap, cfg)))
+        out.append("🧯 Il capitale è sceso sotto la soglia di sicurezza: rischio la metà per operazione finché non recupero.")
     pc = positions_card(snap["positions"], cfg)
     if pc:
         out += [LINE, pc]
@@ -597,7 +610,7 @@ def morning_card(cfg):
         lo = [m for m in movers.get("losers", []) if ok(m)][:5]
         if g or lo:
             rows = ["%-5s %8s %s" % (m["symbol"], price(m["price"]), pct(m["percent_change"])) for m in g + lo]
-            out += ["🚀 <b>Movers</b> (≥ $5, ultima seduta/pre-market)", "<pre>%s</pre>" % esc("\n".join(rows))]
+            out += ["🚀 <b>Titoli più mossi</b> (sopra i 5 $)", "<pre>%s</pre>" % esc("\n".join(rows))]
     wl = load(os.path.join(TRADER, "watchlist.json"), {}) or {}
     hits = wl.get("hits") or []
     if hits:
@@ -613,13 +626,11 @@ def morning_card(cfg):
             setup = h.get("setups") or h.get("setup") or h.get("signal") or ""
             if isinstance(setup, list):
                 setup = ", ".join(SETUP_IT.get(x, x) for x in setup)
-            rsi = " RSI %d" % h["rsi"] if num(h.get("rsi")) is not None else ""
-            rows.append("%-5s %8s %7s%s  %s" % (s, price(last or h.get("price")), ch, rsi, str(setup)[:24]))
-        out += ["👀 <b>Watchlist</b> (scan %s del %s: %d titoli, i più scambiati)" % (
-                    esc(wl.get("mode", "")), esc(str(wl.get("as_of") or wl.get("created_at") or "")[:10]), len(hits)),
+            rows.append("%-5s %8s %7s  %s" % (s, price(last or h.get("price")), ch, str(setup)[:24]))
+        out += ["👀 <b>Titoli da tenere d'occhio</b> (%d trovati, i più scambiati)" % len(hits),
                 "<pre>%s</pre>" % esc("\n".join(rows))]
     else:
-        out.append("👀 Watchlist vuota: lancia /trader-scanner daily prima dell'apertura.")
+        out.append("👀 Nessun titolo interessante trovato stamattina.")
     snap = safe(snapshot, cfg)
     if snap:
         y = [t for t in snap["trades"] if t.get("close_ts") and t["close_ts"] < period_start("day")]
@@ -627,23 +638,19 @@ def morning_card(cfg):
         prev_pnl = sum(t["pnl"] for t in y if t["close_ts"].astimezone(NY).date() == last_day) if last_day else 0.0
         wk = stats([t for t in snap["trades"] if in_period(t, period_start("week"))])
         out += ["💼 <b>Conto</b>", equity_line(snap),
-                "Ultima seduta %s · settimana %s (%d trade)" % (usd(prev_pnl, True), usd(wk["pnl"], True), wk["n"])]
+                "Ieri %s · questa settimana %s (%d operazioni)" % (usd(prev_pnl, True), usd(wk["pnl"], True), wk["n"])]
         if snap["positions"]:
-            out.append("⚠️ %d posizioni aperte dalla notte: la regola è flat ogni sera" % len(snap["positions"]))
+            out.append("📂 %d posizioni aperte dalla sera prima." % len(snap["positions"]))
     else:
         snap = {"brake": False}
     flat = cfg.get("flat_by", "15:55")
     if trading_day:
-        out += ["📏 <b>Regole di oggi</b>",
-                "<pre>%s</pre>" % esc(
-                    "Rischio/trade  %s%s\nStop giornata  %s o %d perdite\nMax trade      %d\n"
-                    "Entrate        %s–%s ITA\nFlat entro     %s ITA\nR:R minimo     %s"
-                    % (usd(risk_per_trade(snap, cfg)), " (freno)" if snap.get("brake") else "",
-                       usd(cfg["max_daily_loss_usd"]), int(cfg.get("max_losses_in_a_row", 2)), int(cfg["max_trades_per_day"]),
-                       ny_to_it(cfg["no_entries_before"]), ny_to_it(cfg["no_entries_after"]), ny_to_it(flat),
-                       str(cfg.get("min_reward_risk", 1.5)).replace(".", ","))),
-                "✅ Checklist: notizie e 8-K sulla watchlist · niente titoli con utili oggi/domani · "
-                "giorno macro (CPI/Fed/NFP)? aspetta 30 min · Time Machine prima di ogni trade"]
+        out += ["📏 <b>Regole di oggi</b>: perdo al massimo %s per operazione e %s in tutta la giornata%s; "
+                "fino a %d operazioni, %d alla volta; compro solo tra le %s e le %s e chiudo tutto entro le %s."
+                % (usd(risk_per_trade(snap, cfg)), usd(cfg["max_daily_loss_usd"]),
+                   " (ridotto: capitale sotto la soglia)" if snap.get("brake") else "",
+                   int(cfg["max_trades_per_day"]), int(load(os.path.join(ROOT, ".claude", "skills", "trader-autopilot", "autopilot.json"), {}).get("max_open_positions", 1)),
+                   ny_to_it(cfg["no_entries_before"]), ny_to_it(cfg["no_entries_after"]), ny_to_it(flat))]
     return "\n".join(out)
 
 
@@ -739,19 +746,15 @@ def cmd_eod(_args):
         print("alpaca read failed: %s" % e)
         return 1
     today = [t for t in snap["trades"] if in_period(t, period_start("day"))]
-    out = ["🌙 <b>CHIUSURA · %s</b>" % it_date(now_utc())]
+    out = ["🌙 <b>Fine giornata · %s</b>" % it_date(now_utc())]
     if today:
-        rows = ["%-5s %9s %7s  %s" % (t["symbol"], usd(t["pnl"], True), rfmt(t.get("r")), exit_kind(t)[1].lower())
-                for t in today]
+        rows = ["%-5s %9s  %s" % (t["symbol"], usd(t["pnl"], True), EXIT_WHY.get(exit_kind(t)[1], "")) for t in today]
         out.append("<pre>%s</pre>" % esc("\n".join(rows)))
     else:
-        out.append("Nessun trade chiuso oggi. Anche non tradare è una scelta valida.")
+        out.append("Oggi nessuna operazione chiusa: non c'erano occasioni abbastanza buone.")
     if snap["positions"]:
-        out.append("⛔ <b>%d posizioni ancora aperte</b>: la regola è flat entro %s ITA"
-                   % (len(snap["positions"]), ny_to_it(cfg.get("flat_by", "15:55"))))
+        out.append("📂 %d posizioni ancora aperte." % len(snap["positions"]))
     out += [LINE, perf_card(snap, cfg, "day")]
-    if today:
-        out.append("📝 Per ogni trade: lezione nel diario (ho seguito il piano? cosa rifarei?).")
     print(telegram("\n".join(out)))
     return 0
 
