@@ -198,6 +198,163 @@ def cmd_news(a):
     return 0
 
 
+def cmd_momentum(a):
+    """Monthly relative-strength portfolios on 10 years of daily bars (stocks only)."""
+    import math
+    from array import array
+    spy = load("SPY")
+    dates = [b[0] for b in spy]
+    di = {d: i for i, d in enumerate(dates)}
+    T = len(dates)
+    uni = [r for r in D.load_universe() if r["type"] == "stock"]
+    syms, sec, px, dv = [], [], [], []
+    for r in uni:
+        b = load(r["symbol"])
+        if not b or len(b) < 300:
+            continue
+        c = array("d", [math.nan]) * T
+        v = array("d", [0.0]) * T
+        for d, o, h, l, cl, vol in b:
+            i = di.get(d)
+            if i is not None:
+                c[i], v[i] = cl, cl * vol
+        syms.append(r["symbol"]); sec.append(r["sector"]); px.append(c); dv.append(v)
+    N = len(syms)
+    print("azioni con storico:", N, "| giorni:", T, dates[0], "→", dates[-1])
+    spyc = [b[4] for b in spy]
+    # month starts: first trading day of each month; signals use the previous close
+    rebal = [i for i in range(1, T) if dates[i][5:7] != dates[i - 1][5:7] and i > 260]
+
+    def ret(k, i, back, skip=0):
+        a0, a1 = px[k][i - back], px[k][i - skip]
+        return a1 / a0 - 1 if a0 == a0 and a1 == a1 and a0 > 0 else None
+
+    def liquid(k, i):
+        c = px[k][i]
+        if not (c == c) or c < 10:
+            return False
+        return sum(dv[k][i - 20:i]) / 20 >= a.min_dv
+
+    def picks(i, mode, n):
+        cand = [k for k in range(N) if liquid(k, i)]
+        mom = {}
+        for k in cand:
+            m = ret(k, i, 252, 21) if mode != "short" else ret(k, i, 126, 21)
+            if m is not None:
+                mom[k] = m
+        if mode == "sector":
+            bys = {}
+            for k in mom:
+                if sec[k] not in ("Altro",):
+                    r6 = ret(k, i, 126)
+                    if r6 is not None:
+                        bys.setdefault(sec[k], []).append(r6)
+            top = sorted(bys, key=lambda s_: -stx.median(bys[s_]))[:3]
+            pool = [k for k in mom if sec[k] in top]
+            per = max(1, n // 3)
+            out = []
+            for s_ in top:
+                out += sorted([k for k in pool if sec[k] == s_], key=lambda k: -mom[k])[:per]
+            return out
+        return sorted(mom, key=lambda k: -mom[k])[:n]
+
+    def run(mode, n, regime=False, stop=None, cost=0.001):
+        eq, hold, entry = 1.0, [], {}
+        curve = [1.0] * T
+        start = rebal[0]
+        prev = start
+        nxt = set(rebal)
+        for i in range(start, T):
+            if i in nxt:
+                i0 = i - 1
+                go = (not regime) or spyc[i0] > sum(spyc[i0 - 199:i0 + 1]) / 200
+                new = picks(i0, mode, n) if go else []
+                turnover = len(set(new) ^ set(hold)) / max(1, n)
+                eq *= (1 - cost * turnover)
+                hold = new
+                entry = {k: px[k][i0] for k in hold}
+            # daily P/L, equal weight of the slots (cash slots earn 0)
+            if hold:
+                rs = []
+                for k in list(hold):
+                    p0, p1 = px[k][i - 1], px[k][i]
+                    if p0 == p0 and p1 == p1 and p0 > 0:
+                        r_ = p1 / p0 - 1
+                        if stop and entry.get(k) and p1 < entry[k] * (1 - stop):
+                            hold.remove(k)
+                            eq_cost = cost / 2
+                            rs.append(r_ - eq_cost)
+                            continue
+                        rs.append(r_)
+                    else:
+                        rs.append(0.0)
+                eq *= 1 + sum(rs) / n
+            curve[i] = eq
+        return curve[start:], dates[start:]
+
+    def ew_universe():
+        eq, curve = 1.0, []
+        start = rebal[0]
+        members = []
+        for i in range(start, T):
+            if i in set(rebal):
+                members = [k for k in range(N) if liquid(k, i - 1)]
+            rs = []
+            for k in members:
+                p0, p1 = px[k][i - 1], px[k][i]
+                if p0 == p0 and p1 == p1 and p0 > 0:
+                    rs.append(p1 / p0 - 1)
+            eq *= 1 + (sum(rs) / len(rs) if rs else 0)
+            curve.append(eq)
+        return curve, dates[start:]
+
+    def stats_(curve, ds, frm, to):
+        idx = [j for j, d in enumerate(ds) if frm <= d < to]
+        if len(idx) < 50:
+            return None
+        c = [curve[j] for j in idx]
+        yrs = len(c) / 252
+        cagr = (c[-1] / c[0]) ** (1 / yrs) - 1
+        dr = [c[j] / c[j - 1] - 1 for j in range(1, len(c))]
+        vol = stx.pstdev(dr) * 252 ** 0.5
+        peak, mdd = c[0], 0
+        for x in c:
+            peak = max(peak, x)
+            mdd = min(mdd, x / peak - 1)
+        return cagr, vol, mdd, (cagr / vol if vol else 0)
+
+    spy_curve = [spyc[i] / spyc[rebal[0]] for i in range(rebal[0], T)]
+    variants = [("S&P 500 (solo comprare e tenere)", (spy_curve, dates[rebal[0]:])),
+                ("Tutte le azioni liquide in parti uguali", ew_universe())]
+    for name, kw in (("Top 20 per forza (12 mesi)", dict(mode="mom", n=20)),
+                     ("Top 10 per forza (12 mesi)", dict(mode="mom", n=10)),
+                     ("Top 20 per forza (6 mesi)", dict(mode="short", n=20)),
+                     ("3 settori più forti, top 7 per settore", dict(mode="sector", n=21)),
+                     ("Top 20 + filtro mercato", dict(mode="mom", n=20, regime=True)),
+                     ("Top 20 + filtro mercato + stop -15%", dict(mode="mom", n=20, regime=True, stop=0.15)),
+                     ("Settori + filtro mercato + stop -15%", dict(mode="sector", n=21, regime=True, stop=0.15))):
+        variants.append((name, run(**kw)))
+    for frm, to, lab in (("2016-01-01", "2022-01-01", "2017–2021 (calibrazione)"),
+                         ("2022-01-01", "2099-01-01", "2022–oggi (verifica)"),
+                         ("2016-01-01", "2099-01-01", "tutto il periodo")):
+        print("\n=== %s ===" % lab)
+        print("%-44s %9s %9s %10s %7s" % ("", "rend/anno", "oscill.", "calo max", "qualità"))
+        for name, (cv, ds) in variants:
+            st_ = stats_(cv, ds, frm, to)
+            if st_:
+                print("%-44s %+8.1f%% %8.1f%% %+9.1f%% %7.2f" % (name, 100 * st_[0], 100 * st_[1], 100 * st_[2], st_[3]))
+    print("\nPer anno (rendimento):")
+    years = sorted({d[:4] for d in dates[rebal[0]:]})
+    print("%-44s " % "" + " ".join("%6s" % y for y in years))
+    for name, (cv, ds) in variants:
+        row = []
+        for y in years:
+            idx = [j for j, d in enumerate(ds) if d[:4] == y]
+            row.append("%+5.0f%%" % (100 * (cv[idx[-1]] / cv[max(0, idx[0] - 1)] - 1)) if idx else "   —  ")
+        print("%-44s " % name[:44] + " ".join(row))
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -207,8 +364,10 @@ def main(argv=None):
     n = sub.add_parser("news")
     n.add_argument("--symbols", type=int, default=80, help="most traded stocks to study")
     n.add_argument("--since", default="2022-01-01")
+    m = sub.add_parser("momentum")
+    m.add_argument("--min-dv", type=float, default=2e7, help="min 20-day average $ volume at each rebalance")
     a = ap.parse_args(argv)
-    return {"hold": cmd_hold, "news": cmd_news}[a.cmd](a)
+    return {"hold": cmd_hold, "news": cmd_news, "momentum": cmd_momentum}[a.cmd](a)
 
 
 if __name__ == "__main__":
