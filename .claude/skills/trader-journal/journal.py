@@ -53,6 +53,8 @@ LINE = "━━━━━━━━━━━━━━━"
 GIORNI = ["lun", "mar", "mer", "gio", "ven", "sab", "dom"]
 MESI = ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"]
 DRY_RUN = False
+SETUP_IT = {"breakout_20d": "rottura 20gg", "bull_flag": "bull flag", "reclaim_ma20": "sopra MA20",
+            "oversold": "ipervenduto", "oversold_bounce": "rimbalzo"}
 
 DEFAULTS = {"budget": 6000, "max_loss_per_trade_usd": 120, "max_daily_loss_usd": 240,
             "max_trades_per_day": 3, "no_entries_before": "09:45", "no_entries_after": "15:30",
@@ -608,9 +610,13 @@ def morning_card(cfg):
             last = num((sn.get("latestTrade") or {}).get("p"))
             prev = num((sn.get("prevDailyBar") or {}).get("c"))
             ch = pct(100.0 * (last - prev) / prev) if last and prev else ""
-            setup = h.get("setup") or h.get("signal") or h.get("rule") or h.get("pattern") or ""
-            rows.append("%-5s %8s %7s  %s" % (s, price(last), ch, str(setup)[:18]))
-        out += ["👀 <b>Watchlist</b> (%s, %s)" % (esc(wl.get("mode", "")), esc(str(wl.get("as_of", ""))[:16])),
+            setup = h.get("setups") or h.get("setup") or h.get("signal") or ""
+            if isinstance(setup, list):
+                setup = ", ".join(SETUP_IT.get(x, x) for x in setup)
+            rsi = " RSI %d" % h["rsi"] if num(h.get("rsi")) is not None else ""
+            rows.append("%-5s %8s %7s%s  %s" % (s, price(last or h.get("price")), ch, rsi, str(setup)[:24]))
+        out += ["👀 <b>Watchlist</b> (scan %s del %s: %d titoli, i più scambiati)" % (
+                    esc(wl.get("mode", "")), esc(str(wl.get("as_of") or wl.get("created_at") or "")[:10]), len(hits)),
                 "<pre>%s</pre>" % esc("\n".join(rows))]
     else:
         out.append("👀 Watchlist vuota: lancia /trader-scanner daily prima dell'apertura.")
