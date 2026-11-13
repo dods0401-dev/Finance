@@ -11,5 +11,19 @@
     "2R"
   ],
   "orb_stop": "or-mid",
-  "level_stop": "atr:1"
+  "level_stop": "atr:1",
+  "mode": "portfolio",
+  "day_trading": false,
+  "portfolio": {
+    "core": "SPY",
+    "core_weight": 0.5,
+    "satellite_n": 10,
+    "min_dollar_volume": 100000000.0,
+    "min_price": 10,
+    "lookback_days": 252,
+    "skip_days": 21,
+    "min_trade_usd": 25,
+    "basis_usd": 6000,
+    "account_start_equity": 100000
+  }
 }

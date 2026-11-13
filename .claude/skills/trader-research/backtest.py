@@ -334,6 +334,19 @@ def cmd_momentum(a):
                      ("Top 20 + filtro mercato + stop -15%", dict(mode="mom", n=20, regime=True, stop=0.15)),
                      ("Settori + filtro mercato + stop -15%", dict(mode="sector", n=21, regime=True, stop=0.15))):
         variants.append((name, run(**kw)))
+    if a.blends:
+        base = dict(variants)
+        spyv = base["S&P 500 (solo comprare e tenere)"]
+        for mname in ("Top 10 per forza (12 mesi)", "Top 20 per forza (12 mesi)"):
+            mv, ds = base[mname]
+            for w in (0.7, 0.5, 0.4):
+                c, out = 1.0, []
+                for j in range(len(ds)):
+                    if j:
+                        c *= 1 + w * (spyv[0][j] / spyv[0][j - 1] - 1) + (1 - w) * (mv[j] / mv[j - 1] - 1)
+                    out.append(c)
+                variants.append(("MIX %d%% S&P / %d%% %s" % (w * 100, (1 - w) * 100, mname.split(" per")[0]), (out, ds)))
+        variants = [v for v in variants if v[0].startswith("MIX") or v[0].startswith("S&P") or v[0].startswith("Top 10 per") or v[0].startswith("Top 20 per forza (12")]
     for frm, to, lab in (("2016-01-01", "2022-01-01", "2017–2021 (calibrazione)"),
                          ("2022-01-01", "2099-01-01", "2022–oggi (verifica)"),
                          ("2016-01-01", "2099-01-01", "tutto il periodo")):
@@ -366,6 +379,7 @@ def main(argv=None):
     n.add_argument("--since", default="2022-01-01")
     m = sub.add_parser("momentum")
     m.add_argument("--min-dv", type=float, default=2e7, help="min 20-day average $ volume at each rebalance")
+    m.add_argument("--blends", action="store_true", help="also S&P 500 + momentum mixes")
     a = ap.parse_args(argv)
     return {"hold": cmd_hold, "news": cmd_news, "momentum": cmd_momentum}[a.cmd](a)
 

@@ -20,6 +20,21 @@ python3 "${CLAUDE_SKILL_DIR}/autopilot.py" run                              # li
 python3 "${CLAUDE_SKILL_DIR}/autopilot.py" flatten                          # cancel orders, close positions
 ```
 
+## Main mode: monthly portfolio (`rebalance`)
+```bash
+python3 "${CLAUDE_SKILL_DIR}/autopilot.py" rebalance --dry-run --no-telegram   # preview
+python3 "${CLAUDE_SKILL_DIR}/autopilot.py" rebalance --if-first-day          # scheduled, 10:05 NY
+```
+50% in SPY, 50% equally across the 10 most traded stocks (20-day average over $100M, price
+over $10) with the highest 12-month return skipping the last month. Portfolio value = the
+$6,000 basis + (account equity − $100,000), so it needs no stored state. Sells first, then
+buys with dollar (fractional) market orders; differences under $25 are skipped. Plain card
+on Telegram. Settings in `autopilot.json` → `portfolio`. Chosen on 2026-11-13 from the
+10-year backtests (`trader-research/backtest.py momentum --min-dv 1e8 --blends`).
+
+## Day trading (`run`, `flatten`): switched off (`"day_trading": false`)
+Kept for reference; the backtests found no edge after costs.
+
 ## Decision pass (`run`)
 1. **Guards** (any one stops the pass): `autopilot.json` `enabled: false`; a `/pausa`
    on Telegram newer than any `/riprendi` (last 24h of bot messages); market closed;

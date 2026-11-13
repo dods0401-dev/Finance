@@ -404,6 +404,9 @@ def log_decisions(now, rows):
 def cmd_run(args):
     os.makedirs(WORK, exist_ok=True)
     cfg, s, now = J.config(), settings(), ny_now(args)
+    if s.get("day_trading") is False:
+        print("day trading is switched off (autopilot.json): nothing to do")
+        return 0
     dry = args.dry_run or bool(args.now)
     log, sent_order, dec, checked = [], None, [], 0
     try:
@@ -582,6 +585,129 @@ def cmd_status(args):
     return 0
 
 
+# ---------------------------------------------------------------- monthly portfolio (core + satellite)
+PORTFOLIO_DEFAULT = {"core": "SPY", "core_weight": 0.5, "satellite_n": 10, "min_dollar_volume": 1e8,
+                     "min_price": 10, "lookback_days": 252, "skip_days": 21, "min_trade_usd": 25,
+                     "basis_usd": 6000, "account_start_equity": 100000}
+
+
+def portfolio_settings():
+    p = dict(PORTFOLIO_DEFAULT)
+    p.update(settings().get("portfolio") or {})
+    return p
+
+
+def momentum_picks(p, today):
+    """The satellite: the most traded large stocks that rose most over the last year,
+    skipping the last month. Uses research/universe.csv and Alpaca daily bars."""
+    sys.path.insert(0, os.path.join(SKILLS, "trader-research"))
+    import data as D
+    uni = [r for r in D.load_universe() if r["type"] == "stock" and float(r["adv_usd"]) >= p["min_dollar_volume"]
+           and float(r["price"]) >= p["min_price"]]
+    syms = [r["symbol"] for r in uni]
+    start = (today - dt.timedelta(days=int(p["lookback_days"] * 1.6))).isoformat()
+    score = {}
+    for i in range(0, len(syms), 100):
+        try:
+            got = D.bars_multi(syms[i:i + 100], "1Day", start)
+        except Exception:
+            continue
+        for sym, bs in got.items():
+            c = [b["c"] for b in bs]
+            v = [b["c"] * b["v"] for b in bs]
+            if len(c) <= p["lookback_days"]:
+                continue
+            if sum(v[-20:]) / 20 < p["min_dollar_volume"] or c[-1] < p["min_price"]:
+                continue
+            score[sym] = c[-1 - p["skip_days"]] / c[-1 - p["lookback_days"]] - 1
+    names = {r["symbol"]: (r["name"], r["sector"]) for r in uni}
+    top = sorted(score, key=lambda s_: -score[s_])[:int(p["satellite_n"])]
+    return [(s_, score[s_], names.get(s_, ("", ""))) for s_ in top], len(score)
+
+
+def first_trading_day_of_month(today):
+    cal = J.alpaca_get("/v2/calendar", {"start": today.replace(day=1).isoformat(), "end": today.isoformat()}) or []
+    return bool(cal) and cal[0]["date"] == today.isoformat()
+
+
+def cmd_rebalance(args):
+    p, s = portfolio_settings(), settings()
+    now = ny_now(args)
+    dry = args.dry_run or bool(args.now)
+    if not s.get("enabled", True):
+        print(J.telegram("📅 Ribilanciamento saltato: il pilota automatico è spento."))
+        return 0
+    if not args.now and telegram_paused():
+        print(J.telegram("📅 Ribilanciamento saltato: sono in pausa (scrivi /riprendi)."))
+        return 0
+    if args.if_first_day and not first_trading_day_of_month(now.date()):
+        print("not the first trading day of the month: nothing to do")
+        return 0
+    if not args.now and not J.alpaca_get("/v2/clock").get("is_open"):
+        print("market closed: nothing to do")
+        return 0
+    acct = J.alpaca_get("/v2/account")
+    sleeve = float(p["basis_usd"]) + float(acct["equity"]) - float(p["account_start_equity"])
+    positions = {x["symbol"]: float(x["market_value"]) for x in J.alpaca_get("/v2/positions") or []}
+    picks, ranked = momentum_picks(p, now.date())
+    if len(picks) < int(p["satellite_n"]):
+        print(J.telegram("📅 Ribilanciamento saltato: dati insufficienti (%d titoli valutati)." % ranked))
+        return 1
+    target = {p["core"]: sleeve * p["core_weight"]}
+    each = sleeve * (1 - p["core_weight"]) / len(picks)
+    for sym, _, _ in picks:
+        target[sym] = target.get(sym, 0) + each
+    orders = []
+    for sym in sorted(set(target) | set(positions)):
+        diff = target.get(sym, 0.0) - positions.get(sym, 0.0)
+        if abs(diff) < p["min_trade_usd"]:
+            continue
+        orders.append((sym, diff))
+    orders.sort(key=lambda x: x[1])  # sells first, so the cash is there for the buys
+    done, failed = [], []
+    for sym, diff in orders:
+        side = "buy" if diff > 0 else "sell"
+        if side == "sell" and target.get(sym, 0) == 0:
+            body = None  # close the whole position
+        else:
+            body = {"symbol": sym, "notional": "%.2f" % abs(diff), "side": side, "type": "market",
+                    "time_in_force": "day", "client_order_id": "pf-%s-%s" % (now.strftime("%Y%m%d%H%M"), sym)}
+        if dry:
+            done.append((sym, side, abs(diff)))
+            continue
+        try:
+            r = alpaca_send("DELETE", "/v2/positions/%s" % urllib.parse.quote(sym)) if body is None else alpaca_send("POST", "/v2/orders", body)
+            done.append((sym, side, abs(diff)))
+            J.append_journal({"ts": J.now_utc().isoformat(timespec="seconds"), "event": "rebalance", "paper": True,
+                              "autopilot": True, "symbol": sym, "side": side, "notional": round(abs(diff), 2),
+                              "order_id": r.get("id"), "why": "ribilanciamento mensile"})
+        except Exception as e:
+            failed.append((sym, side, e.read().decode()[:120] if hasattr(e, "read") else type(e).__name__))
+    log_decisions(now, [{"outcome": "rebalance", "sleeve_usd": round(sleeve, 2), "picks": [x[0] for x in picks],
+                         "orders": done, "failed": failed}] if not dry else [])
+    # plain-language card
+    out = ["📅 <b>Ribilanciamento del mese</b>%s" % ("  <i>(prova, nessun ordine)</i>" if dry else ""),
+           "Capitale del portafoglio: <b>%s</b>" % J.usd(sleeve),
+           "Metà (%s) nell'indice delle 500 maggiori aziende USA (%s): segue il mercato." % (J.usd(target[p["core"]]), p["core"]),
+           "Metà divisa su %d aziende molto scambiate che sono salite di più nell'ultimo anno (%s ciascuna):" % (len(picks), J.usd(each))]
+    for sym, sc, (name, sec) in picks:
+        out.append("• %s (%s, %s): +%d%% in un anno" % (J.esc(sym), J.esc((name or "")[:28]), J.esc(sec), round(100 * sc)))
+    buys = [x for x in done if x[1] == "buy"]
+    sells = [x for x in done if x[1] == "sell"]
+    if sells:
+        out.append("🔴 Venduto: " + ", ".join("%s %s" % (x[0], J.usd(x[2])) for x in sells))
+    if buys:
+        out.append("🟢 Comprato: " + ", ".join("%s %s" % (x[0], J.usd(x[2])) for x in buys))
+    if not done:
+        out.append("Nessuna modifica necessaria questo mese.")
+    if failed:
+        out.append("⚠️ Non riusciti: " + J.esc(", ".join("%s (%s)" % (x[0], x[2]) for x in failed)))
+    out.append("Prossimo ribilanciamento: il primo giorno di borsa del mese prossimo.")
+    text = "\n".join(out)
+    print(text if args.no_telegram else J.telegram(text))
+    return 0 if not failed else 1
+
+
 def main(argv=None):
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--dry-run", action="store_true")
@@ -592,10 +718,12 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     for n in ("run", "flatten", "status"):
         sub.add_parser(n, parents=[common])
+    rb = sub.add_parser("rebalance", parents=[common])
+    rb.add_argument("--if-first-day", action="store_true", help="only on the first trading day of the month")
     args = ap.parse_args(argv)
     if args.no_telegram:
         J.DRY_RUN = True
-    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status}[args.cmd](args)
+    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance}[args.cmd](args)
 
 
 if __name__ == "__main__":
