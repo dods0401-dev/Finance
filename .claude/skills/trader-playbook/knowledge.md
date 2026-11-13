@@ -50,3 +50,6 @@ the right section with the date. Sources for podcasts/press: show + episode + da
 - Wall Street Journal / Bloomberg Odd Lots — e.g. Brent Donnelly on what makes a
   winning trader (Odd Lots, Aug 2021).
 - Chat With Traders "Best of Risk Management" parts 1–2.
+
+## Updates
+<!-- the 8-hour refresh appends dated, sourced lessons here -->
