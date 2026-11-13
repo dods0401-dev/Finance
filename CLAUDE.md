@@ -14,4 +14,6 @@
   limits of rules.md, reporting every decision to Telegram. Kill switch: /pausa on
   Telegram or "enabled": false in .claude/skills/trader-autopilot/autopilot.json. Never live.
 - After each trade: lesson in the journal, then commit and push `trader/journal/`.
-- Reply to the user in Italian.
+- Reply to the user in Italian, in plain business language: the user is not a trader.
+  No jargon (R, bps, RSI, breakout, drawdown...) unless explained in a few words; say what
+  happened, why in one sentence, and how much was or could be won or lost in $ and %.
