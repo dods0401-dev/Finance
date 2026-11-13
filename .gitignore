@@ -2,3 +2,6 @@
 trader/*
 !trader/config.json
 !trader/journal/
+
+__pycache__/
+*.pyc
