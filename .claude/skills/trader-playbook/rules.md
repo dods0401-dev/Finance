@@ -2,6 +2,23 @@
 
 Last updated: 2026-11-13. Paper trading on Alpaca until I decide otherwise.
 
+## Five strategies in parallel (decided 2026-11-15, test of at least 1 month, verdict after 3–6)
+Paper account only. Each strategy has its own budget and its own books (orders tagged by
+strategy); together $40,000 of the $100,000 paper account.
+
+| # | Strategy | Budget | Rules |
+|---|---|---|---|
+| s1 | Bilanciato | $10,000 | 50% SPY + 50% top-10 momentum, monthly (below) |
+| s2 | Aggressivo | $10,000 | 50% SSO (S&P 500 ×2) + 50% top-10 momentum, monthly |
+| dt | Day trading | $10,000 | the day-trading rules below; flat every evening (its own shares only) |
+| sh | Short | $5,000 | short a liquid stock hit by severe news and already falling, hedged by buying its sector ETF for the same amount; max 4 at a time, $1,000 each; stop if it rises 8%; closed after 5 trading days. Never a stock another strategy holds |
+| op | Opzioni | $5,000 | buy calls on the 2 strongest sector ETFs of the last month and a put on the weakest (if falling); 30–60 days, about 2% out of the money; max $600 premium each (= max loss), max 4 open; sell at +100%, at −50% or 10 days before expiry; new entries Mondays and Thursdays |
+
+- Any strategy that loses **20% of its budget stops by itself** and says so on Telegram.
+- Pause from Telegram (phone or watch): «pausa» (all), «pausa short», «riprendi», «riprendi short».
+- Short selling and options are allowed **only** for the sh and op strategies, within these limits.
+- Weekly league table on Friday; daily table every evening.
+
 ## Main strategy: monthly portfolio (decided 2026-11-13, after the 10-year backtests)
 - Capital: the **$10,000** basis (raised from $6,000 on 2026-11-13) plus everything gained or
   lost since the start.
@@ -15,10 +32,10 @@ Last updated: 2026-11-13. Paper trading on Alpaca until I decide otherwise.
 - Monthly health check after each rebalance: the same rules replayed on the last 12 months
   versus the S&P 500. If the strategy trails the index for 3 months in a row, the user is
   warned and we review it together (nothing changes automatically).
-- No margin, no short selling, no options, no crypto.
+- No margin, no crypto (short and options only inside the sh and op strategies).
 
-## Day trading (switched OFF on 2026-11-13: no edge after costs in the backtests)
-The rules below apply only if day trading is switched back on.
+## Day trading (strategy dt, switched back on 2026-11-16 as one of the five)
+The backtests found no edge after costs: this is a live test, not a bet on it.
 
 ## Capital and risk
 - Training capital: **$6,000** (the paper account holds $100,000; size as if it were $6,000).

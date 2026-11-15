@@ -12,8 +12,8 @@
   ],
   "orb_stop": "or-mid",
   "level_stop": "atr:1",
-  "mode": "portfolio",
-  "day_trading": false,
+  "mode": "streams",
+  "day_trading": true,
   "portfolio": {
     "core": "SPY",
     "core_weight": 0.5,
@@ -26,5 +26,41 @@
     "basis_usd": 10000,
     "account_start_equity": 100000,
     "outlook_annual_return": 0.15
+  },
+  "streams": {
+    "start_date": "2026-11-16",
+    "stop_loss_pct": 0.2,
+    "list": {
+      "s1": {
+        "name": "Bilanciato",
+        "budget": 10000,
+        "core": "SPY",
+        "core_weight": 0.5
+      },
+      "s2": {
+        "name": "Aggressivo",
+        "budget": 10000,
+        "core": "SSO",
+        "core_weight": 0.5
+      },
+      "dt": {
+        "name": "Day trading",
+        "budget": 10000
+      },
+      "sh": {
+        "name": "Short",
+        "budget": 5000,
+        "slots": 4,
+        "slot_usd": 1000,
+        "hold_days": 5,
+        "stop_pct": 0.08
+      },
+      "op": {
+        "name": "Opzioni",
+        "budget": 5000,
+        "max_open": 4,
+        "max_premium_usd": 600
+      }
+    }
   }
 }

@@ -34,6 +34,7 @@ import datetime as dt
 import html
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -248,36 +249,104 @@ def tg_call(method, params=None, timeout=25):
         return None
 
 
-def bot_paused():
-    """Durable pause: '/pausa' (or '/stop', 'pausa') pins a ⏸ message in the chat; '/riprendi'
-    (or '/start', 'riprendi') unpins it. The pinned message is the state, so it survives the
-    24h limit of Telegram updates and needs no file. Returns True while paused."""
+STREAM_ALIASES = {"s1": ["bilanciato", "1"], "s2": ["aggressivo", "2"], "dt": ["day trading", "daytrading", "day", "3"],
+                  "sh": ["short", "4"], "op": ["opzioni", "opzione", "5"]}
+STREAM_NAMES = {"s1": "Bilanciato", "s2": "Aggressivo", "dt": "Day trading", "sh": "Short", "op": "Opzioni"}
+
+
+def _pinned():
+    chat = os.environ.get("TELEGRAM_CHAT_ID")
+    msg = (tg_call("getChat", {"chat_id": chat}) or {}).get("pinned_message") or {}
+    return msg.get("text", "")
+
+
+def _parse_pinned(text):
+    """Pinned status message -> (paused set, last processed update id)."""
+    ps, ref = set(), 0
+    m = re.search(r"#(\d+)", text or "")
+    if m:
+        ref = int(m.group(1))
+    if (text or "").startswith(PAUSE_MARK):
+        line = text.splitlines()[0]
+        if "TUTTO" in line.upper():
+            ps.add("all")
+        for sid, name in STREAM_NAMES.items():
+            if name.lower() in line.lower():
+                ps.add(sid)
+    return ps, ref
+
+
+def _publish(ps, ref, names, note=None):
+    chat = os.environ.get("TELEGRAM_CHAT_ID")
+    tg_call("unpinAllChatMessages", {"chat_id": chat})
+    if ps:
+        what = "TUTTO" if "all" in ps else ", ".join(names.get(x, x) for x in sorted(ps))
+        text = ("%s IN PAUSA: %s\nNon compro e non vendo per %s finché non scrivi «riprendi»%s. I resoconti continuano.\n#%d" % (
+            PAUSE_MARK, what, "nessuna strategia" if "all" in ps else "queste strategie",
+            "" if "all" in ps else " + nome (es. «riprendi short»)", ref))
+        if note:
+            text = note + "\n" + text
+        msg = tg_call("sendMessage", {"chat_id": chat, "text": text})
+        if msg:
+            tg_call("pinChatMessage", {"chat_id": chat, "message_id": msg["message_id"], "disable_notification": "true"})
+    else:
+        tg_call("sendMessage", {"chat_id": chat, "text": (note + "\n" if note else "") + "▶️ Tutte le strategie sono attive."})
+        # keep the processed-update reference pinned silently
+        msg = tg_call("sendMessage", {"chat_id": chat, "text": "▶️ Stato: tutto attivo #%d" % ref, "disable_notification": "true"})
+        if msg:
+            tg_call("pinChatMessage", {"chat_id": chat, "message_id": msg["message_id"], "disable_notification": "true"})
+
+
+def pause_state(aliases=None, names=None):
+    """Durable pause per strategy, driven by Telegram (phone or watch):
+    'pausa' / 'pausa short' / 'riprendi' / 'riprendi short' (also '/pausa', 'stop', '/start').
+    The pinned message is the state (paused strategies + last processed update id)."""
+    aliases, names = aliases or STREAM_ALIASES, names or STREAM_NAMES
     chat = os.environ.get("TELEGRAM_CHAT_ID")
     if not chat or not os.environ.get("TELEGRAM_BOT_TOKEN"):
-        return False
-    pinned = ((tg_call("getChat", {"chat_id": chat}) or {}).get("pinned_message") or {}).get("text", "")
-    paused = pinned.startswith(PAUSE_MARK)
-    last = None
+        return set()
+    ps, ref = _parse_pinned(_pinned())
+    changed, last = False, ref
     for u in tg_call("getUpdates", {"timeout": 0}) or []:
+        if u.get("update_id", 0) <= ref:
+            continue
+        last = max(last, u["update_id"])
         m = u.get("message") or {}
         if str((m.get("chat") or {}).get("id")) != str(chat):
             continue
         t = (m.get("text") or "").strip().lower().lstrip("/")
-        if t.startswith("pausa") or t.startswith("stop"):
-            last = ("pause", m.get("date", 0))
-        elif t.startswith("riprendi") or t.startswith("start"):
-            last = ("resume", m.get("date", 0))
-    if last and last[0] == "pause" and not paused:
-        msg = tg_call("sendMessage", {"chat_id": chat, "text": PAUSE_MARK + " Pilota automatico IN PAUSA: non compro e non vendo nulla "
-                                      "finché non scrivi /riprendi. I resoconti continuano."})
-        if msg:
-            tg_call("pinChatMessage", {"chat_id": chat, "message_id": msg["message_id"], "disable_notification": "true"})
-        paused = True
-    elif last and last[0] == "resume" and paused:
-        tg_call("unpinAllChatMessages", {"chat_id": chat})
-        tg_call("sendMessage", {"chat_id": chat, "text": "▶️ Pilota automatico RIPARTITO: riprendo a operare secondo le regole."})
-        paused = False
-    return paused
+        verb = "pause" if t.startswith(("pausa", "stop")) else "resume" if t.startswith(("riprendi", "start")) else None
+        if not verb:
+            continue
+        rest = t.split(None, 1)[1] if " " in t else ""
+        target = None
+        for sid, al in aliases.items():
+            if rest and any(rest.startswith(a) for a in al):
+                target = sid
+        if verb == "pause":
+            ps = {"all"} if not target else (ps | {target})
+        elif not target:
+            ps = set()
+        elif "all" in ps:
+            ps = set(aliases) - {target}     # everything was paused: only the named one restarts
+        else:
+            ps = ps - {target}
+        changed = True
+    if changed:
+        _publish(ps, last, names)
+    return ps
+
+
+def pause_add(sid, aliases=None, names=None, note=None):
+    ps = pause_state(aliases, names)
+    if sid in ps or "all" in ps:
+        return
+    _, ref = _parse_pinned(_pinned())
+    _publish(ps | {sid}, ref, names or STREAM_NAMES, note)
+
+
+def bot_paused():
+    return "all" in pause_state()
 
 
 # ---------------------------------------------------------------- trades & performance

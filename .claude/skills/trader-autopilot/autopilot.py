@@ -34,6 +34,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SKILLS = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(SKILLS, "trader-journal"))
 import journal as J  # noqa: E402
+sys.path.insert(0, HERE)
+import streams as ST  # noqa: E402
 
 ROOT = J.ROOT
 TRADER = J.TRADER
@@ -97,8 +99,9 @@ def alpaca_send(method, path, body=None):
         return json.loads(raw) if raw else {}
 
 
-def telegram_paused():
-    return bool(J.safe(J.bot_paused))
+def telegram_paused(sid="dt"):
+    ps = J.safe(ST.paused)
+    return bool(ps) and ST.is_paused(sid, ps)
 
 
 # ---------------------------------------------------------------- earnings (SEC EDGAR 8-K item 2.02)
@@ -141,19 +144,32 @@ def earnings_block(symbol, today, cfg):
 
 # ---------------------------------------------------------------- state from Alpaca
 def day_state(cfg, now):
-    snap = J.snapshot(cfg)
+    """Today's state of the day-trading stream only (orders tagged dt-)."""
+    c = ST.cfg()
+    b, orders = ST.books(c)
+    me = b["dt"]
+    dt_ids = {o["id"] for o, s_ in ST.flat_orders(orders) if s_ == "dt"}
+    fills = [f for f in J.all_fills(J.parse_ts(c["start_date"] + "T00:00:00+00:00")) if f.get("order_id") in dt_ids]
+    trades, _ = J.build_trades(fills, cfg)
     start = dt.datetime(now.year, now.month, now.day, tzinfo=NY)
-    today_trades = [t for t in snap["trades"] if t.get("close_ts") and t["close_ts"] >= start]
-    orders = J.alpaca_get("/v2/orders", {"status": "all", "after": start.isoformat(), "limit": 200, "nested": "true"}) or []
-    entries = [o for o in orders if o.get("side") == "buy" and o.get("status") not in ("canceled", "rejected", "expired")
-               and not (o.get("status") == "canceled" and float(o.get("filled_qty") or 0) == 0)]
+    today_trades = [t for t in trades if t.get("close_ts") and t["close_ts"] >= start]
+    today_orders = [o for o in orders if ST.sid_of(o.get("client_order_id")) == "dt"
+                    and J.parse_ts(o.get("submitted_at")) and J.parse_ts(o["submitted_at"]) >= start]
+    entries = [o for o in today_orders if o.get("side") == "buy" and not (
+        o.get("status") in ("canceled", "rejected", "expired") and float(o.get("filled_qty") or 0) == 0)]
+    budget = float(c["list"]["dt"]["budget"])
+    positions = []
+    for sym, q in me["qty"].items():
+        px = me["prices"].get(sym, 0.0)
+        positions.append({"symbol": sym, "qty": q, "market_value": q * px,
+                          "avg_entry_price": me["cost"].get(sym, 0.0) / q if q else 0.0,
+                          "unrealized_pl": q * px - me["cost"].get(sym, 0.0)})
     open_risk = 0.0
-    for o in J.alpaca_get("/v2/orders", {"status": "open", "nested": "true"}) or []:
-        for leg in [o] + (o.get("legs") or []):
-            if leg.get("type") == "stop" and leg.get("side") == "sell":
-                pos = next((p for p in snap["positions"] if p["symbol"] == leg["symbol"]), None)
-                if pos:
-                    open_risk += max(0.0, (float(pos["avg_entry_price"]) - float(leg["stop_price"])) * float(leg["qty"]))
+    for o, s_ in ST.flat_orders(J.alpaca_get("/v2/orders", {"status": "open", "nested": "true"}) or []):
+        if s_ == "dt" and o.get("type") == "stop" and o.get("side") == "sell":
+            pos = next((p_ for p_ in positions if p_["symbol"] == o["symbol"]), None)
+            if pos:
+                open_risk += max(0.0, (pos["avg_entry_price"] - float(o["stop_price"])) * float(o["qty"]))
     losses = -sum(t["pnl"] for t in today_trades if t["pnl"] < 0)
     streak = 0
     for t in reversed(today_trades):
@@ -161,9 +177,12 @@ def day_state(cfg, now):
             streak += 1
         else:
             break
-    traded = {o.get("symbol") for o in orders}
+    shorted = {sym for sym, q in b["sh"]["qty"].items() if q < 0}
+    snap = {"trades": trades, "positions": positions, "budget": budget, "equity": me["value"],
+            "brake": me["value"] < budget * 0.9, "unreal": sum(p_["unrealized_pl"] for p_ in positions), "maxdd": 0.0}
     return {"snap": snap, "today_trades": today_trades, "entries": len(entries), "losses": losses,
-            "open_risk": open_risk, "streak": streak, "traded": traded}
+            "open_risk": open_risk, "streak": streak, "traded": {o.get("symbol") for o in today_orders} | shorted,
+            "value": me["value"]}
 
 
 def guards(args, cfg, st, now):
@@ -171,8 +190,10 @@ def guards(args, cfg, st, now):
     s, why = settings(), []
     if not s.get("enabled", True):
         why.append("il pilota automatico è spento")
-    if not args.now and telegram_paused():
-        why.append("sono in pausa (scrivi /riprendi per ripartire)")
+    if not args.now and telegram_paused("dt"):
+        why.append("il day trading è in pausa (scrivi «riprendi day» per ripartire)")
+    if not args.now and ST.auto_stop("dt", st["value"], ST.cfg()):
+        why.append("il day trading si è fermato: ha perso troppo")
     if not args.now:
         clock = J.alpaca_get("/v2/clock")
         if not clock.get("is_open"):
@@ -459,7 +480,7 @@ def cmd_run(args):
 
 def summary_text(now, stop, checked, dec, log, dry):
     it = now.astimezone(J.IT).strftime("%H:%M")
-    head = "🤖 <b>Controllo delle %s</b>%s" % (it, "  <i>(prova, nessun ordine)</i>" if dry else "")
+    head = "⚡ <b>DAY TRADING · controllo delle %s</b>%s" % (it, "  <i>(prova, nessun ordine)</i>" if dry else "")
     if stop:
         return head + "\nOggi non cerco nuove operazioni: " + J.esc("; ".join(stop)) + "."
     bought = [d for d in dec if d["outcome"] in ("bought", "would_buy")]
@@ -506,7 +527,7 @@ def place(v, cfg_path, rcfg, args, dry, cfg, st):
     body = {"symbol": sym, "qty": str(o["qty"]), "side": "buy", "type": "market", "time_in_force": "day",
             "order_class": "bracket", "take_profit": {"limit_price": str(o["take_profit_limit_price"])},
             "stop_loss": {"stop_price": str(o["stop_loss_stop_price"])},
-            "client_order_id": "ap-%s-%s" % (J.now_utc().strftime("%Y%m%d%H%M%S"), sym)}
+            "client_order_id": ST.cid("dt", "e", sym)}
     if dry:
         card = "🧪 <b>PROVA</b> (nessun ordine inviato)\n" + J.buy_card(
             {"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"}, o["plan"], why, v["verdict"], cfg)
@@ -521,39 +542,42 @@ def place(v, cfg_path, rcfg, args, dry, cfg, st):
                       "autopilot": True, "symbol": sym, "side": "buy", "qty": o["qty"], "input": body,
                       "order_id": resp.get("id"), "why": why, "plan": o["plan"], "timemachine": v["verdict"],
                       "tm_avg_r": v["avg_r"], "response": json.dumps(resp)[:600]})
-    snap = J.safe(J.snapshot, cfg)
-    J.telegram("🤖 " + J.buy_card({"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"},
+    snap = None
+    J.telegram("⚡ <b>DAY TRADING</b>\n" + J.buy_card({"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"},
                                   o["plan"], why, v["verdict"], cfg, snap))
     return o, None, None
 
 
 def cmd_flatten(args):
+    """Closes the day-trading stream only: cancels its orders and sells its shares."""
     dry = args.dry_run
     lines = []
     try:
-        opens = J.alpaca_get("/v2/orders", {"status": "open", "nested": "true"}) or []
-        positions = J.alpaca_get("/v2/positions") or []
+        b, _ = ST.books()
+        opens = [o for o in J.alpaca_get("/v2/orders", {"status": "open", "nested": "true"}) or []
+                 if ST.sid_of(o.get("client_order_id")) == "dt"]
     except Exception as e:
-        print(J.telegram("🤖 <b>FLAT</b> · errore lettura Alpaca: %s" % J.esc(type(e).__name__)))
+        print(J.telegram("⚡ Chiusura serale: non riesco a leggere il conto (%s)" % J.esc(type(e).__name__)))
         return 1
     for o in opens:
-        lines.append("annullo ordine %s %s %s" % (o.get("side"), o.get("qty"), o.get("symbol")))
         if not dry:
             J.safe(alpaca_send, "DELETE", "/v2/orders/%s" % o["id"])
-    for p in positions:
-        lines.append("chiudo %s %s az. (P/L %s)" % (p["symbol"], p["qty"], J.usd(p.get("unrealized_pl"), True)))
+    me = b["dt"]
+    for sym, q in me["qty"].items():
+        if q <= 0:
+            continue
+        pl = q * me["prices"].get(sym, 0) - me["cost"].get(sym, 0)
+        lines.append("venduto %s (%s azioni): %s" % (sym, ("%g" % q), J.usd(pl, True)))
         if not dry:
             try:
-                r = alpaca_send("DELETE", "/v2/positions/%s" % urllib.parse.quote(p["symbol"]))
-                J.append_journal({"ts": J.now_utc().isoformat(timespec="seconds"), "event": "close_position",
-                                  "paper": True, "autopilot": True, "symbol": p["symbol"], "side": "sell",
-                                  "qty": p["qty"], "order_id": r.get("id"), "why": "flat by 15:55 (regola)"})
+                alpaca_send("POST", "/v2/orders", {"symbol": sym, "qty": "%g" % q, "side": "sell", "type": "market",
+                                                   "time_in_force": "day", "client_order_id": ST.cid("dt", "flat", sym)})
             except Exception as e:
-                lines.append("ERRORE chiusura %s: %s" % (p["symbol"], type(e).__name__))
+                lines.append("⚠️ vendita di %s non riuscita (%s)" % (sym, type(e).__name__))
     if not lines:
-        print("flat: nothing open")
+        print("flat: nothing open in the day-trading stream")
         return 0
-    print(J.telegram("🚪 <b>FLAT DI FINE GIORNATA</b>%s\n" % ("  <i>(prova)</i>" if dry else "")
+    print(J.telegram("⚡ <b>DAY TRADING · chiusura serale</b>%s\nNiente posizioni di notte:\n" % ("  <i>(prova)</i>" if dry else "")
                      + "\n".join("• " + J.esc(l) for l in lines)))
     return 0
 
@@ -745,102 +769,126 @@ def outlook_text(o):
                 round(100 * o["p_loss"]), J.usd(round(o["p01"]), True)))
 
 
-def current_weights(p):
-    acct = J.alpaca_get("/v2/account")
-    value = float(p["basis_usd"]) + float(acct["equity"]) - float(p["account_start_equity"])
-    pos = {x["symbol"]: float(x["market_value"]) for x in J.alpaca_get("/v2/positions") or []}
-    return pos, value
+def stream_settings(sid):
+    p = portfolio_settings()
+    x = ST.cfg()["list"][sid]
+    p.update({k: x[k] for k in ("core", "core_weight") if k in x})
+    p["basis_usd"] = x["budget"]
+    return p, x
+
+
+def stream_holdings(me):
+    """{symbol: market value} of one stream."""
+    return {sym: q * me["prices"].get(sym, 0.0) for sym, q in me["qty"].items()}
 
 
 def cmd_outlook(args):
-    p = portfolio_settings()
-    pos, value = current_weights(p)
-    if not pos:
-        text = "🔮 Portafoglio ancora vuoto: la simulazione partirà dopo la prima costruzione."
-    else:
-        text = outlook_text(J.safe(portfolio_outlook, p, pos, value))
+    c = ST.cfg()
+    b, _ = ST.books(c)
+    out = []
+    for sid in [k for k, v in c["list"].items() if v["kind"] == "portfolio"]:
+        p, x = stream_settings(sid)
+        hold = stream_holdings(b[sid])
+        if not hold:
+            out.append("%s %s: portafoglio ancora vuoto." % (x["emoji"], x["name"]))
+            continue
+        out.append("%s <b>%s</b>\n%s" % (x["emoji"], x["name"], outlook_text(J.safe(portfolio_outlook, p, hold, b[sid]["value"]))))
+    text = "\n\n".join(out)
     print(text if args.no_telegram else J.telegram(text))
     return 0
 
 
 def cmd_rebalance(args):
-    p, s = portfolio_settings(), settings()
-    now = ny_now(args)
+    """Monthly rebalance of the portfolio streams (Bilanciato, Aggressivo), each on its own books."""
+    s, now = settings(), ny_now(args)
     dry = args.dry_run or bool(args.now)
+    c = ST.cfg()
+    sids = [k for k, v in c["list"].items() if v["kind"] == "portfolio"]
+    if args.stream:
+        sids = [x for x in sids if x == args.stream]
     if not s.get("enabled", True):
         print(J.telegram("📅 Ribilanciamento saltato: il pilota automatico è spento."))
-        return 0
-    if not args.now and telegram_paused():
-        print(J.telegram("📅 Ribilanciamento saltato: sono in pausa (scrivi /riprendi)."))
         return 0
     if args.if_first_day and not first_trading_day_of_month(now.date()):
         print("not the first trading day of the month: nothing to do")
         return 0
-    if not args.now and not J.alpaca_get("/v2/clock").get("is_open"):
+    if not dry and not J.alpaca_get("/v2/clock").get("is_open"):
         print("market closed: nothing to do")
         return 0
-    acct = J.alpaca_get("/v2/account")
-    sleeve = float(p["basis_usd"]) + float(acct["equity"]) - float(p["account_start_equity"])
-    positions = {x["symbol"]: float(x["market_value"]) for x in J.alpaca_get("/v2/positions") or []}
-    picks, ranked = momentum_picks(p, now.date())
-    if len(picks) < int(p["satellite_n"]):
+    b, _ = ST.books(c)
+    ps = J.safe(ST.paused) or set()
+    shorted = {sym for sym, q in b["sh"]["qty"].items() if q < 0}
+    base_p = portfolio_settings()
+    picks_all, ranked = momentum_picks(dict(base_p, satellite_n=int(base_p["satellite_n"]) + len(shorted)), now.date())
+    picks = [x for x in picks_all if x[0] not in shorted][:int(base_p["satellite_n"])]
+    if len(picks) < int(base_p["satellite_n"]):
         print(J.telegram("📅 Ribilanciamento saltato: dati insufficienti (%d titoli valutati)." % ranked))
         return 1
-    target = {p["core"]: sleeve * p["core_weight"]}
-    each = sleeve * (1 - p["core_weight"]) / len(picks)
-    for sym, _, _ in picks:
-        target[sym] = target.get(sym, 0) + each
-    orders = []
-    for sym in sorted(set(target) | set(positions)):
-        diff = target.get(sym, 0.0) - positions.get(sym, 0.0)
-        if abs(diff) < p["min_trade_usd"]:
+    rc = 0
+    for sid in sids:
+        p, x = stream_settings(sid)
+        me = b[sid]
+        if ST.is_paused(sid, ps):
+            J.telegram("%s <b>%s</b>: ribilanciamento saltato, è in pausa." % (x["emoji"], x["name"]))
             continue
-        orders.append((sym, diff))
-    orders.sort(key=lambda x: x[1])  # sells first, so the cash is there for the buys
-    done, failed = [], []
-    for sym, diff in orders:
-        side = "buy" if diff > 0 else "sell"
-        if side == "sell" and target.get(sym, 0) == 0:
-            body = None  # close the whole position
-        else:
-            body = {"symbol": sym, "notional": "%.2f" % abs(diff), "side": side, "type": "market",
-                    "time_in_force": "day", "client_order_id": "pf-%s-%s" % (now.strftime("%Y%m%d%H%M"), sym)}
-        if dry:
-            done.append((sym, side, abs(diff)))
+        if ST.auto_stop(sid, me["value"], c):
             continue
-        try:
-            r = alpaca_send("DELETE", "/v2/positions/%s" % urllib.parse.quote(sym)) if body is None else alpaca_send("POST", "/v2/orders", body)
-            done.append((sym, side, abs(diff)))
-            J.append_journal({"ts": J.now_utc().isoformat(timespec="seconds"), "event": "rebalance", "paper": True,
-                              "autopilot": True, "symbol": sym, "side": side, "notional": round(abs(diff), 2),
-                              "order_id": r.get("id"), "why": "ribilanciamento mensile"})
-        except Exception as e:
-            failed.append((sym, side, e.read().decode()[:120] if hasattr(e, "read") else type(e).__name__))
-    log_decisions(now, [{"outcome": "rebalance", "sleeve_usd": round(sleeve, 2), "picks": [x[0] for x in picks],
-                         "orders": done, "failed": failed}] if not dry else [])
-    # plain-language card
-    out = ["📅 <b>Ribilanciamento del mese</b>%s" % ("  <i>(prova, nessun ordine)</i>" if dry else ""),
-           "Capitale del portafoglio: <b>%s</b>" % J.usd(sleeve),
-           "Metà (%s) nell'indice delle 500 maggiori aziende USA (%s): segue il mercato." % (J.usd(target[p["core"]]), p["core"]),
-           "Metà divisa su %d aziende molto scambiate che sono salite di più nell'ultimo anno (%s ciascuna):" % (len(picks), J.usd(each))]
-    for sym, sc, (name, sec) in picks:
-        out.append("• %s (%s, %s): +%d%% in un anno" % (J.esc(sym), J.esc((name or "")[:28]), J.esc(sec), round(100 * sc)))
-    buys = [x for x in done if x[1] == "buy"]
-    sells = [x for x in done if x[1] == "sell"]
-    if sells:
-        out.append("🔴 Venduto: " + ", ".join("%s %s" % (x[0], J.usd(x[2])) for x in sells))
-    if buys:
-        out.append("🟢 Comprato: " + ", ".join("%s %s" % (x[0], J.usd(x[2])) for x in buys))
-    if not done:
-        out.append("Nessuna modifica necessaria questo mese.")
-    if failed:
-        out.append("⚠️ Non riusciti: " + J.esc(", ".join("%s (%s)" % (x[0], x[2]) for x in failed)))
-    out.append("Prossimo ribilanciamento: il primo giorno di borsa del mese prossimo.")
-    out.append(health_text(J.safe(strategy_health, p, now.date())))
-    out.append(outlook_text(J.safe(portfolio_outlook, p, dict(target), sleeve)))
-    text = "\n".join(out)
-    print(text if args.no_telegram else J.telegram(text))
-    return 0 if not failed else 1
+        value = me["value"]
+        hold = stream_holdings(me)
+        target = {p["core"]: value * p["core_weight"]}
+        each = value * (1 - p["core_weight"]) / len(picks)
+        for sym, _, _ in picks:
+            target[sym] = target.get(sym, 0) + each
+        orders = [(sym, target.get(sym, 0.0) - hold.get(sym, 0.0)) for sym in sorted(set(target) | set(hold))]
+        orders = sorted([o for o in orders if abs(o[1]) >= p["min_trade_usd"]], key=lambda o: o[1])
+        done, failed = [], []
+        for sym, diff in orders:
+            side = "buy" if diff > 0 else "sell"
+            if side == "sell":
+                q = me["qty"].get(sym, 0.0)
+                px = me["prices"].get(sym) or 0
+                qty = q if target.get(sym, 0) == 0 or not px else min(q, abs(diff) / px)
+                body = {"symbol": sym, "qty": "%.6f" % qty, "side": "sell", "type": "market", "time_in_force": "day",
+                        "client_order_id": ST.cid(sid, "r", sym)}
+            else:
+                body = {"symbol": sym, "notional": "%.2f" % diff, "side": "buy", "type": "market", "time_in_force": "day",
+                        "client_order_id": ST.cid(sid, "r", sym)}
+            if dry:
+                done.append((sym, side, abs(diff)))
+                continue
+            try:
+                r = alpaca_send("POST", "/v2/orders", body)
+                done.append((sym, side, abs(diff)))
+                J.append_journal({"ts": J.now_utc().isoformat(timespec="seconds"), "event": "rebalance", "paper": True,
+                                  "stream": sid, "symbol": sym, "side": side, "notional": round(abs(diff), 2),
+                                  "order_id": r.get("id"), "why": "ribilanciamento mensile"})
+            except Exception as e:
+                failed.append((sym, side, e.read().decode()[:120] if hasattr(e, "read") else type(e).__name__))
+        core_name = "nell'indice delle 500 maggiori aziende USA (SPY)" if p["core"] == "SPY" else \
+            "nell'indice S&amp;P 500 a leva 2× (SSO: si muove il doppio del mercato)" if p["core"] == "SSO" else "in " + p["core"]
+        out = [ST.header(sid, c, "ribilanciamento del mese", dry),
+               "💼 Capitale: <b>%s</b> (partito da %s)" % (J.usd(round(value)), J.usd(x["budget"])),
+               "🏛 %d%% (%s) %s" % (round(100 * p["core_weight"]), J.usd(round(target[p["core"]])), core_name),
+               "🚀 %d%% su %d aziende salite di più nell'ultimo anno, %s ciascuna:" % (
+                   round(100 * (1 - p["core_weight"])), len(picks), J.usd(round(each)))]
+        out.append("<pre>%s</pre>" % J.esc("\n".join("%-5s +%4d%%  %s" % (sym, round(100 * sc), (name or "")[:22])
+                                                      for sym, sc, (name, sec) in picks)))
+        buys = [d for d in done if d[1] == "buy"]
+        sells = [d for d in done if d[1] == "sell"]
+        if sells:
+            out.append("🔴 Venduto: " + ", ".join("%s %s" % (d[0], J.usd(round(d[2]))) for d in sells))
+        if buys:
+            out.append("🟢 Comprato: " + ", ".join("%s %s" % (d[0], J.usd(round(d[2]))) for d in buys))
+        if not done:
+            out.append("✔️ Nessuna modifica necessaria questo mese.")
+        if failed:
+            out.append("⚠️ Non riusciti: " + J.esc(", ".join("%s (%s)" % (d[0], d[2]) for d in failed)))
+            rc = 1
+        out.append(health_text(J.safe(strategy_health, p, now.date())))
+        out.append(outlook_text(J.safe(portfolio_outlook, p, dict(target), value)))
+        text = "\n".join(out)
+        print(text if args.no_telegram else J.telegram(text))
+    return rc
 
 
 def main(argv=None):
@@ -857,10 +905,17 @@ def main(argv=None):
     sub.add_parser("outlook", parents=[common])
     rb = sub.add_parser("rebalance", parents=[common])
     rb.add_argument("--if-first-day", action="store_true", help="only on the first trading day of the month")
+    rb.add_argument("--stream", choices=["s1", "s2"], help="only this portfolio stream")
+    sub.add_parser("short", parents=[common])
+    op = sub.add_parser("options", parents=[common])
+    op.add_argument("--force", action="store_true", help="look for new entries even if today is not an entry day")
+    sp = sub.add_parser("streams", parents=[common])
+    sp.add_argument("--weekly", action="store_true")
     args = ap.parse_args(argv)
     if args.no_telegram:
         J.DRY_RUN = True
-    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance, "health": cmd_health, "outlook": cmd_outlook}[args.cmd](args)
+    return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance, "health": cmd_health, "outlook": cmd_outlook,
+            "short": ST.cmd_short, "options": ST.cmd_options, "streams": ST.cmd_streams}[args.cmd](args)
 
 
 if __name__ == "__main__":
