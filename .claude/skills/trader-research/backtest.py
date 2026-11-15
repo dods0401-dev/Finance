@@ -368,6 +368,128 @@ def cmd_momentum(a):
     return 0
 
 
+def bs_price(kind, S, K, T, r, v):
+    """Black-Scholes price of a European option (kind 'call' or 'put')."""
+    import math
+    if T <= 0 or v <= 0:
+        return max(0.0, (S - K) if kind == "call" else (K - S))
+    d1 = (math.log(S / K) + (r + 0.5 * v * v) * T) / (v * math.sqrt(T))
+    d2 = d1 - v * math.sqrt(T)
+    N = lambda x: 0.5 * (1 + math.erf(x / math.sqrt(2)))
+    if kind == "call":
+        return S * N(d1) - K * math.exp(-r * T) * N(d2)
+    return K * math.exp(-r * T) * N(-d2) - S * N(-d1)
+
+
+def cmd_options(a):
+    """Monthly: the current model (50% S&P 500 + 50% top-10 momentum) with option overlays
+    priced by Black-Scholes from VIX (+ skew for out-of-the-money puts) and T-bill rates."""
+    import json as _j
+    vr = _j.load(open(os.path.join(D.CACHE, "vix_irx.json")))
+    vix, irx = vr["^VIX"], vr["^IRX"]
+    spy = {b[0]: b[4] for b in load("SPY")}
+    sso = {b[0]: b[4] for b in load("SSO")}
+    dates = sorted(spy)
+    starts = [i for i in range(1, len(dates)) if dates[i][5:7] != dates[i - 1][5:7] and i > 260]
+    uni = [r["symbol"] for r in D.load_universe() if r["type"] == "stock"]
+    px, dv = {}, {}
+    for sym in uni:
+        b = load(sym)
+        if b and len(b) > 300:
+            px[sym] = {x[0]: x[4] for x in b}
+            dv[sym] = {x[0]: x[4] * x[5] for x in b}
+    print("azioni:", len(px), "| mesi:", len(starts) - 1)
+    months, prev_picks = [], set()
+    for a_, b_ in zip(starts[:-1], starts[1:]):
+        d0, d1 = dates[a_ - 1], dates[b_ - 1]
+        dl, ds_ = dates[a_ - 1 - 252], dates[a_ - 1 - 21]
+        last20 = dates[a_ - 21:a_ - 1]
+        score = {}
+        for sym, c in px.items():
+            if d0 in c and dl in c and ds_ in c and c[d0] >= 10:
+                if sum(dv[sym].get(x, 0) for x in last20) / 20 >= 1e8:
+                    score[sym] = c[ds_] / c[dl] - 1
+        picks = sorted(score, key=lambda x: -score[x])[:10]
+        rs = [px[x][d1] / px[x][d0] - 1 for x in picks if d1 in px[x]]
+        sat = sum(rs) / len(rs) if rs else 0.0
+        turn = len(set(picks) ^ prev_picks) / 20
+        prev_picks = set(picks)
+        S0, S1 = spy[d0], spy[d1]
+        T = (b_ - a_) / 252
+        r = (irx.get(d0) or 2.0) / 100
+        v = (vix.get(d0) or 18.0) / 100
+        months.append({"m": d0[:7], "spy": S1 / S0 - 1, "sso": sso[d1] / sso[d0] - 1, "sat": sat, "turn": turn,
+                       "S0": S0, "S1": S1, "T": T, "r": r, "v": v})
+
+    OPT_COST = 0.03   # bid-ask paid on each option premium
+    STK_COST = 0.001  # per $ traded in the stock satellite
+
+    def put_leg(m, otm, skew):
+        K = m["S0"] * (1 - otm)
+        prem = bs_price("put", m["S0"], K, m["T"], m["r"], m["v"] + skew) * (1 + OPT_COST)
+        return (max(K - m["S1"], 0) - prem) / m["S0"], prem / m["S0"]
+
+    def call_leg(m, otm, skew):
+        K = m["S0"] * (1 + otm)
+        prem = bs_price("call", m["S0"], K, m["T"], m["r"], max(0.05, m["v"] + skew))
+        return (max(m["S1"] - K, 0) - prem * (1 - OPT_COST)), prem
+
+    def base(m, core="spy", w=0.5):
+        return w * m[core] + (1 - w) * (m["sat"] - STK_COST * m["turn"] * 2)
+
+    V = {
+        "A. Modello attuale (50% S&P + 50% top 10)": lambda m: base(m),
+        "B. + assicurazione: put -5% su tutto": lambda m: base(m) + put_leg(m, 0.05, 0.02)[0],
+        "C. + assicurazione: put -10% su tutto": lambda m: base(m) + put_leg(m, 0.10, 0.04)[0],
+        "D. Collare sull'indice (put -5%, call +5% venduta)": lambda m: base(m) + 0.5 * (
+            put_leg(m, 0.05, 0.02)[0] - call_leg(m, 0.05, -0.02)[0] / m["S0"]),
+        "E. Più rischio: indice a leva 2x (SSO)": lambda m: base(m, "sso"),
+        "F. Leva 2x + assicurazione put -10%": lambda m: base(m, "sso") + put_leg(m, 0.10, 0.04)[0],
+        "G. 10% in call S&P ogni mese + 90% modello": lambda m: 0.9 * base(m) + 0.1 * (
+            max(m["S1"] - m["S0"], 0) / (bs_price("call", m["S0"], m["S0"], m["T"], m["r"], m["v"]) * (1 + OPT_COST)) - 1),
+        "H. Più rischio: 30% S&P + 70% top 10": lambda m: base(m, "spy", 0.3),
+        "I. 30/70 + assicurazione put -10%": lambda m: base(m, "spy", 0.3) + put_leg(m, 0.10, 0.04)[0],
+    }
+    cost_note = sum(put_leg(m, 0.05, 0.02)[1] for m in months) / len(months)
+    cost_note10 = sum(put_leg(m, 0.10, 0.04)[1] for m in months) / len(months)
+
+    def stats_(rets):
+        eq, peak, mdd = 1.0, 1.0, 0.0
+        for x in rets:
+            eq *= 1 + x
+            peak = max(peak, eq)
+            mdd = min(mdd, eq / peak - 1)
+        yrs = len(rets) / 12
+        cagr = eq ** (1 / yrs) - 1
+        vol = stx.pstdev(rets) * 12 ** 0.5
+        return cagr, vol, mdd, min(rets), sum(1 for x in rets if x < 0) / len(rets)
+
+    print("costo medio dell'assicurazione al mese: put -5%% = %.2f%% del valore, put -10%% = %.2f%%" % (100 * cost_note, 100 * cost_note10))
+    for frm, to, lab in (("2016", "2022", "2017–2021 (calibrazione)"), ("2022", "2099", "2022–oggi (verifica)"),
+                         ("2016", "2099", "tutto il periodo")):
+        sel = [m for m in months if frm <= m["m"][:4] < to]
+        print("\n=== %s: %d mesi ===" % (lab, len(sel)))
+        print("%-52s %9s %8s %9s %10s %7s %14s" % ("", "rend/anno", "oscill.", "calo max", "mese peggio", "mesi -", "10.000$ dopo 1a"))
+        for name, f in V.items():
+            rets = [f(m) for m in sel]
+            c, vo, dd, worst, neg = stats_(rets)
+            print("%-52s %+8.1f%% %7.1f%% %+8.1f%% %+9.1f%% %6.0f%% %13s" % (name, 100 * c, 100 * vo, 100 * dd, 100 * worst, 100 * neg,
+                                                                            "%+.0f $" % (10000 * c)))
+    print("\nAnni (rendimento):")
+    years = sorted({m["m"][:4] for m in months})
+    print("%-52s " % "" + " ".join("%6s" % y for y in years))
+    for name, f in V.items():
+        row = []
+        for y in years:
+            g = 1.0
+            for m in months:
+                if m["m"][:4] == y:
+                    g *= 1 + f(m)
+            row.append("%+5.0f%%" % (100 * (g - 1)))
+        print("%-52s " % name[:52] + " ".join(row))
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -380,8 +502,9 @@ def main(argv=None):
     m = sub.add_parser("momentum")
     m.add_argument("--min-dv", type=float, default=2e7, help="min 20-day average $ volume at each rebalance")
     m.add_argument("--blends", action="store_true", help="also S&P 500 + momentum mixes")
+    sub.add_parser("options")
     a = ap.parse_args(argv)
-    return {"hold": cmd_hold, "news": cmd_news, "momentum": cmd_momentum}[a.cmd](a)
+    return {"hold": cmd_hold, "news": cmd_news, "momentum": cmd_momentum, "options": cmd_options}[a.cmd](a)
 
 
 if __name__ == "__main__":
