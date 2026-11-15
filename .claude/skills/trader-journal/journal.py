@@ -748,7 +748,16 @@ def morning_card(cfg):
                 "<pre>%s</pre>" % esc("\n".join(rows))]
     else:
         out.append("👀 Nessun titolo interessante trovato stamattina.")
-    snap = safe(snapshot, cfg)
+    ap0 = load(os.path.join(ROOT, ".claude", "skills", "trader-autopilot", "autopilot.json"), {}) or {}
+    st0 = (ap0.get("streams") or {}).get("list") or {}
+    snap = None if st0 else safe(snapshot, cfg)
+    if st0:
+        acct = safe(alpaca_get, "/v2/account") or {}
+        tot_b = sum(float(x.get("budget", 0)) for x in st0.values())
+        if acct.get("equity"):
+            tot_v = tot_b + float(acct["equity"]) - 100000
+            out += ["🏁 <b>Le %d strategie</b>: %s (partite da %s, %s). Classifica completa stasera alle 22:17." % (
+                len(st0), usd(round(tot_v)), usd(tot_b), pct(100 * (tot_v / tot_b - 1)))]
     if snap:
         y = [t for t in snap["trades"] if t.get("close_ts") and t["close_ts"] < period_start("day")]
         last_day = max((t["close_ts"].astimezone(NY).date() for t in y), default=None)
@@ -762,7 +771,9 @@ def morning_card(cfg):
         snap = {"brake": False}
     flat = cfg.get("flat_by", "15:55")
     ap = load(os.path.join(ROOT, ".claude", "skills", "trader-autopilot", "autopilot.json"), {}) or {}
-    if ap.get("day_trading") is False:
+    if st0:
+        trading_day = False
+    elif ap.get("day_trading") is False:
         pf = ap.get("portfolio") or {}
         out += ["📅 <b>Portafoglio</b>: %d%% nell'indice S&P 500 e %d%% sulle %d aziende più forti dell'ultimo anno. "
                 "Si ribilancia da solo il primo giorno di borsa di ogni mese." % (
