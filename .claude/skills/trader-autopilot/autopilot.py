@@ -98,24 +98,7 @@ def alpaca_send(method, path, body=None):
 
 
 def telegram_paused():
-    token, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
-    if not token or not chat:
-        return False
-    try:
-        d = J.http_json("https://api.telegram.org/bot%s/getUpdates" % token, timeout=25)
-    except Exception:
-        return False
-    state = False
-    for u in d.get("result") or []:
-        m = u.get("message") or {}
-        if str((m.get("chat") or {}).get("id")) != str(chat):
-            continue
-        t = (m.get("text") or "").strip().lower()
-        if t.startswith("/pausa") or t.startswith("/stop"):
-            state = True
-        elif t.startswith("/riprendi") or t.startswith("/start"):
-            state = False
-    return state
+    return bool(J.safe(J.bot_paused))
 
 
 # ---------------------------------------------------------------- earnings (SEC EDGAR 8-K item 2.02)

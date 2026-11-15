@@ -232,6 +232,54 @@ def yahoo_quote(symbol):
     return last, prev
 
 
+# ---------------------------------------------------------------- pause from Telegram (phone or watch)
+PAUSE_MARK = "⏸"
+
+
+def tg_call(method, params=None, timeout=25):
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        return None
+    data = urllib.parse.urlencode(params or {}).encode()
+    try:
+        with urllib.request.urlopen("https://api.telegram.org/bot%s/%s" % (token, method), data=data, timeout=timeout) as r:
+            return json.load(r).get("result")
+    except Exception:
+        return None
+
+
+def bot_paused():
+    """Durable pause: '/pausa' (or '/stop', 'pausa') pins a ⏸ message in the chat; '/riprendi'
+    (or '/start', 'riprendi') unpins it. The pinned message is the state, so it survives the
+    24h limit of Telegram updates and needs no file. Returns True while paused."""
+    chat = os.environ.get("TELEGRAM_CHAT_ID")
+    if not chat or not os.environ.get("TELEGRAM_BOT_TOKEN"):
+        return False
+    pinned = ((tg_call("getChat", {"chat_id": chat}) or {}).get("pinned_message") or {}).get("text", "")
+    paused = pinned.startswith(PAUSE_MARK)
+    last = None
+    for u in tg_call("getUpdates", {"timeout": 0}) or []:
+        m = u.get("message") or {}
+        if str((m.get("chat") or {}).get("id")) != str(chat):
+            continue
+        t = (m.get("text") or "").strip().lower().lstrip("/")
+        if t.startswith("pausa") or t.startswith("stop"):
+            last = ("pause", m.get("date", 0))
+        elif t.startswith("riprendi") or t.startswith("start"):
+            last = ("resume", m.get("date", 0))
+    if last and last[0] == "pause" and not paused:
+        msg = tg_call("sendMessage", {"chat_id": chat, "text": PAUSE_MARK + " Pilota automatico IN PAUSA: non compro e non vendo nulla "
+                                      "finché non scrivi /riprendi. I resoconti continuano."})
+        if msg:
+            tg_call("pinChatMessage", {"chat_id": chat, "message_id": msg["message_id"], "disable_notification": "true"})
+        paused = True
+    elif last and last[0] == "resume" and paused:
+        tg_call("unpinAllChatMessages", {"chat_id": chat})
+        tg_call("sendMessage", {"chat_id": chat, "text": "▶️ Pilota automatico RIPARTITO: riprendo a operare secondo le regole."})
+        paused = False
+    return paused
+
+
 # ---------------------------------------------------------------- trades & performance
 def all_fills(since=None):
     out, token = [], None
@@ -730,7 +778,8 @@ def cmd_monitor(args):
 
 
 def cmd_morning(_args):
-    print(telegram(morning_card(config())))
+    paused = safe(bot_paused)
+    print(telegram(morning_card(config()) + ("\n⏸ <b>Pilota automatico in pausa</b> (scrivi /riprendi per ripartire)." if paused else "")))
     return 0
 
 
@@ -746,6 +795,7 @@ def cmd_perf(args):
 
 
 def cmd_eod(_args):
+    safe(bot_paused)  # reads /pausa or /riprendi and confirms them in the chat
     cfg = config()
     try:
         snap = snapshot(cfg)

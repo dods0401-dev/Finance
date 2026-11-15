@@ -75,8 +75,10 @@ Every pass sends a Telegram summary of what it checked and why it did or did not
 stricter than `trader-playbook/rules.md`, never looser.
 
 ## Kill switches
-- Telegram: send `/pausa` to the bot (resume with `/riprendi`). Holds for 24h of
-  bot history; for a longer stop set `"enabled": false` in `autopilot.json` and push.
+- Telegram (phone or watch, by replying to any bot message): `/pausa` (or `pausa`, `/stop`).
+  The next scheduled task (briefing 08:47, end of day 22:17, rebalance) reads it, pins a
+  "⏸ IN PAUSA" message in the chat and from then on buys and sells nothing; reports go on.
+  `/riprendi` (or `riprendi`, `/start`) unpins it and confirms. The pinned message is the
+  state: durable, no file, no 24h limit.
+- `"enabled": false` in `autopilot.json` (pushed to main) for a permanent stop.
 - `flatten` closes everything at once.
-
-Paper only: the endpoint is hard-coded and asserted. Never point it at live.
