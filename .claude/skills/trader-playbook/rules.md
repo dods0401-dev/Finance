@@ -2,15 +2,16 @@
 
 Last updated: 2026-11-13. Paper trading on Alpaca until I decide otherwise.
 
-## Five strategies in parallel (decided 2026-11-15, test of at least 1 month, verdict after 3–6)
+## Six strategies in parallel (decided 2026-11-15, Day lungo added 2026-11-16, test of at least 1 month, verdict after 3–6)
 Paper account only. Each strategy has its own budget and its own books (orders tagged by
-strategy); together $40,000 of the $100,000 paper account.
+strategy); together $45,000 of the $100,000 paper account.
 
 | # | Strategy | Budget | Rules |
 |---|---|---|---|
 | s1 | Bilanciato | $10,000 | 50% SPY + 50% top-10 momentum, monthly (below) |
 | s2 | Aggressivo | $10,000 | 50% SSO (S&P 500 ×2) + 50% top-10 momentum, monthly |
 | dt | Day trading | $10,000 | the day-trading rules below; flat every evening (its own shares only) |
+| dl | Day lungo | $5,000 | same entry signals as day trading, but no fixed target: a protective stop (good until cancelled) is raised every hour to the highest price since entry minus the initial risk; at 15:40 New York it keeps a position overnight only if it is in profit, the S&P 500 is above its 200-day average, the stock is less than 10% above its 20-day average, no earnings are due and no negative news; otherwise it sells; at most 5 trading days |
 | sh | Short | $5,000 | short a liquid stock hit by severe news and already falling, hedged by buying its sector ETF for the same amount; max 4 at a time, $1,000 each; stop if it rises 8%; closed after 5 trading days. Never a stock another strategy holds |
 | op | Opzioni | $5,000 | buy calls on the 2 strongest sector ETFs of the last month and a put on the weakest (if falling); 30–60 days, about 2% out of the money; max $600 premium each (= max loss), max 4 open; sell at +100%, at −50% or 10 days before expiry; new entries Mondays and Thursdays |
 

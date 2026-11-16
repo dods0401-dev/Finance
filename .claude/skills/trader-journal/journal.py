@@ -249,9 +249,9 @@ def tg_call(method, params=None, timeout=25):
         return None
 
 
-STREAM_ALIASES = {"s1": ["bilanciato", "1"], "s2": ["aggressivo", "2"], "dt": ["day trading", "daytrading", "day", "3"],
-                  "sh": ["short", "4"], "op": ["opzioni", "opzione", "5"]}
-STREAM_NAMES = {"s1": "Bilanciato", "s2": "Aggressivo", "dt": "Day trading", "sh": "Short", "op": "Opzioni"}
+STREAM_ALIASES = {"s1": ["bilanciato", "1"], "s2": ["aggressivo", "2"], "dl": ["day lungo", "lungo", "6"],
+                  "dt": ["day trading", "daytrading", "day", "3"], "sh": ["short", "4"], "op": ["opzioni", "opzione", "5"]}
+STREAM_NAMES = {"s1": "Bilanciato", "s2": "Aggressivo", "dt": "Day trading", "dl": "Day lungo", "sh": "Short", "op": "Opzioni"}
 
 
 def _pinned():
@@ -319,10 +319,11 @@ def pause_state(aliases=None, names=None):
         if not verb:
             continue
         rest = t.split(None, 1)[1] if " " in t else ""
-        target = None
+        target, best = None, 0
         for sid, al in aliases.items():
-            if rest and any(rest.startswith(a) for a in al):
-                target = sid
+            for a_ in al:
+                if rest and rest.startswith(a_) and len(a_) > best:
+                    target, best = sid, len(a_)
         if verb == "pause":
             ps = {"all"} if not target else (ps | {target})
         elif not target:

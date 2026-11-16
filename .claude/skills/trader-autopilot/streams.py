@@ -39,12 +39,15 @@ DEFAULT = {
         "dt": {"name": "Day trading", "emoji": "⚡", "budget": 10000, "kind": "daytrade"},
         "sh": {"name": "Short", "emoji": "🔻", "budget": 5000, "kind": "short", "slots": 4, "slot_usd": 1000,
                "hold_days": 5, "stop_pct": 0.08, "min_dollar_volume": 5e7},
+        "dl": {"name": "Day lungo", "emoji": "🌙", "budget": 5000, "kind": "daytrade_long", "max_days": 5,
+               "max_extension": 0.10},
         "op": {"name": "Opzioni", "emoji": "🎯", "budget": 5000, "kind": "options", "max_open": 4,
                "max_premium_usd": 600, "min_days": 30, "max_days": 60, "take_profit": 1.0, "stop_loss": 0.5,
                "exit_days_before_expiry": 10, "entry_weekdays": [0, 3]},
     },
 }
 LEGACY = {"ap": "dt", "pf": "s1"}
+OCC = re.compile(r"^[A-Z]+\d{6}[CP]\d{8}$")
 OPTION_ETFS = {"XLE": "energia e petrolio", "XLF": "finanza", "XLK": "tecnologia", "XLU": "energia elettrica (utility)",
                "XLV": "salute", "XLI": "industria", "XLB": "materiali", "XLP": "beni di consumo di base",
                "XLY": "consumi", "SMH": "semiconduttori (AI)", "GLD": "oro", "TLT": "titoli di Stato USA",
@@ -154,8 +157,8 @@ def books(c=None, orders=None):
 
 
 # ---------------------------------------------------------------- pause per stream (Telegram)
-ALIASES = {"s1": ["bilanciato", "1"], "s2": ["aggressivo", "2"], "dt": ["day trading", "daytrading", "day", "3"],
-           "sh": ["short", "4"], "op": ["opzioni", "opzione", "5"]}
+ALIASES = {"s1": ["bilanciato", "1"], "s2": ["aggressivo", "2"], "dl": ["day lungo", "lungo", "6"],
+           "dt": ["day trading", "daytrading", "day", "3"], "sh": ["short", "4"], "op": ["opzioni", "opzione", "5"]}
 
 
 def paused():
@@ -528,7 +531,7 @@ def cmd_streams(args):
         rows.append((v / x["budget"] - 1, sid, v))
         auto_stop(sid, v, c)
     rows.sort(reverse=True)
-    medals = ["🥇", "🥈", "🥉", "4.", "5."]
+    medals = ["🥇", "🥈", "🥉", "4.", "5.", "6.", "7.", "8."]
     tot_b = sum(x["budget"] for x in c["list"].values())
     tot_v = sum(r[2] for r in rows)
     lines = []
@@ -539,7 +542,7 @@ def cmd_streams(args):
         lines.append("%s %s %-11s %9s %7s %s%s" % (medals[i], x["emoji"], x["name"], J.usd(round(v)), J.pct(100 * ret),
                                                  ("🟢" if ret >= 0 else "🔴") + bar, mark))
     spy = J.safe(spy_since, c["start_date"])
-    title = "🏁 <b>LE 5 STRATEGIE</b> · %s%s" % (J.it_date(J.now_utc()), " · <b>settimana</b>" if args.weekly else "")
+    title = "🏁 <b>LE %d STRATEGIE</b> · %s%s" % (len(c["list"]), J.it_date(J.now_utc()), " · <b>settimana</b>" if args.weekly else "")
     out = [title, "<pre>%s</pre>" % J.esc("\n".join(lines))]
     if spy is not None:
         out.append("📈 S&amp;P 500 dallo stesso giorno: <b>%s</b>" % J.pct(100 * spy))
@@ -554,7 +557,7 @@ def cmd_streams(args):
         if moves:
             out.append("📆 Da ieri: " + " · ".join(moves))
     held = []
-    for sid in ("s1", "s2", "dt", "sh", "op"):
+    for sid in c["list"]:
         n = len(b[sid]["qty"])
         if n:
             held.append("%s %d" % (c["list"][sid]["emoji"], n))
@@ -569,5 +572,137 @@ def cmd_streams(args):
         os.makedirs(os.path.dirname(history_path()), exist_ok=True)
         with open(history_path(), "a") as f:
             f.write(json.dumps({"date": today, "values": {sid: round(b[sid]["value"], 2) for sid in c["list"]}}) + "\n")
+    print(text if args.no_telegram else J.telegram(text))
+    return 0
+
+
+# ---------------------------------------------------------------- stream 6: day trading that lets winners run
+def open_orders_of(sid, sym=None):
+    return [o for o, s_ in flat_orders(J.alpaca_get("/v2/orders", {"status": "open", "nested": "true"}) or [])
+            if s_ == sid and (sym is None or o.get("symbol") == sym)]
+
+
+def first_stop(orders, sid, sym):
+    """The protective stop placed with the entry (its price defines the initial risk)."""
+    st = [o for o, s_ in flat_orders(orders) if s_ == sid and o.get("symbol") == sym and "-stop0-" in (o.get("client_order_id") or "")]
+    st.sort(key=lambda o: o.get("submitted_at") or "")
+    return J.num(st[-1].get("stop_price")) if st else None
+
+
+def long_buy_card(sym, o, why, verdict, cfg):
+    plan = o["plan"]
+    entry, stop, qty = float(plan["entry"]), float(o["stop_loss_stop_price"]), float(o["qty"])
+    risk = (entry - stop) * qty
+    return ("🟢 <b>Ho comprato %s</b>  <i>(conto di prova)</i>\n"
+            "%s azioni a %s $ → investiti <b>%s</b>\n"
+            "<b>Perché</b>: %s\n"
+            "🛑 Protezione: se scende a %s $ vendo → <b>%s</b> (il massimo che rischio)\n"
+            "📈 Nessun obiettivo fisso: se sale, alzo la protezione e lascio correre il guadagno.\n"
+            "🌙 Alle 21:40 decido se tenerla anche stanotte (al massimo %d giorni)." % (
+                J.esc(sym), J.qty_s(qty), J.price(entry), J.usd(entry * qty), J.esc(why), J.price(stop),
+                J.usd(-risk, True), cfg_max_days()))
+
+
+def cfg_max_days():
+    return int(cfg()["list"]["dl"].get("max_days", 5))
+
+
+def trail_stops(dry=False):
+    """Raise each Day-lungo stop to (highest price since entry − initial risk), never lower it."""
+    import data as D
+    c = cfg()
+    b, orders = books(c)
+    me, out = b["dl"], []
+    for sym, q in me["qty"].items():
+        if q <= 0:
+            continue
+        entry = me["cost"].get(sym, 0.0) / q
+        s0 = first_stop(orders, "dl", sym)
+        stops = [o for o in open_orders_of("dl", sym) if o.get("type") == "stop" and o.get("side") == "sell"]
+        if not s0 or not stops or entry <= s0:
+            continue
+        risk = entry - s0
+        opened = me["opened"].get(sym) or J.now_utc().isoformat()
+        bars = (D.bars_multi([sym], "5Min", opened[:19] + "Z").get(sym) or [])
+        if not bars:
+            continue
+        high = max(x["h"] for x in bars)
+        last = me["prices"].get(sym) or bars[-1]["c"]
+        cur = float(stops[0]["stop_price"])
+        new = round(high - risk, 2)
+        if new <= cur + 0.01 or new >= last:
+            continue
+        if not dry:
+            try:
+                send("PATCH", "/v2/orders/%s" % stops[0]["id"], {"stop_price": "%.2f" % new})
+            except Exception as e:
+                out.append("⚠️ %s: non riesco ad alzare lo stop (%s)" % (J.esc(sym), J.esc(err_text(e))))
+                continue
+        locked = (new - entry) * q
+        out.append("🔼 <b>%s</b>: è salito fino a %s $, alzo la protezione da %s a <b>%s $</b> → %s" % (
+            J.esc(sym), J.price(high), J.price(cur), J.price(new),
+            ("guadagno minimo garantito %s" % J.usd(locked, True)) if locked > 0 else ("perdita massima ora %s" % J.usd(locked, True))))
+    return out
+
+
+def cmd_evening(args):
+    """15:40 New York: keep each Day-lungo position overnight only if all conditions hold."""
+    import data as D
+    import context as C
+    sys.path.insert(0, HERE)
+    import autopilot as A
+    c = cfg()
+    p, sid = c["list"]["dl"], "dl"
+    dry = args.dry_run
+    if not dry and not market_open():
+        print("market closed: nothing to do")
+        return 0
+    b, orders = books(c)
+    me = b[sid]
+    held = {sym: q for sym, q in me["qty"].items() if q > 0}
+    if not held:
+        print("day lungo: nothing open")
+        return 0
+    today = J.now_utc().astimezone(NY).date()
+    daily = D.bars_multi(["SPY"] + list(held), "1Day", (today - dt.timedelta(days=320)).isoformat())
+    spy = [x["c"] for x in daily.get("SPY") or []]
+    spy_ok = len(spy) >= 200 and spy[-1] > sum(spy[-200:]) / 200
+    words = (J.load(os.path.join(D.RES, "themes.json"), {}) or {}).get("red_flag_words", {})
+    flags = C.red_flags(C.news_24h(30), words)
+    out = [header(sid, c, "decisione serale", dry)]
+    for sym, q in held.items():
+        cost = me["cost"].get(sym, 0.0)
+        last = me["prices"].get(sym, 0.0)
+        gain = q * last - cost
+        closes = [x["c"] for x in daily.get(sym) or []]
+        ext = (last / (sum(closes[-20:]) / 20) - 1) if len(closes) >= 20 else 0.0
+        days = trading_days_between((me["opened"].get(sym) or today.isoformat())[:10], today.isoformat())
+        blocked, _ = A.earnings_block(sym, today, J.config())
+        why_not = ("è in perdita" if gain <= 0 else
+                   "il mercato è debole (S&amp;P 500 sotto la media di 200 giorni)" if not spy_ok else
+                   "è salito troppo in fretta (%s sopra la media di 20 giorni)" % J.pct(100 * ext) if ext >= p["max_extension"] else
+                   "ci sono i conti trimestrali in arrivo" if blocked else
+                   "ci sono notizie negative sull'azienda" if sym in flags else
+                   "sono passati %d giorni, il massimo" % days if days >= p["max_days"] else None)
+        if why_not:
+            if not dry:
+                for o in open_orders_of(sid, sym):
+                    J.safe(send, "DELETE", "/v2/orders/%s" % o["id"])
+                J.safe(send, "POST", "/v2/orders", {"symbol": sym, "qty": "%g" % q, "side": "sell", "type": "market",
+                                                     "time_in_force": "day", "client_order_id": cid(sid, "x", sym)})
+            out.append("💤 <b>Vendo %s</b>: %s (%s). Motivo: %s." % (J.esc(sym), J.usd(gain, True),
+                                                                   J.pct(100 * gain / cost if cost else 0), why_not))
+            continue
+        low = min((x["l"] for x in (D.bars_multi([sym], "5Min", today.isoformat()).get(sym) or [])), default=None)
+        stops = [o for o in open_orders_of(sid, sym) if o.get("type") == "stop" and o.get("side") == "sell"]
+        msg = ""
+        if low and stops and low > float(stops[0]["stop_price"]) + 0.01 and low < last:
+            if not dry:
+                J.safe(send, "PATCH", "/v2/orders/%s" % stops[0]["id"], {"stop_price": "%.2f" % low})
+            msg = " Protezione alzata a %s $ (il minimo di oggi)." % J.price(low)
+        out.append("🌙 <b>Tengo %s stanotte</b>: %s (%s), giorno %d di %d. Mercato in salute, nessuna notizia negativa, "
+                   "niente conti in arrivo.%s" % (J.esc(sym), J.usd(gain, True), J.pct(100 * gain / cost if cost else 0),
+                                                  days + 1, p["max_days"], msg))
+    text = "\n".join(out)
     print(text if args.no_telegram else J.telegram(text))
     return 0

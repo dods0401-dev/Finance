@@ -82,3 +82,10 @@ stricter than `trader-playbook/rules.md`, never looser.
   state: durable, no file, no 24h limit.
 - `"enabled": false` in `autopilot.json` (pushed to main) for a permanent stop.
 - `flatten` closes everything at once.
+
+## Day lungo (`run --stream dl`, `evening`)
+Same entry signals as day trading, orders tagged `dl-`: market buy plus a good-until-cancelled
+stop. Each hourly pass raises the stop to (highest price since entry − initial risk), never
+lowers it. `evening` (15:40 New York) keeps a position overnight only if it is in profit, the
+S&P 500 is above its 200-day average, the stock is less than 10% above its 20-day average, no
+earnings are due and no negative news; otherwise it sells. At most 5 trading days.

@@ -99,6 +99,10 @@ def alpaca_send(method, path, body=None):
         return json.loads(raw) if raw else {}
 
 
+SID = "dt"   # the intraday engine serves "dt" (day trading) and "dl" (day trading lungo)
+TITLES = {"dt": "⚡ <b>DAY TRADING</b>", "dl": "🌙 <b>DAY TRADING LUNGO</b>"}
+
+
 def telegram_paused(sid="dt"):
     ps = J.safe(ST.paused)
     return bool(ps) and ST.is_paused(sid, ps)
@@ -144,20 +148,20 @@ def earnings_block(symbol, today, cfg):
 
 # ---------------------------------------------------------------- state from Alpaca
 def day_state(cfg, now):
-    """Today's state of the day-trading stream only (orders tagged dt-)."""
+    """Today's state of the current intraday stream only (orders tagged dt- or dl-)."""
     c = ST.cfg()
     b, orders = ST.books(c)
-    me = b["dt"]
-    dt_ids = {o["id"] for o, s_ in ST.flat_orders(orders) if s_ == "dt"}
+    me = b[SID]
+    dt_ids = {o["id"] for o, s_ in ST.flat_orders(orders) if s_ == SID}
     fills = [f for f in J.all_fills(J.parse_ts(c["start_date"] + "T00:00:00+00:00")) if f.get("order_id") in dt_ids]
     trades, _ = J.build_trades(fills, cfg)
     start = dt.datetime(now.year, now.month, now.day, tzinfo=NY)
     today_trades = [t for t in trades if t.get("close_ts") and t["close_ts"] >= start]
-    today_orders = [o for o in orders if ST.sid_of(o.get("client_order_id")) == "dt"
+    today_orders = [o for o in orders if ST.sid_of(o.get("client_order_id")) == SID
                     and J.parse_ts(o.get("submitted_at")) and J.parse_ts(o["submitted_at"]) >= start]
     entries = [o for o in today_orders if o.get("side") == "buy" and not (
         o.get("status") in ("canceled", "rejected", "expired") and float(o.get("filled_qty") or 0) == 0)]
-    budget = float(c["list"]["dt"]["budget"])
+    budget = float(c["list"][SID]["budget"])
     positions = []
     for sym, q in me["qty"].items():
         px = me["prices"].get(sym, 0.0)
@@ -166,7 +170,7 @@ def day_state(cfg, now):
                           "unrealized_pl": q * px - me["cost"].get(sym, 0.0)})
     open_risk = 0.0
     for o, s_ in ST.flat_orders(J.alpaca_get("/v2/orders", {"status": "open", "nested": "true"}) or []):
-        if s_ == "dt" and o.get("type") == "stop" and o.get("side") == "sell":
+        if s_ == SID and o.get("type") == "stop" and o.get("side") == "sell":
             pos = next((p_ for p_ in positions if p_["symbol"] == o["symbol"]), None)
             if pos:
                 open_risk += max(0.0, (pos["avg_entry_price"] - float(o["stop_price"])) * float(o["qty"]))
@@ -190,10 +194,10 @@ def guards(args, cfg, st, now):
     s, why = settings(), []
     if not s.get("enabled", True):
         why.append("il pilota automatico è spento")
-    if not args.now and telegram_paused("dt"):
-        why.append("il day trading è in pausa (scrivi «riprendi day» per ripartire)")
-    if not args.now and ST.auto_stop("dt", st["value"], ST.cfg()):
-        why.append("il day trading si è fermato: ha perso troppo")
+    if not args.now and telegram_paused(SID):
+        why.append("questa strategia è in pausa (scrivi «riprendi» + nome per ripartire)")
+    if not args.now and ST.auto_stop(SID, st["value"], ST.cfg()):
+        why.append("questa strategia si è fermata: ha perso troppo")
     if not args.now:
         clock = J.alpaca_get("/v2/clock")
         if not clock.get("is_open"):
@@ -408,8 +412,14 @@ def log_decisions(now, rows):
 
 
 def cmd_run(args):
+    global SID
+    SID = getattr(args, "stream", None) or "dt"
     os.makedirs(WORK, exist_ok=True)
     cfg, s, now = J.config(), settings(), ny_now(args)
+    if SID == "dl":
+        moved = ST.trail_stops(args.dry_run or bool(args.now))
+        if moved:
+            print(J.telegram(TITLES["dl"] + " · stop alzati\n" + "\n".join(moved)) if not args.no_telegram else "\n".join(moved))
     if s.get("day_trading") is False:
         print("day trading is switched off (autopilot.json): nothing to do")
         return 0
@@ -480,7 +490,7 @@ def cmd_run(args):
 
 def summary_text(now, stop, checked, dec, log, dry):
     it = now.astimezone(J.IT).strftime("%H:%M")
-    head = "⚡ <b>DAY TRADING · controllo delle %s</b>%s" % (it, "  <i>(prova, nessun ordine)</i>" if dry else "")
+    head = "%s · controllo delle %s%s" % (TITLES.get(SID, SID), it, "  <i>(prova, nessun ordine)</i>" if dry else "")
     if stop:
         return head + "\nOggi non cerco nuove operazioni: " + J.esc("; ".join(stop)) + "."
     bought = [d for d in dec if d["outcome"] in ("bought", "would_buy")]
@@ -524,17 +534,27 @@ def place(v, cfg_path, rcfg, args, dry, cfg, st):
     ctx = sector_note(sym)
     if ctx:
         why += " " + ctx
-    body = {"symbol": sym, "qty": str(o["qty"]), "side": "buy", "type": "market", "time_in_force": "day",
-            "order_class": "bracket", "take_profit": {"limit_price": str(o["take_profit_limit_price"])},
-            "stop_loss": {"stop_price": str(o["stop_loss_stop_price"])},
-            "client_order_id": ST.cid("dt", "e", sym)}
+    if SID == "dl":
+        body = {"symbol": sym, "qty": str(o["qty"]), "side": "buy", "type": "market", "time_in_force": "day",
+                "client_order_id": ST.cid("dl", "e", sym)}
+    else:
+        body = {"symbol": sym, "qty": str(o["qty"]), "side": "buy", "type": "market", "time_in_force": "day",
+                "order_class": "bracket", "take_profit": {"limit_price": str(o["take_profit_limit_price"])},
+                "stop_loss": {"stop_price": str(o["stop_loss_stop_price"])},
+                "client_order_id": ST.cid("dt", "e", sym)}
+    card_fn = (lambda snap_: ST.long_buy_card(sym, o, why, v["verdict"], cfg)) if SID == "dl" else \
+        (lambda snap_: J.buy_card({"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"}, o["plan"], why, v["verdict"], cfg, snap_))
     if dry:
-        card = "🧪 <b>PROVA</b> (nessun ordine inviato)\n" + J.buy_card(
-            {"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"}, o["plan"], why, v["verdict"], cfg)
+        card = "🧪 <b>PROVA</b> (nessun ordine inviato)\n" + TITLES.get(SID, "") + "\n" + card_fn(None)
         print(card if args.no_telegram else J.telegram(card))
         return o, None, None
     try:
         resp = alpaca_send("POST", "/v2/orders", body)
+        if SID == "dl":  # protective stop, good until cancelled: it also covers the nights
+            f = ST.wait_fill(resp["id"])
+            alpaca_send("POST", "/v2/orders", {"symbol": sym, "qty": str(o["qty"]), "side": "sell", "type": "stop",
+                                               "stop_price": "%.2f" % float(o["stop_loss_stop_price"]), "time_in_force": "gtc",
+                                               "client_order_id": ST.cid("dl", "stop0", sym)})
     except Exception as e:
         detail = e.read().decode()[:200] if hasattr(e, "read") else type(e).__name__
         return None, "rejected", detail
@@ -542,9 +562,7 @@ def place(v, cfg_path, rcfg, args, dry, cfg, st):
                       "autopilot": True, "symbol": sym, "side": "buy", "qty": o["qty"], "input": body,
                       "order_id": resp.get("id"), "why": why, "plan": o["plan"], "timemachine": v["verdict"],
                       "tm_avg_r": v["avg_r"], "response": json.dumps(resp)[:600]})
-    snap = None
-    J.telegram("⚡ <b>DAY TRADING</b>\n" + J.buy_card({"symbol": sym, "qty": o["qty"], "type": "market", "side": "buy"},
-                                  o["plan"], why, v["verdict"], cfg, snap))
+    J.telegram(TITLES.get(SID, "") + "\n" + card_fn(None))
     return o, None, None
 
 
@@ -899,8 +917,11 @@ def main(argv=None):
     common.add_argument("--no-telegram", action="store_true", help="print instead of sending")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
-    for n in ("run", "flatten", "status"):
+    rn = sub.add_parser("run", parents=[common])
+    rn.add_argument("--stream", choices=["dt", "dl"], default="dt")
+    for n in ("flatten", "status"):
         sub.add_parser(n, parents=[common])
+    ev = sub.add_parser("evening", parents=[common])
     sub.add_parser("health", parents=[common])
     sub.add_parser("outlook", parents=[common])
     rb = sub.add_parser("rebalance", parents=[common])
@@ -915,7 +936,7 @@ def main(argv=None):
     if args.no_telegram:
         J.DRY_RUN = True
     return {"run": cmd_run, "flatten": cmd_flatten, "status": cmd_status, "rebalance": cmd_rebalance, "health": cmd_health, "outlook": cmd_outlook,
-            "short": ST.cmd_short, "options": ST.cmd_options, "streams": ST.cmd_streams}[args.cmd](args)
+            "short": ST.cmd_short, "evening": ST.cmd_evening, "options": ST.cmd_options, "streams": ST.cmd_streams}[args.cmd](args)
 
 
 if __name__ == "__main__":

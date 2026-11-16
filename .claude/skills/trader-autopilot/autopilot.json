@@ -60,6 +60,12 @@
         "budget": 5000,
         "max_open": 4,
         "max_premium_usd": 600
+      },
+      "dl": {
+        "name": "Day lungo",
+        "budget": 5000,
+        "max_days": 5,
+        "max_extension": 0.1
       }
     }
   }
