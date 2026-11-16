@@ -294,6 +294,35 @@ def live_price(sym, snaps, entry):
     return p or J.num((entry.get("forming") or {}).get("price")) or J.num((entry.get("trigger") or {}).get("price"))
 
 
+_ATR = {}
+
+
+def daily_atr_pct(sym):
+    """Average daily range of the last 14 sessions, as % of the price (cached per run)."""
+    if sym in _ATR:
+        return _ATR[sym]
+    sys.path.insert(0, os.path.join(SKILLS, "trader-research"))
+    import data as D
+    v = None
+    try:
+        bs = D.bars_multi([sym], "1Day", (J.now_utc().date() - dt.timedelta(days=40)).isoformat()).get(sym) or []
+        if len(bs) >= 15:
+            trs = [max(b["h"] - b["l"], abs(b["h"] - p_["c"]), abs(b["l"] - p_["c"])) for p_, b in zip(bs[-15:-1], bs[-14:])]
+            v = 100 * (sum(trs) / len(trs)) / bs[-1]["c"]
+    except Exception:
+        pass
+    _ATR[sym] = v
+    return v
+
+
+def min_stop_pct(sym):
+    """Day lungo: the stop is at least 1% (or half the usual daily range) under the entry, at most 4%."""
+    x = ST.cfg()["list"].get("dl", {})
+    lo, hi = float(x.get("min_stop_pct", 1.0)), float(x.get("max_stop_pct", 4.0))
+    atr = daily_atr_pct(sym)
+    return min(hi, max(lo, 0.5 * atr if atr else lo))
+
+
 def evaluate(c, s, args, now, snaps):
     """Plans and replays one triggered candidate; returns the best variant or a reason."""
     sym, setup, e = c["symbol"], c["setup"], c["entry"]
@@ -319,6 +348,14 @@ def evaluate(c, s, args, now, snaps):
         if not plan or plan.get("error") or not plan.get("stop"):
             notes.append("piano %s rifiutato: %s" % (tgt, (plan or {}).get("error") or err))
             continue
+        if SID == "dl":  # give the trade room: never a stop inside the normal noise
+            need = min_stop_pct(sym)
+            if (plan["entry"] - plan["stop"]) / plan["entry"] * 100 < need:
+                wide = round(plan["entry"] * (1 - need / 100), 2)
+                plan2, err2 = run_json([EXIT, "plan", "--from", epath, "--entry", "%.2f" % px, "--stop", "price:%.2f" % wide,
+                                        "--target", tgt, "--write", ppath, "--json"] + (["--time", etime] if etime else []) + now_flag)
+                if plan2 and plan2.get("stop") and not plan2.get("error"):
+                    plan = plan2
         rps = plan["entry"] - plan["stop"]
         if trig and rps > 0 and px - trig > s["max_chase_r"] * rps:
             return None, ("chase", "prezzo %.2f, segnale %.2f, oltre %.2fR" % (px, trig, s["max_chase_r"]))

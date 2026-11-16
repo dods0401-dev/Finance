@@ -67,7 +67,9 @@
         "name": "Day lungo",
         "budget": 5000,
         "max_days": 5,
-        "max_extension": 0.1
+        "max_extension": 0.1,
+        "min_stop_pct": 1.0,
+        "max_stop_pct": 4.0
       }
     }
   }
