@@ -38,10 +38,12 @@
         "core_weight": 0.5
       },
       "s2": {
-        "name": "Aggressivo",
+        "name": "Settori",
         "budget": 10000,
-        "core": "SSO",
-        "core_weight": 0.5
+        "mode": "sectors",
+        "sectors": 3,
+        "per_sector": 4,
+        "core_weight": 0.0
       },
       "dt": {
         "name": "Day trading",

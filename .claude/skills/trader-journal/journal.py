@@ -249,9 +249,9 @@ def tg_call(method, params=None, timeout=25):
         return None
 
 
-STREAM_ALIASES = {"s1": ["bilanciato", "1"], "s2": ["aggressivo", "2"], "dl": ["day lungo", "lungo", "6"],
+STREAM_ALIASES = {"s1": ["bilanciato", "1"], "s2": ["settori", "aggressivo", "2"], "dl": ["day lungo", "lungo", "6"],
                   "dt": ["day trading", "daytrading", "day", "3"], "sh": ["short", "4"], "op": ["opzioni", "opzione", "5"]}
-STREAM_NAMES = {"s1": "Bilanciato", "s2": "Aggressivo", "dt": "Day trading", "dl": "Day lungo", "sh": "Short", "op": "Opzioni"}
+STREAM_NAMES = {"s1": "Bilanciato", "s2": "Settori", "dt": "Day trading", "dl": "Day lungo", "sh": "Short", "op": "Opzioni"}
 
 
 def _pinned():

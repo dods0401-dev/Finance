@@ -6,7 +6,7 @@ the books of each stream are rebuilt from the account's order history, so nothin
 stored and nothing gets lost when a scheduled session starts from scratch.
 
   s1 Bilanciato   50% SPY + 50% top-10 momentum, monthly           (autopilot.py rebalance)
-  s2 Aggressivo   50% SSO (S&P 500 x2) + 50% top-10, monthly       (autopilot.py rebalance)
+  s2 Settori      3 strongest sectors x 4 strongest stocks, monthly (autopilot.py rebalance)
   dt Day trading  the intraday engine                               (autopilot.py run / flatten)
   sh Short        short a stock hit by severe news, hedged with its sector ETF, 5 days
   op Opzioni      long calls/puts on the strongest/weakest sector ETFs, defined risk
@@ -35,7 +35,8 @@ DEFAULT = {
     "stop_loss_pct": 0.20,
     "list": {
         "s1": {"name": "Bilanciato", "emoji": "🟦", "budget": 10000, "kind": "portfolio", "core": "SPY", "core_weight": 0.5},
-        "s2": {"name": "Aggressivo", "emoji": "🟥", "budget": 10000, "kind": "portfolio", "core": "SSO", "core_weight": 0.5},
+        "s2": {"name": "Settori", "emoji": "🧭", "budget": 10000, "kind": "portfolio", "mode": "sectors",
+               "sectors": 3, "per_sector": 4, "core_weight": 0.0},
         "dt": {"name": "Day trading", "emoji": "⚡", "budget": 10000, "kind": "daytrade"},
         "sh": {"name": "Short", "emoji": "🔻", "budget": 5000, "kind": "short", "slots": 4, "slot_usd": 1000,
                "hold_days": 5, "stop_pct": 0.08, "min_dollar_volume": 5e7},
@@ -157,7 +158,7 @@ def books(c=None, orders=None):
 
 
 # ---------------------------------------------------------------- pause per stream (Telegram)
-ALIASES = {"s1": ["bilanciato", "1"], "s2": ["aggressivo", "2"], "dl": ["day lungo", "lungo", "6"],
+ALIASES = {"s1": ["bilanciato", "1"], "s2": ["settori", "aggressivo", "2"], "dl": ["day lungo", "lungo", "6"],
            "dt": ["day trading", "daytrading", "day", "3"], "sh": ["short", "4"], "op": ["opzioni", "opzione", "5"]}
 
 

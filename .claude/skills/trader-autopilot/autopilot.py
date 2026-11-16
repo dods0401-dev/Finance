@@ -624,6 +624,31 @@ def portfolio_settings():
     return p
 
 
+SCORES, R6 = {}, {}
+
+
+def sector_picks(p, n_sectors=3, per_sector=4, exclude=()):
+    """Rotation: the 3 sectors whose stocks rose most over 6 months (median), then the strongest
+    stocks of each by 12-month return skipping the last month. Needs momentum_picks() first."""
+    sys.path.insert(0, os.path.join(SKILLS, "trader-research"))
+    import data as D
+    import statistics as stx
+    info = {r["symbol"]: (r["name"], r["sector"]) for r in D.load_universe()}
+    by = {}
+    for sym, r6 in R6.items():
+        sec = info.get(sym, ("", ""))[1]
+        if sec and sec not in ("Altro", "ETF"):
+            by.setdefault(sec, []).append(r6)
+    strength = {sec: stx.median(v) for sec, v in by.items() if len(v) >= 5}
+    top = sorted(strength, key=lambda s_: -strength[s_])[:n_sectors]
+    picks = []
+    for sec in top:
+        names = sorted([s_ for s_ in SCORES if info.get(s_, ("", ""))[1] == sec and s_ not in exclude],
+                       key=lambda s_: -SCORES[s_])[:per_sector]
+        picks += [(s_, SCORES[s_], info[s_]) for s_ in names]
+    return picks, [(sec, strength[sec]) for sec in top]
+
+
 def momentum_picks(p, today):
     """The satellite: the most traded large stocks that rose most over the last year,
     skipping the last month. Uses research/universe.csv and Alpaca daily bars."""
@@ -647,7 +672,11 @@ def momentum_picks(p, today):
             if sum(v[-20:]) / 20 < p["min_dollar_volume"] or c[-1] < p["min_price"]:
                 continue
             score[sym] = c[-1 - p["skip_days"]] / c[-1 - p["lookback_days"]] - 1
+            if len(c) > 126:
+                R6[sym] = c[-1] / c[-127] - 1
     names = {r["symbol"]: (r["name"], r["sector"]) for r in uni}
+    SCORES.clear()
+    SCORES.update(score)
     top = sorted(score, key=lambda s_: -score[s_])[:int(p["satellite_n"])]
     return [(s_, score[s_], names.get(s_, ("", ""))) for s_ in top], len(score)
 
@@ -853,10 +882,17 @@ def cmd_rebalance(args):
             continue
         value = me["value"]
         hold = stream_holdings(me)
-        target = {p["core"]: value * p["core_weight"]}
-        each = value * (1 - p["core_weight"]) / len(picks)
-        for sym, _, _ in picks:
-            target[sym] = target.get(sym, 0) + each
+        sectors_mode = x.get("mode") == "sectors"
+        if sectors_mode:
+            spicks, top_secs = sector_picks(p, int(x.get("sectors", 3)), int(x.get("per_sector", 4)), shorted)
+            target, each = {}, value / max(1, len(spicks))
+            for sym, _, _ in spicks:
+                target[sym] = each
+        else:
+            target = {p["core"]: value * p["core_weight"]}
+            each = value * (1 - p["core_weight"]) / len(picks)
+            for sym, _, _ in picks:
+                target[sym] = target.get(sym, 0) + each
         orders = [(sym, target.get(sym, 0.0) - hold.get(sym, 0.0)) for sym in sorted(set(target) | set(hold))]
         orders = sorted([o for o in orders if abs(o[1]) >= p["min_trade_usd"]], key=lambda o: o[1])
         done, failed = [], []
@@ -885,12 +921,19 @@ def cmd_rebalance(args):
         core_name = "nell'indice delle 500 maggiori aziende USA (SPY)" if p["core"] == "SPY" else \
             "nell'indice S&amp;P 500 a leva 2× (SSO: si muove il doppio del mercato)" if p["core"] == "SSO" else "in " + p["core"]
         out = [ST.header(sid, c, "ribilanciamento del mese", dry),
-               "💼 Capitale: <b>%s</b> (partito da %s)" % (J.usd(round(value)), J.usd(x["budget"])),
-               "🏛 %d%% (%s) %s" % (round(100 * p["core_weight"]), J.usd(round(target[p["core"]])), core_name),
-               "🚀 %d%% su %d aziende salite di più nell'ultimo anno, %s ciascuna:" % (
-                   round(100 * (1 - p["core_weight"])), len(picks), J.usd(round(each)))]
-        out.append("<pre>%s</pre>" % J.esc("\n".join("%-5s +%4d%%  %s" % (sym, round(100 * sc), (name or "")[:22])
-                                                      for sym, sc, (name, sec) in picks)))
+               "💼 Capitale: <b>%s</b> (partito da %s)" % (J.usd(round(value)), J.usd(x["budget"]))]
+        if sectors_mode:
+            out.append("🧭 I 3 settori più forti degli ultimi 6 mesi: " + ", ".join(
+                "<b>%s</b> (%s)" % (J.esc(sec), J.pct(100 * st_, True, 0)) for sec, st_ in top_secs))
+            out.append("🚀 Dentro ciascuno, le aziende più forti dell'ultimo anno, %s ciascuna:" % J.usd(round(each)))
+            out.append("<pre>%s</pre>" % J.esc("\n".join("%-5s +%4d%%  %s" % (sym, round(100 * sc), sec[:14])
+                                                          for sym, sc, (name, sec) in spicks)))
+        else:
+            out += ["🏛 %d%% (%s) %s" % (round(100 * p["core_weight"]), J.usd(round(target[p["core"]])), core_name),
+                    "🚀 %d%% su %d aziende salite di più nell'ultimo anno, %s ciascuna:" % (
+                        round(100 * (1 - p["core_weight"])), len(picks), J.usd(round(each)))]
+            out.append("<pre>%s</pre>" % J.esc("\n".join("%-5s +%4d%%  %s" % (sym, round(100 * sc), (name or "")[:22])
+                                                          for sym, sc, (name, sec) in picks)))
         buys = [d for d in done if d[1] == "buy"]
         sells = [d for d in done if d[1] == "sell"]
         if sells:
@@ -902,7 +945,8 @@ def cmd_rebalance(args):
         if failed:
             out.append("⚠️ Non riusciti: " + J.esc(", ".join("%s (%s)" % (d[0], d[2]) for d in failed)))
             rc = 1
-        out.append(health_text(J.safe(strategy_health, p, now.date())))
+        if not sectors_mode:
+            out.append(health_text(J.safe(strategy_health, p, now.date())))
         out.append(outlook_text(J.safe(portfolio_outlook, p, dict(target), value)))
         text = "\n".join(out)
         print(text if args.no_telegram else J.telegram(text))
