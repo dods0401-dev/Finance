@@ -1,41 +1,42 @@
 # Market context
 
-**Updated:** 2026-11-17 08:06 UTC (8-hour refresh; little new since 06:07 UTC, no Tuesday pre-market reports yet).
-Third-party sources disagree on some figures; verify against official schedules /
-company IR before trading.
+**Updated:** 2026-11-17 16:06 UTC (8-hour refresh). Intraday figures from
+morning reports; sources disagree on exact levels. Verify against official
+schedules / company IR before trading.
 
 ## Next 48 hours (US, times ET)
-**Tue 17 Nov**
-- Pre-market: **Home Depot earnings** (estimates: EPS ~$3.84, revenue ~$42.8B).
-- 08:30 Retail Sales (Oct) (Sep was +0.8% vs +0.3% expected).
-- 10:00 NAHB Housing Market Index (Nov); Business Inventories (Sep).
-- **After the close: Nvidia earnings** (consensus ~$109B revenue, EPS ~$2.47; first
-  report with an interim CEO). Expect a large gap in NVDA and chip/AI names Wednesday.
+**Tue 17 Nov (rest of day)**
+- Done: Retail Sales (Oct) +0.2% vs +0.1% expected (+0.5% excluding autos and gas): consumers still spending.
+- Done: Home Depot beat (EPS $3.86 vs ~$3.84, revenue $43.4B, comparable sales +2.2%) but cut its yearly
+  outlook and named CFO Richard McPhail CEO from 23 Nov → shares fell >3%.
+- **After the close: Nvidia earnings** (consensus ~$109B revenue, EPS ~$2.47; stock about -26% in a month;
+  first report with an interim CEO). Expect a large gap in NVDA and chip/AI names Wednesday.
 
 **Wed 18 Nov**
 - Pre-market: Target earnings. 08:30 Housing Starts (Oct).
 - 14:00 **FOMC October minutes** (Sept minutes: most members leaned to one more hike by year-end).
 - After close: Palo Alto Networks. Anthropic IPO pricing expected.
 
-**Just after the window**
-- Thu 19: Walmart, Lowe's, jobless claims, Philly Fed; Anthropic (ANT) expected to start trading on Nasdaq.
+**Thu 19 Nov (morning)**
+- Pre-market: Walmart, Lowe's. 08:30 jobless claims (~200K expected), Philly Fed.
+- Anthropic (ANT) expected to start trading on Nasdaq.
 
 ## Risk mood (3 lines)
-- Monday was a clear risk-off day: S&P 500 about -1.9%, Nasdaq about -2.5%, Dow about -1.4%; VIX +19% to ~23.
-- Nvidia -4.1% to ~$156 (lowest since July 2025, about -24% in November); new US chip-export curbs to China hit chips.
-- Futures little changed overnight; defensive sectors (staples, utilities) are the only ones holding up.
+- Monday close: Dow -1.4% (51,608), S&P 500 -1.9%, Nasdaq -2.5% (worst day since 5 Nov); third losing day in a row.
+- Tuesday: losses picking up again in the countdown to Nvidia; nervous, wait-and-see market.
+- Retail data and Home Depot show a still-solid consumer; the stress is in AI/chips and rate-hike fears.
 
 ## Headlines that matter for day trading
-1. Stocks slide to kick off major week for Wall Street — CNN, 16 Nov 2026,
-   https://www.cnn.com/2026/11/16/business/stocks-nvidia-ai-anthropic
-2. Tech stocks pull the market lower before Nvidia's results — StockTitan, 16 Nov 2026,
-   https://www.stocktitan.net/articles/stock-market-today-live-november-16-2026
-3. Wall Street futures muted as Nvidia earnings loom amid AI jitters — Investing.com, 16–17 Nov 2026,
-   https://ca.investing.com/news/stock-market-news/wall-street-futures-muted-as-nvidia-earnings-loom-amid-ai-jitters-4962479
-4. US stock futures decline ahead of Nvidia earnings as investors await Fed signals — Yahoo Finance, Nov 2026,
-   https://finance.yahoo.com/markets/stocks/articles/us-stock-futures-decline-ahead-095642402.html
-5. Earnings to watch: Nvidia, Walmart, Home Depot and more report this week — Investing.com, Nov 2026,
-   https://www.investing.com/news/stock-market-news/earnings-to-watch-nvidia-walmart-home-depot-and-more-report-this-week-93CH-5030799
+1. Dow, S&P 500, Nasdaq losses pick up in countdown to Nvidia earnings — Yahoo Finance, 17 Nov 2026,
+   https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-17-dow-sp-500-nasdaq-nvidia-earnings-retail-sales-143848454.html
+2. Home Depot Q3 earnings 2026 — CNBC, 17 Nov 2026,
+   https://www.cnbc.com/2026/11/17/home-depot-hd-q3-earnings-2026.html
+3. Nvidia's 26% plunge puts Wall Street on edge ahead of earnings tonight — 24/7 Wall St., 17 Nov 2026,
+   https://247wallst.com/investing/2026/11/17/stock-market-today-nvidias-26-plunge-puts-wall-street-on-edge-ahead-of-earnings-tonight/
+4. Stock futures mixed with earnings, retail sales in focus — Schaeffer's, 17 Nov 2026,
+   https://www.schaeffersresearch.com/content/ezines/2026/11/17/stock-futures-mixed-with-earnings-retail-sales-in-focus
+5. U.S. stocks jittery ahead of Nvidia results — TipRanks, 17 Nov 2026,
+   https://www.tipranks.com/news/stock-market-today-nov-17-u-s-stocks-jittery-ahead-of-nvidia-results
 
 ## Practical notes (from existing rules, no change)
 - Earnings days are skipped by autopilot (8-K check): HD, NVDA, TGT, PANW, WMT, LOW.
