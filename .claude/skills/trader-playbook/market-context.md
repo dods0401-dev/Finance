@@ -1,6 +1,6 @@
 # Market context
 
-**Updated:** 2026-11-18 00:06 UTC (8-hour refresh). After-hours figures vary by
+**Updated:** 2026-11-18 08:06 UTC (8-hour refresh; no new reports since 00:06 UTC, Wednesday pre-market not yet covered). After-hours figures vary by
 source; verify against official schedules / company IR before trading.
 
 ## Next 48 hours (US, times ET)
@@ -12,6 +12,9 @@ source; verify against official schedules / company IR before trading.
 
 **Thu 19 Nov**
 - Pre-market: Walmart, Lowe's. 08:30 jobless claims (~200K expected), Philly Fed. 10:00 Leading Index (Oct).
+
+**Fri 20 Nov**
+- No major confirmed US release found.
 - Anthropic (ANT) expected to start trading on Nasdaq.
 
 ## Nvidia results (Tue 17 Nov, after close)
