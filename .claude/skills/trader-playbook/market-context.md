@@ -12,10 +12,10 @@ source; verify against official schedules / company IR before trading.
 
 **Thu 19 Nov**
 - Pre-market: Walmart, Lowe's. 08:30 jobless claims (~200K expected), Philly Fed. 10:00 Leading Index (Oct).
+- Anthropic (ANT) expected to start trading on Nasdaq.
 
 **Fri 20 Nov**
 - No major confirmed US release found.
-- Anthropic (ANT) expected to start trading on Nasdaq.
 
 ## Nvidia results (Tue 17 Nov, after close)
 - Revenue $115.8B (+103% in a year) vs ~$109B expected; EPS $2.68 vs ~$2.47; data center $107.6B.
