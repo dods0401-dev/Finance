@@ -1,6 +1,6 @@
 # Market context
 
-**Updated:** 2026-11-19 06:50 UTC (8-hour refresh; task fired 00:05 UTC, run started late).
+**Updated:** 2026-11-19 08:06 UTC (8-hour refresh; previous full run at 06:50 UTC, nothing new since).
 Closing figures differ slightly between outlets; verify against official
 schedules / company IR before trading.
 
