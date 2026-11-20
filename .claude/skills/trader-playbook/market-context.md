@@ -1,48 +1,45 @@
 # Market context
 
-**Updated:** 2026-11-20 08:06 UTC (8-hour refresh). Verify against official
-schedules / company IR before trading.
+**Updated:** 2026-11-20 16:06 UTC (8-hour refresh). Intraday snapshots from
+different outlets disagree; verify against official schedules / company IR.
 
 ## Next 48 hours (US, times ET)
-**Fri 20 Nov**
-- Monthly options expiration (third Friday of the month): heavier volume and sudden swings near the close are common.
-- No major confirmed US economic release found.
+**Fri 20 Nov (rest of day)**
+- Monthly options expiration: heavier volume and sudden swings near the close are common.
+- Earnings this week already out: Intuit, Ross Stores (reported Thu after close).
+- Geopolitics: Benzinga reports the US President is weighing a decision on Iran — headline risk, nothing confirmed.
 
-**Weekend** — markets closed. Next week is Thanksgiving week (shorter trading, thin volume).
+**Weekend** — markets closed.
 
-## What happened Thursday 19 Nov
-- Morning tech rebound reversed into a broad sell-off: S&P 500 (SPY) -2.0%, now below its 200-day average;
-  Nasdaq 100 -2.2%, small caps -2.2%; VIX 28.4 (+16%); 970 stocks at 20-day lows vs 29 at highs.
-- **Anthropic (ANT) debut**: opened $111.50 (+34% vs $83 IPO), closed $97.17 (+17%), giving back half its pop as the market fell.
-  Biggest IPO ever (980M shares).
-- AMD -7.7% on a Hunterbrook report about China ties (journalistic report, not confirmed).
-- Walmart beat and raised its outlook; jobless claims 203K (steady).
+**Next week (Thanksgiving)** — markets closed Thu 26 Nov, early close 13:00 ET Fri 27 Nov.
+Usual holiday-week data (GDP revision, durable goods, PCE inflation) — 2026 dates not yet confirmed by the sources found.
 
-## Overnight (Fri 20 Nov, Asia)
-- Asia sold off hard on AI-spending fears: Nikkei about -4%, KOSPI about -4.4/-5%, Taiwan -5% (-16% on the week),
-  Hang Seng -1.7%. Asian shares head for their worst week since 2020.
-- US futures lower: S&P 500 about -0.2/-0.4%, Nasdaq about -0.6/-0.7% (one outlier source shows -2/-3%, unverified).
+## What happened Thursday 19 Nov → Friday morning
+- Thursday close: Dow 49,097 (-2.2%), S&P 500 ~7,176 (-2.0%, sixth loss in a row), Nasdaq 23,879 (-2.25%).
+- Overnight Asia had its worst week since 2020 (Nikkei ~-4%, Taiwan -5% on the day, -16% on the week).
+- Friday: mixed open (Dow up slightly, Nasdaq -0.7/-1.4%); chip stocks kept falling; Anthropic (ANT) dropped
+  after its debut and weighed on AI names. By midday one report had Dow -1.3%, S&P -0.75%, VIX ~28.
 
 ## Risk mood (3 lines)
-- Thursday: Dow -2.2%, S&P 500 -2.0% (sixth straight loss); S&P about -5.5% in a week. Fear is high (VIX ~28).
-- Good news (Nvidia, Walmart, Anthropic demand) is being sold: a sign of a market that wants less risk.
-- Hawkish Fed minutes (more hikes) plus AI-debt worries are the main weights.
+- Clear risk-off week: S&P 500 down about 6% from last Friday, AI and chips leading the fall worldwide.
+- Fear stays high (VIX ~28); buyers have not shown up even on good company results.
+- Thin holiday week ahead: fewer buyers and sellers can make moves larger.
 
 ## Headlines that matter for day trading
-1. Anthropic's record-setting IPO can't halt broader market slide — NBC News, 19 Nov 2026,
-   https://www.nbcnews.com/business/markets/live-blog/anthropic-ipo-live-updates-rcna610159
-2. Anthropic stock closes up 17% from initial price in first day of trading — Yahoo Finance, 19 Nov 2026,
-   https://finance.yahoo.com/technology/live/anthropic-ipo-live-company-said-to-price-stock-at-83-begin-trading-thursday-212656452.html
-3. Investors scramble for a piece of Anthropic in blockbuster IPO — NPR, 19 Nov 2026,
-   https://www.npr.org/2026/11/19/nx-s1-6042558/anthropic-ipo-breaks-records-100-billion
+1. Chip stocks keep falling after the US open — StockTitan, 20 Nov 2026,
+   https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026
+2. Why is the stock market down today? — Admiral Markets, 20 Nov 2026,
+   https://admiralmarkets.com/analytics/traders-blog/why-is-the-stock-market-down-today-20-november-2026
+3. Futures fall as Trump weighs Iran decision; Intuit, Ross in focus — Benzinga, 20 Nov 2026,
+   https://www.benzinga.com/markets/equities/26/11/63465508/stock-market-today-dow-jones-sp-500-futures-fall-as-trump-weighs-iran-decision-intu-rost-keys-in-focus
 4. Asian shares head for worst week since 2020 as AI rout deepens — Yahoo Finance (Reuters), 20 Nov 2026,
    https://finance.yahoo.com/markets/world-indices/articles/asian-shares-head-worst-week-014854250.html
-5. Wall Street futures fall as Anthropic debut fails to revive AI trade — Investing.com, 20 Nov 2026,
-   https://ph.investing.com/news/stock-market-news/wall-street-futures-fall-as-anthropic-debut-fails-to-revive-ai-trade-2712149
+5. Dow falls 1.34%, VIX jumps 15% at midday — JournalArta, 20 Nov 2026,
+   https://journalarta.com/en/2026/11/20/stock-market-today-dow-slides-1-34-and-vix-jumps-15-at-midday/
 
 ## Practical notes (from existing rules, no change)
-- ANT has no 60-day history for the Time Machine → nothing to size; its first day moved ~17 points from high to close.
-- In a falling market, opening rallies have faded three days in a row (Nvidia Wed, tech Thu): respect the opening range and the stop.
+- In this falling market, opening rallies have faded several days in a row: respect the opening range and the stop.
+- Holiday week: check NYSE hours (closed Thu 26, half day Fri 27) — the flat-by-close time moves to ~12:50 ET on Friday 27.
 
 ## Proposals for the user
 - None this run.
