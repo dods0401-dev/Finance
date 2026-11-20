@@ -1,42 +1,43 @@
 # Market context
 
-**Updated:** 2026-11-19 16:06 UTC (8-hour refresh). Mostly pre-open / early-session
-reports; sources disagree on early moves. Verify against official schedules /
-company IR before trading.
+**Updated:** 2026-11-20 00:06 UTC (8-hour refresh). Verify against official
+schedules / company IR before trading.
 
 ## Next 48 hours (US, times ET)
-**Thu 19 Nov (rest of day)**
-- Done: Walmart beat (revenue +5.2% to $188.8B, adjusted EPS $0.65 vs ~$0.64) and raised its yearly outlook
-  (sales +4.9–5.2%, EPS $2.84–2.89); comparable sales slightly missed. Early share move unclear (±1%).
-- Done: jobless claims 203K (+1K), slightly above ~197K expected — job market steady.
-- **Anthropic (ANT) first trading day on Nasdaq** (IPO priced $83, above the $70–78 range). Opening price not confirmed yet.
-
 **Fri 20 Nov**
-- No major confirmed US release found.
+- Monthly options expiration (third Friday of the month): heavier volume and sudden swings near the close are common.
+- No major confirmed US economic release found.
 
-**Weekend** — markets closed.
+**Weekend** — markets closed. Next week is Thanksgiving week (shorter trading, thin volume).
+
+## What happened Thursday 19 Nov
+- Morning tech rebound reversed into a broad sell-off: S&P 500 (SPY) -2.0%, now below its 200-day average;
+  Nasdaq 100 -2.2%, small caps -2.2%; VIX 28.4 (+16%); 970 stocks at 20-day lows vs 29 at highs.
+- **Anthropic (ANT) debut**: opened $111.50 (+34% vs $83 IPO), closed $97.17 (+17%), giving back half its pop as the market fell.
+  Biggest IPO ever (980M shares).
+- AMD -7.7% on a Hunterbrook report about China ties (journalistic report, not confirmed).
+- Walmart beat and raised its outlook; jobless claims 203K (steady).
 
 ## Risk mood (3 lines)
-- S&P 500 closed Wednesday at 7,323.63 (-0.23%), its fifth loss in a row; Fed minutes were hawkish (more hikes seen).
-- Today: tech-led rebound at the open on the Anthropic debut (Nasdaq futures up ~2% pre-open).
-- A one-day bounce after five down days is not yet a turn; rate-hike fear has not gone away.
+- Six losses in seven sessions; S&P 500 about -5.5% in a week. Fear is high (VIX ~28).
+- Good news (Nvidia, Walmart, Anthropic demand) is being sold: a sign of a market that wants less risk.
+- Hawkish Fed minutes (more hikes) plus AI-debt worries are the main weights.
 
 ## Headlines that matter for day trading
-1. Tech stocks jump before Anthropic's expected trading debut — StockTitan, 19 Nov 2026,
-   https://stocktitan.net/articles/stock-market-today-live-november-19-2026
-2. US equity open: indices in the green as Anthropic sparks AI rebound — Newsquawk, 19 Nov 2026,
-   https://www.newsquawk.com/headlines/us-equity-open-indices-in-the-green-as-anthropic-spark-ai-rebound
-3. Walmart earnings release Q3 FY2027 — MarketScreener, 19 Nov 2026,
-   https://www.marketscreener.com/news/walmart-earnings-release-earnings-release-q3-2027-ce785ed2d88fff20
-4. Nasdaq futures jump 560 points as Wall Street eyes rebound — Trading and Investment News, 19 Nov 2026,
-   https://www.tradingandinvestmentnews.co.uk/nasdaq-futures-560-points/
-5. Nov 19, 2026 market briefing: Anthropic IPO and Fed hike odds — Alertsify, 19 Nov 2026,
-   https://alertsify.com/blog/daily-briefing-2026-11-19
+1. Anthropic's record-setting IPO can't halt broader market slide — NBC News, 19 Nov 2026,
+   https://www.nbcnews.com/business/markets/live-blog/anthropic-ipo-live-updates-rcna610159
+2. Anthropic stock closes up 17% from initial price in first day of trading — Yahoo Finance, 19 Nov 2026,
+   https://finance.yahoo.com/technology/live/anthropic-ipo-live-company-said-to-price-stock-at-83-begin-trading-thursday-212656452.html
+3. Anthropic stock pops 30% in mega IPO — Fortune, 19 Nov 2026,
+   https://fortune.com/2026/11/19/anthropic-ipo-first-day-trading-nasdaq-record-valuation/
+4. Investors scramble for a piece of Anthropic in blockbuster IPO — NPR, 19 Nov 2026,
+   https://www.npr.org/2026/11/19/nx-s1-6042558/anthropic-ipo-breaks-records-100-billion
+5. ANT's first day of trading, step by step — StockTitan, 19 Nov 2026,
+   https://www.stocktitan.net/articles/anthropic-ipo-live-ant-first-trading-day-2026
 
 ## Practical notes (from existing rules, no change)
-- Earnings days are skipped by autopilot (8-K check): WMT, LOW today.
-- A newly listed IPO (ANT) has no 60-day history for the Time Machine → nothing to size; first-day IPO swings are extreme.
-- Sharp opening jumps after a losing streak often fade (Nvidia did on Wednesday): wait for the opening range, keep the stop.
+- ANT has no 60-day history for the Time Machine → nothing to size; its first day moved ~17 points from high to close.
+- In a falling market, opening rallies have faded three days in a row (Nvidia Wed, tech Thu): respect the opening range and the stop.
 
 ## Proposals for the user
 - None this run.
