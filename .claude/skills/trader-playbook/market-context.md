@@ -1,10 +1,13 @@
 # Market context
 
-**Updated:** 2026-11-21 08:06 UTC (8-hour refresh). Verify against official
+**Updated:** 2026-11-21 16:06 UTC (8-hour refresh). Verify against official
 schedules / company IR before trading.
 
 ## Next 48 hours
 **Sat 21 – Sun 22 Nov** — US markets closed. Watch weekend headlines on Nvidia (probes), Iran and AI spending.
+- Nvidia probe details (Reuters, 20 Nov): SEC enforcement staff are examining potential accounting / disclosure issues,
+  reportedly around Asia (Singapore) revenue disclosure. SEC declined comment; scope and start date unclear.
+  A civil probe is not a finding of wrongdoing and can end without action. No company response yet.
 
 **Mon 23 Nov** (just after the window)
 - Flash S&P Global PMIs (Nov). Earnings: Hewlett Packard Enterprise, Agilent, Macy's, Zoom.
@@ -36,8 +39,8 @@ schedules / company IR before trading.
    https://www.staradvertiser.com/2026/11/20/breaking-news/wall-street-rout-pushes-sp-500-dow-into-correction/
 3. Chip stocks drag the Nasdaq 100 to the edge of a bear market as Nvidia falls 14% — Quantisnow, 20 Nov 2026,
    https://www.quantisnow.com/articles/nvidia-worst-day-on-file-chips-drag-nasdaq-100-down-5-5-percent
-4. Nvidia is down 37% in a month — 24/7 Wall St., 20 Nov 2026,
-   https://247wallst.com/investing/2026/11/20/nvidia-is-down-37-in-a-month-can-nvda-stock-get-back-to-200/
+4. Nvidia's accounting is a focus of US SEC investigation, sources say — Reuters via Investing.com, 20 Nov 2026,
+   https://www.investing.com/news/economy-news/exclusiveus-secs-nvidia-probe-is-examining-potential-accounting-issues-sources-say-5042460
 5. The week ahead: Thanksgiving week brings more inflation data — Schaeffer's, 19 Nov 2026,
    https://www.schaeffersresearch.com/content/news/2026/11/19/the-week-ahead-thanksgiving-week-brings-more-inflation-data
 
