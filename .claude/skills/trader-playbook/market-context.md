@@ -1,13 +1,20 @@
 # Market context
 
-**Updated:** 2026-11-21 00:06 UTC (8-hour refresh). Verify against official
+**Updated:** 2026-11-21 08:06 UTC (8-hour refresh). Verify against official
 schedules / company IR before trading.
 
 ## Next 48 hours
 **Sat 21 – Sun 22 Nov** — US markets closed. Watch weekend headlines on Nvidia (probes), Iran and AI spending.
 
-**Next week (Thanksgiving)** — markets closed Thu 26 Nov, early close 13:00 ET Fri 27 Nov.
-Usual holiday-week data (GDP revision, durable goods, PCE inflation) — 2026 dates still to confirm.
+**Mon 23 Nov** (just after the window)
+- Flash S&P Global PMIs (Nov). Earnings: Hewlett Packard Enterprise, Agilent, Macy's, Zoom.
+
+**Rest of Thanksgiving week**
+- Tue 24: Case-Shiller home prices, Conference Board consumer confidence. Earnings: **Dell** (AI-server test;
+  EPS ~$6.61 expected), HP, Analog Devices, Best Buy, Dollar Tree, Dick's, Workday, Autodesk.
+- Wed 25: **08:30 Q3 GDP (2nd estimate) and October PCE inflation**, durable goods, new home sales; Fed Beige Book.
+  Deere before the open.
+- Thu 26: markets closed. Fri 27: stocks close 13:00 ET, bonds 14:00 ET.
 
 ## What happened Friday 20 Nov
 - **S&P 500 -3.7% to 6,910 and Dow -1.9% to 48,147: both now in "correction" (more than 10% below their highs).**
@@ -31,8 +38,8 @@ Usual holiday-week data (GDP revision, durable goods, PCE inflation) — 2026 da
    https://www.quantisnow.com/articles/nvidia-worst-day-on-file-chips-drag-nasdaq-100-down-5-5-percent
 4. Nvidia is down 37% in a month — 24/7 Wall St., 20 Nov 2026,
    https://247wallst.com/investing/2026/11/20/nvidia-is-down-37-in-a-month-can-nvda-stock-get-back-to-200/
-5. US stocks close sharply lower — StockTitan, 20 Nov 2026,
-   https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026
+5. The week ahead: Thanksgiving week brings more inflation data — Schaeffer's, 19 Nov 2026,
+   https://www.schaeffersresearch.com/content/news/2026/11/19/the-week-ahead-thanksgiving-week-brings-more-inflation-data
 
 ## Practical notes (from existing rules, no change)
 - NVDA now carries red-flag headlines (probes): autopilot skips it for 5 diaries.
