@@ -1,6 +1,6 @@
 # Market context
 
-**Updated:** 2026-11-22 00:06 UTC (8-hour refresh; no dated weekend market news found). Verify against official
+**Updated:** 2026-11-22 08:06 UTC (8-hour refresh; still no dated weekend market news found). Verify against official
 schedules / company IR before trading.
 
 ## Next 48 hours
