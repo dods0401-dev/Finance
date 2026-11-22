@@ -1,15 +1,17 @@
 # Market context
 
-**Updated:** 2026-11-21 16:06 UTC (8-hour refresh). Verify against official
+**Updated:** 2026-11-22 00:06 UTC (8-hour refresh; no dated weekend market news found). Verify against official
 schedules / company IR before trading.
 
 ## Next 48 hours
-**Sat 21 – Sun 22 Nov** — US markets closed. Watch weekend headlines on Nvidia (probes), Iran and AI spending.
+**Sun 22 Nov** — US markets closed (futures reopen Sunday evening ET). Watch weekend headlines on Nvidia (probes), Iran and AI spending.
 - Nvidia probe details (Reuters, 20 Nov): SEC enforcement staff are examining potential accounting / disclosure issues,
   reportedly around Asia (Singapore) revenue disclosure. SEC declined comment; scope and start date unclear.
   A civil probe is not a finding of wrongdoing and can end without action. No company response yet.
+- Iran: undated reports mention US–Iran talks, a rejected Iranian counterproposal and brokers cutting risk on fears of a
+  limited US strike, with Brent near $104–107. Dates unclear → treat as unverified headline risk for Monday.
 
-**Mon 23 Nov** (just after the window)
+**Mon 23 Nov**
 - Flash S&P Global PMIs (Nov). Earnings: Hewlett Packard Enterprise, Agilent, Macy's, Zoom.
 
 **Rest of Thanksgiving week**
