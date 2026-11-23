@@ -1,56 +1,47 @@
 # Market context
 
-**Updated:** 2026-11-22 16:06 UTC (8-hour refresh). Verify against official
-schedules / company IR before trading.
+**Updated:** 2026-11-23 08:07 UTC (8-hour refresh; covers the missed 00:05 run). Verify against
+official schedules / company IR before trading.
 
-## Next 48 hours
-**Sun 22 Nov** — US markets closed (futures reopen Sunday evening ET).
-- A single weekend-quote post (unverified, likely broker weekend prices) shows a small bounce: Dow ~+0.3%, Nasdaq ~+1.1%.
-  Do not rely on it; check Sunday-evening futures. Watch weekend headlines on Nvidia (probes), Iran and AI spending.
-- Nvidia probe details (Reuters, 20 Nov): SEC enforcement staff are examining potential accounting / disclosure issues,
-  reportedly around Asia (Singapore) revenue disclosure. SEC declined comment; scope and start date unclear.
-  A civil probe is not a finding of wrongdoing and can end without action. No company response yet.
-- Iran: undated reports mention US–Iran talks, a rejected Iranian counterproposal and brokers cutting risk on fears of a
-  limited US strike, with Brent near $104–107. Dates unclear → treat as unverified headline risk for Monday.
-
+## Next 48 hours (US, times ET)
 **Mon 23 Nov**
 - Flash S&P Global PMIs (Nov). Earnings: Hewlett Packard Enterprise, Agilent, Macy's, Zoom.
+- Futures point to a strong rebound at the open (see below) — after seven down days, gap-ups have faded several times.
 
-**Rest of Thanksgiving week**
-- Tue 24: Case-Shiller home prices, Conference Board consumer confidence. Earnings: **Dell** (AI-server test;
-  EPS ~$6.61 expected), HP, Analog Devices, Best Buy, Dollar Tree, Dick's, Workday, Autodesk.
-- Wed 25: **08:30 Q3 GDP (2nd estimate) and October PCE inflation**, durable goods, new home sales; Fed Beige Book.
-  Deere before the open.
-- Thu 26: markets closed. Fri 27: stocks close 13:00 ET, bonds 14:00 ET.
+**Tue 24 Nov**
+- Case-Shiller home prices, Conference Board consumer confidence.
+- Earnings: **Dell** (AI-server test; EPS ~$6.61 expected), HP, Analog Devices, Best Buy, Dollar Tree, Dick's, Workday, Autodesk.
 
-## What happened Friday 20 Nov
-- **S&P 500 -3.7% to 6,910 and Dow -1.9% to 48,147: both now in "correction" (more than 10% below their highs).**
-  S&P 500 seventh straight loss, -8.6% on the week (worst since April 2025). Nasdaq -5.3%; Nasdaq 100 near a 20% drop.
-- **Nvidia -14% to ~$125.5** (worst day since Jan 2025, -37% in a month). Reuters: the SEC is examining its accounting;
-  separately a Congressional probe on China sales and a California Attorney General investigation (per our news feed).
-- AMD -13%, Micron -14%, Broadcom double-digit loss; Anthropic (ANT) -9.1% on its second day.
-- VIX closed 37.2 after topping 40; only consumer staples rose.
+**Rest of the week**
+- Wed 25: 08:30 Q3 GDP (2nd estimate) and October PCE inflation, durable goods, new home sales; Fed Beige Book; Deere.
+- Thu 26: markets closed (Thanksgiving). Fri 27: stocks close 13:00 ET, bonds 14:00 ET.
+
+## Overnight (Mon 23 Nov)
+- US futures rebound: Nasdaq 100 about +2.8/+3.1%, S&P 500 about +2/+2.2%; Nvidia futures ~+5.7% (~$132.7).
+- Asia steps in: China cut margin requirements and state funds bought a record amount of ETFs; South Korea prepares a
+  stabilisation fund. Taiwan +2.2% after its worst week since 1991; KOSPI -2.6%; Japan closed (holiday).
+- Still in the background: SEC look at Nvidia's accounting; a Fed rate hike seen as almost certain at the next meeting.
 
 ## Risk mood (3 lines)
-- Panic-level fear (VIX ~37) and a broad AI-led rout; the S&P 500 is in correction.
-- Regulatory risk on the market leader (Nvidia) adds a new, unquantifiable worry.
-- Holiday week ahead with thin volume: both further drops and sharp rebounds are possible.
+- Last week: S&P 500 -8.6% (in correction), Nasdaq 100 near -20% from its high, VIX ~37 at Friday's close.
+- Monday starts with a relief bounce helped by government support in Asia — not proof the selling is over.
+- A short, thin holiday week with Dell and PCE inflation: big moves both ways are likely.
 
 ## Headlines that matter for day trading
-1. S&P 500 and Dow close in correction; Nasdaq erases 2026 gain as AI rout picks up steam — CNBC, 20 Nov 2026,
-   https://www.cnbc.com/amp/2026/11/19/stock-market-today-live-updates.html
-2. Wall Street rout pushes S&P 500, Dow into correction — Star-Advertiser (AP), 20 Nov 2026,
-   https://www.staradvertiser.com/2026/11/20/breaking-news/wall-street-rout-pushes-sp-500-dow-into-correction/
-3. Chip stocks drag the Nasdaq 100 to the edge of a bear market as Nvidia falls 14% — Quantisnow, 20 Nov 2026,
-   https://www.quantisnow.com/articles/nvidia-worst-day-on-file-chips-drag-nasdaq-100-down-5-5-percent
-4. Nvidia's accounting is a focus of US SEC investigation, sources say — Reuters via Investing.com, 20 Nov 2026,
+1. US futures bounce as Asia scrambles to shore up stocks after AI-driven rout — Reuters via MarketScreener, 23 Nov 2026,
+   https://www.marketscreener.com/news/us-futures-bounce-as-asia-scrambles-to-shore-up-stocks-after-ai-driven-rout-ce785ed3d088f124
+2. Nvidia futures rip 6%, Nasdaq and S&P 500 futures snap back 2% — Yahoo Finance, 23 Nov 2026,
+   https://finance.yahoo.com/markets/stocks/articles/green-week-ahead-nvidia-futures-060000363.html
+3. Asia stocks slide as AI rout deepens despite rebound in U.S. futures — Investing.com, 23 Nov 2026,
+   https://ca.investing.com/news/stock-market-news/asia-stocks-slide-as-ai-rout-deepens-despite-rebound-in-us-futures-4974646
+4. Stock futures rebound following brutal week — FXStreet, 23 Nov 2026,
+   https://www.fxstreet.com/analysis/stock-futures-rebound-following-brutal-week-202611230714
+5. Nvidia's accounting is a focus of US SEC investigation, sources say — Reuters via Investing.com, 20 Nov 2026,
    https://www.investing.com/news/economy-news/exclusiveus-secs-nvidia-probe-is-examining-potential-accounting-issues-sources-say-5042460
-5. The week ahead: Thanksgiving week brings more inflation data — Schaeffer's, 19 Nov 2026,
-   https://www.schaeffersresearch.com/content/news/2026/11/19/the-week-ahead-thanksgiving-week-brings-more-inflation-data
 
 ## Practical notes (from existing rules, no change)
-- NVDA now carries red-flag headlines (probes): autopilot skips it for 5 diaries.
-- With VIX above 35, daily ranges are very wide: the same max-loss rule means fewer shares; a stop is a plan, not a guarantee.
+- Gap-up open after a crash: wait for the opening range; a stop is a plan, not a guarantee.
+- NVDA carries red-flag headlines (SEC/Congress/California probes): autopilot skips it for 5 diaries.
 - Holiday week: closed Thu 26, half day Fri 27 — flat-by-close moves to ~12:50 ET on Friday.
 
 ## Proposals for the user
