@@ -1,6 +1,6 @@
 # Market context
 
-**Updated:** 2026-11-24 00:06 UTC (8-hour refresh). Index figures differ slightly by
+**Updated:** 2026-11-24 08:05 UTC (8-hour refresh). Index figures differ slightly by
 outlet; verify against official schedules / company IR before trading.
 
 ## Next 48 hours (US, times ET)
@@ -20,6 +20,13 @@ outlet; verify against official schedules / company IR before trading.
   HPE +17% on reports of rising AI-server prices.
 - After hours: HPE -5% despite a beat, higher guidance and a $5B buyback; Zoom flat after a beat and first dividend; Agilent up.
 
+## Overnight (Tue 24 Nov)
+- Asia rallied on the AI rebound: MSCI Asia ex-Japan +4%, Nikkei up to +5%, KOSPI +7%, Taiwan about +9% (one report);
+  China lagged on worries about tighter US chip-export curbs.
+- US futures only slightly higher (S&P 500 and Nasdaq 100 about +0.2/+0.3%) after Monday's surge.
+- Monday's Nvidia jump was helped by short sellers buying back (CMC Markets); one report says the board acted after input
+  from senior US government officials (single source).
+
 ## Risk mood (3 lines)
 - Relief rally erased much of last week's fall in one day, but the S&P 500 is still below its 50- and 200-day averages.
 - HPE falling after strong results shows how much is already priced in after a 17% jump.
@@ -34,8 +41,8 @@ outlet; verify against official schedules / company IR before trading.
    https://www.benzinga.com/markets/equities/26/11/63551516/stock-market-today-nvidia-jensen-huang-return-nasdaq-100-anthropic-crowdstrike
 4. Closing Look — Monday, November 23, 2026 — Capp Notes, 23 Nov 2026,
    https://cappnotes.substack.com/p/closing-look-monday-november-23-2026
-5. Stock futures rebound as Nvidia bounces; PCE and GDP await in Thanksgiving week — StockInvest.us, 23 Nov 2026,
-   https://stockinvest.us/digest/digest-us-premarket-2026-11-23
+5. Asian stocks rally as Huang's return to Nvidia revives the AI trade — Yahoo Finance (Reuters), 24 Nov 2026,
+   https://finance.yahoo.com/markets/stocks/articles/asian-stocks-rally-huangs-nvidia-013042563.html
 
 ## Practical notes (from existing rules, no change)
 - Earnings days are skipped by autopilot (8-K check): DELL, HPQ, ADI, BBY, DLTR, DKS, WDAY, ADSK Tuesday; DE Wednesday.
