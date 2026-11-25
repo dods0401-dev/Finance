@@ -1,43 +1,48 @@
 # Market context
 
-**Updated:** 2026-11-24 16:06 UTC (8-hour refresh). Early-session figures differ by
-outlet; verify against official schedules / company IR before trading.
+**Updated:** 2026-11-25 08:06 UTC (8-hour refresh; covers the missed 00:06 run). Verify against
+official schedules / company IR before trading.
 
 ## Next 48 hours (US, times ET)
-**Tue 24 Nov (rest of day)**
-- 10:00 Conference Board consumer confidence (Nov).
-- Done: Best Buy comparable sales +6.1%, yearly EPS outlook raised to $6.90–7.05; early +5% faded to about flat.
-- After close: **Dell** (EPS ~$6.61, revenue ~$49.2B expected; record $95B order backlog in focus; stock -5/-7% pre-market
-  after +30% Monday), HP, Workday, Autodesk.
-- Deal: Sanofi to buy Insmed for about $41B.
-
 **Wed 25 Nov**
-- **08:30 Q3 GDP (2nd estimate) and October PCE inflation**, durable goods, new home sales; Fed Beige Book; Deere pre-market.
-- Last full session before the holiday: volume may be thin in the afternoon.
+- **08:30 October PCE inflation** (expected 3.8% a year, up from 3.6%; core 3.2% from 3.1%) and **Q3 GDP 2nd estimate**
+  (~3.4%), durable goods, new home sales; Fed Beige Book in the afternoon; Deere pre-market.
+  Last big inflation test before the Fed decision on 9 Dec: a hot number raises hike odds.
+- Last full session before the holiday: thin volume likely in the afternoon.
 
-**Thu 26 Nov** — markets closed (Thanksgiving). Fri 27: stocks close 13:00 ET, bonds 14:00 ET.
+**Thu 26 Nov** — markets closed (Thanksgiving).
+
+**Fri 27 Nov** — stocks close 13:00 ET, bonds 14:00 ET; Black Friday retail headlines.
+
+## What happened Tuesday 24 Nov
+- Rotation: S&P 500 -0.5%, Nasdaq 100 -2%; small caps +0.5%, health care +3.3% (Sanofi to buy Insmed for ~$41B).
+- Chips gave back part of Monday: Micron -11% (BNP Paribas downgrade), AMD -9%, Nvidia -6%. Dell -12/-13% in the session after a
+  rival warned on AI-server profits; Anthropic traded below its $83 IPO price.
+- **Dell after the close: big beat** — adjusted EPS $9.45 vs ~$6.59, revenue $54.9B vs ~$49.3B; yearly revenue outlook raised to
+  $202B, EPS outlook to $29.68; $25B buyback. Shares +3/+6% after hours.
+- US Treasury announced fresh Iran sanctions with warnings on the Strait of Hormuz.
 
 ## Risk mood (3 lines)
-- Monday's record rally (S&P 500 +4.73% to 7,237; Nasdaq +6.51%) is being tested: early Tuesday S&P about -0.9%, Nasdaq -1.8%, chips lower.
-- New geopolitical headline: US Treasury Secretary Bessent announced fresh Iran sanctions with warnings on the Strait of Hormuz → oil/headline risk.
-- Rebound still fragile; Wednesday's inflation data and the Fed hike outlook are the next big test.
+- Rebound after the crash is uneven: tech sold again on Tuesday, defensives and health care held up.
+- S&P 500 futures were about -0.5% overnight despite Dell; VIX ~26.
+- Inflation data today and a likely Fed hike in December are the main risk before a thin holiday close.
 
 ## Headlines that matter for day trading
-1. Dow, S&P 500, Nasdaq fall as chip stocks tumble, investors test Nvidia-fueled rally — Yahoo Finance, 24 Nov 2026,
-   https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html
-2. Futures fall after Bessent unveils fresh Iran sanctions, Hormuz warnings; HPE, Dell in focus — Benzinga, 24 Nov 2026,
+1. Dell earnings beat on AI strength, company authorizes $25 billion buyback — CNBC, 24 Nov 2026,
+   https://www.cnbc.com/2026/11/24/dell-earnings-report-q3-2027.html
+2. Wednesday's PCE report marks final major inflation test before Fed decision — Investing.com, Nov 2026,
+   https://www.investing.com/analysis/wednesdays-pce-report-marks-final-major-inflation-test-before-fed-decision-200692279
+3. S&P 500 futures fall 0.5%; Dell earnings didn't help — TradingView, 24–25 Nov 2026,
+   https://www.tradingview.com/news/tradingview:55d8a5121094b:0-es-s-p-500-futures-fall-0-5-after-buyers-pare-session-losses-dell-earnings-didn-t-help/
+4. Core PCE eyed at 3.2% as Fed rate hike odds build — Pomegra, Nov 2026,
+   https://pomegra.io/news/core-pce-eyed-at-32-as-fed-rate-hike-odds-build
+5. Futures fall after Bessent unveils fresh Iran sanctions, Hormuz warnings — Benzinga, 24 Nov 2026,
    https://www.benzinga.com/markets/equities/26/11/63569914/stock-market-today-dow-sp-500-futures-fall-after-scott-bessent-unveils-fresh-iran-sanctions-hormuz-warnings-hpe-smtc-dell-in-focus
-3. Why is Dell Technologies stock sliding today? — Investing.com, 24 Nov 2026,
-   https://www.investing.com/news/stock-market-news/why-is-dell-technologies-stock-sliding-today-93CH-5047904
-4. Chip stocks slip after Monday's big rally — StockTitan, 24 Nov 2026,
-   https://www.stocktitan.net/articles/stock-market-today-live-november-24-2026
-5. Futures ease after Nvidia-led surge; Sanofi's $41B Insmed deal — StockInvest.us, 24 Nov 2026,
-   https://stockinvest.us/digest/digest-us-premarket-2026-11-24
 
 ## Practical notes (from existing rules, no change)
-- Earnings days are skipped by autopilot (8-K check): DELL, HPQ, WDAY, ADSK, BBY, ADI, DLTR, DKS today; DE Wednesday.
-- A day after a record rally, opening gaps can reverse quickly: wait for the opening range, keep the stop.
-- Holiday week: closed Thu 26, half day Fri 27 — flat-by-close moves to ~12:50 ET on Friday.
+- Earnings days are skipped by autopilot (8-K check): DELL (day after report), DE today.
+- 08:30 data hits before the open: expect a gap; wait for the opening range and keep the stop.
+- Friday half day: flat-by-close moves to ~12:50 ET.
 
 ## Proposals for the user
 - None this run.
