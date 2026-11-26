@@ -1,0 +1,2478 @@
+{
+ "date": "2026-11-26",
+ "created_at": "2026-11-26T21:36:47+00:00",
+ "data": {
+  "regime": {
+   "SPY": {
+    "close": 716.7,
+    "r1": -0.29,
+    "r5": -1.85,
+    "r20": -7.2,
+    "a50": false,
+    "a200": false,
+    "hi20": false,
+    "lo20": false,
+    "rvol": 1.16
+   },
+   "QQQ": {
+    "close": 633.93,
+    "r1": -0.65,
+    "r5": -3.88,
+    "r20": -12.63,
+    "a50": false,
+    "a200": false,
+    "hi20": false,
+    "lo20": false,
+    "rvol": 1.34
+   },
+   "IWM": {
+    "close": 268.87,
+    "r1": 0.65,
+    "r5": -0.46,
+    "r20": -4.42,
+    "a50": false,
+    "a200": false,
+    "hi20": false,
+    "lo20": false,
+    "rvol": 1.21
+   },
+   "VIX": {
+    "close": 26.8,
+    "r1": -5.27
+   },
+   "breadth": {
+    "pct_above_50d": 44.6,
+    "pct_above_200d": 46.6,
+    "new_20d_highs": 252,
+    "new_20d_lows": 92,
+    "stocks": 2785
+   }
+  },
+  "sectors": {
+   "Altro": {
+    "n": 230,
+    "r1": 1.31,
+    "r5": 0.26,
+    "r20": -0.75,
+    "pct_above_50d": 48.3,
+    "rvol": 0.9,
+    "leaders": [
+     [
+      "TGLS",
+      23.5
+     ],
+     [
+      "AMTM",
+      18.8
+     ],
+     [
+      "CAR",
+      16.5
+     ],
+     [
+      "CSGP",
+      13.8
+     ],
+     [
+      "PDD",
+      12.9
+     ]
+    ],
+    "laggards": [
+     [
+      "LQDT",
+      -20.7
+     ],
+     [
+      "MNRO",
+      -22.1
+     ],
+     [
+      "VCX",
+      -22.4
+     ]
+    ],
+    "etf": null,
+    "news_count": 31,
+    "headlines": [
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "GRMN"
+      ],
+      "headline": "Garmin Hosts 2026 Wearable Technology Exhibition",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "ACN"
+      ],
+      "headline": "Accenture Collaborates with Siemens and IFS on Industrial Manufacturing Solutions",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "DASH"
+      ],
+      "headline": "Reports of Unsolicited Push Notifications and Live Activities Ads in iOS Apps",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T17:32",
+      "symbols": [
+       "DOLE"
+      ],
+      "headline": "Dole plc Launches Co-Branded 'Little Prince' Banana Product in China",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:31",
+      "symbols": [
+       "R"
+      ],
+      "headline": "Ryder Earns Top 10 3PL Recognition from Inbound Logistics",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:31",
+      "symbols": [
+       "UBER"
+      ],
+      "headline": "Legal Complaint Filed Against Uber Regarding Driver Screening and Safety",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:31",
+      "symbols": [
+       "V"
+      ],
+      "headline": "Visa Releases 2026 Holiday Spending Shift Survey for Canada",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:02",
+      "symbols": [
+       "PFLT"
+      ],
+      "headline": "UBS Adjusts Price Target for PennantPark Floating Rate Capital",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Comunicazioni": {
+    "n": 69,
+    "r1": 0.82,
+    "r5": -0.73,
+    "r20": 2.14,
+    "pct_above_50d": 53.6,
+    "rvol": 0.85,
+    "leaders": [
+     [
+      "TU",
+      13.6
+     ],
+     [
+      "MH",
+      10.3
+     ],
+     [
+      "VEON",
+      8.3
+     ],
+     [
+      "CHTR",
+      5.8
+     ],
+     [
+      "TRI",
+      5.2
+     ]
+    ],
+    "laggards": [
+     [
+      "NMAX",
+      -16.2
+     ],
+     [
+      "FUBO",
+      -20.8
+     ],
+     [
+      "SKM",
+      -21.1
+     ]
+    ],
+    "etf": {
+     "symbol": "XLC",
+     "r1": 0.89,
+     "r5": -0.19,
+     "r20": 2.17
+    },
+    "news_count": 8,
+    "headlines": [
+     {
+      "t": "2026-11-26T18:02",
+      "symbols": [
+       "VOD"
+      ],
+      "headline": "Analyst Rating Updates for Vodafone Group PLC",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "DLX"
+      ],
+      "headline": "Deluxe Announces Investor Day Presentation",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T13:01",
+      "symbols": [
+       "AD"
+      ],
+      "headline": "Ahold Delhaize Subsidiary AB Vassilopoulos Pilots New Discount Model",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T12:32",
+      "symbols": [
+       "LION"
+      ],
+      "headline": "Lionsgate's 'The Hunger Games: Sunrise on the Reaping' Sets New Franchise Tuesday Record",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T12:31",
+      "symbols": [
+       "ASTS"
+      ],
+      "headline": "Director Adriana Cisneros Purchases Over $1 Million in AST SpaceMobile Stock",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T12:31",
+      "symbols": [
+       "FWONA"
+      ],
+      "headline": "Lenovo and Formula 1 Expand Technology Partnership",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-25T23:02",
+      "symbols": [
+       "WLY"
+      ],
+      "headline": "Wiley Participates in Community Thanksgiving Initiative",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-25T23:01",
+      "symbols": [
+       "BCE"
+      ],
+      "headline": "Bell Canada and Vector Institute Renew Strategic AI Partnership",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Consumi di base": {
+    "n": 57,
+    "r1": 1.74,
+    "r5": -0.05,
+    "r20": 4.48,
+    "pct_above_50d": 73.7,
+    "rvol": 0.96,
+    "leaders": [
+     [
+      "BRBR",
+      14.6
+     ],
+     [
+      "OFRM",
+      13.6
+     ],
+     [
+      "MKC",
+      7.6
+     ],
+     [
+      "CAG",
+      5.7
+     ],
+     [
+      "POST",
+      5.3
+     ]
+    ],
+    "laggards": [
+     [
+      "COCO",
+      -9.7
+     ],
+     [
+      "CELH",
+      -11.3
+     ],
+     [
+      "VITL",
+      -12.8
+     ]
+    ],
+    "etf": {
+     "symbol": "XLP",
+     "r1": 0.46,
+     "r5": 1.23,
+     "r20": 6.29
+    },
+    "news_count": 14,
+    "headlines": [
+     {
+      "t": "2026-11-26T21:01",
+      "symbols": [
+       "JBS"
+      ],
+      "headline": "Law Firm Investigates JBS N.V.'s Proposed Acquisition of Pilgrim's Pride Corporation",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T20:01",
+      "symbols": [
+       "PM"
+      ],
+      "headline": "Rothmans, Benson & Hedges Inc. Reports 2026 Environmental Results for BeBot Initiative",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "KDP"
+      ],
+      "headline": "Keurig Dr Pepper Completes Redemption of Chobani Equity Stake",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "PEP"
+      ],
+      "headline": "PepsiCo Announces Rs 868 Crore Investment in Tamil Nadu Food Manufacturing Facility",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T18:01",
+      "symbols": [
+       "ADM"
+      ],
+      "headline": "Wellington Management Group LLP Files Holding Notification for Admiral Group plc",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T17:02",
+      "symbols": [
+       "BG"
+      ],
+      "headline": "Irish High Court Rejects Scheme of Arrangement for BAWAG Group's Acquisition of Permanent TSB",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:32",
+      "symbols": [
+       "MO"
+      ],
+      "headline": "Altria Group Considers Potential Acquisition of Imperial Brands",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:31",
+      "symbols": [
+       "KDP"
+      ],
+      "headline": "Goldman Sachs Analyst Adjusts Keurig Dr Pepper Price Target",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Consumi discrezionali": {
+    "n": 286,
+    "r1": 0.99,
+    "r5": -0.31,
+    "r20": 4.02,
+    "pct_above_50d": 62.9,
+    "rvol": 0.87,
+    "leaders": [
+     [
+      "ANF",
+      20.4
+     ],
+     [
+      "GAP",
+      17.0
+     ],
+     [
+      "CPNG",
+      12.7
+     ],
+     [
+      "MSGR",
+      11.2
+     ],
+     [
+      "KSS",
+      11.1
+     ]
+    ],
+    "laggards": [
+     [
+      "CENTA",
+      -19.8
+     ],
+     [
+      "PLAY",
+      -20.8
+     ],
+     [
+      "SHOE",
+      -25.8
+     ]
+    ],
+    "etf": {
+     "symbol": "XLY",
+     "r1": -0.2,
+     "r5": -1.43,
+     "r20": 1.87
+    },
+    "news_count": 52,
+    "headlines": [
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "GWW"
+      ],
+      "headline": "Saba Capital Discloses Increased Voting Rights in W.W. Grainger, Inc.",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "CTAS"
+      ],
+      "headline": "CNESST Releases Findings on Workplace Fatality at Cintas Canada Ltée",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T20:01",
+      "symbols": [
+       "TSLA"
+      ],
+      "headline": "Tesla Deploys Manual Battery Preconditioning Feature",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T20:01",
+      "symbols": [
+       "TSLA"
+      ],
+      "headline": "EU Postpones Vote on Tesla Assisted Driving Approval",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "LTH"
+      ],
+      "headline": "Life Time Shares Expert Holiday Wellness Tips",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "ANF"
+      ],
+      "headline": "Wall Street Analysts Update Ratings and Price Targets for Abercrombie & Fitch",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "MOD"
+      ],
+      "headline": "Modexus Solutions Outlines Strategic Growth Targets at 2026 Investor Day",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "HLT"
+      ],
+      "headline": "Hilton and Sun Group Expand Partnership with Four New Hotels in Vietnam",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Energia": {
+    "n": 139,
+    "r1": 1.5,
+    "r5": -0.92,
+    "r20": -12.6,
+    "pct_above_50d": 21.6,
+    "rvol": 0.85,
+    "leaders": [
+     [
+      "VVV",
+      17.0
+     ],
+     [
+      "BIPC",
+      8.2
+     ],
+     [
+      "FANG",
+      3.3
+     ],
+     [
+      "VNOM",
+      3.3
+     ],
+     [
+      "PTEN",
+      2.9
+     ]
+    ],
+    "laggards": [
+     [
+      "YPF",
+      -10.4
+     ],
+     [
+      "CLMT",
+      -10.6
+     ],
+     [
+      "DK",
+      -12.4
+     ]
+    ],
+    "etf": {
+     "symbol": "XLE",
+     "r1": 0.74,
+     "r5": -0.64,
+     "r20": -11.03
+    },
+    "news_count": 19,
+    "headlines": [
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "TRP"
+      ],
+      "headline": "TC Energy Threatens to Cancel Gas Pipeline Expansion Due to Proposed Alberta Legislation",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "XOM"
+      ],
+      "headline": "European Parliament Delays Methane Reporting Requirements for Fossil Fuel Importers",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T16:32",
+      "symbols": [
+       "ATO"
+      ],
+      "headline": "Atos Partners with Scaleway for Sovereign Cloud Deployment",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T15:31",
+      "symbols": [
+       "EQNR"
+      ],
+      "headline": "Subsea 7 Secures Contract Extension from Equinor for Seven Viking",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T15:31",
+      "symbols": [
+       "TTE"
+      ],
+      "headline": "TotalEnergies CEO to Co-Chair 10th Paris Conference",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:32",
+      "symbols": [
+       "ENB"
+      ],
+      "headline": "Enbridge in Discussions to Sell Part of its Crude Oil Pipeline Network for CA$1.5 Billion",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "GFR"
+      ],
+      "headline": "Greenfire Resources Announces Resignation of VP, Finance",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "TTE"
+      ],
+      "headline": "TotalEnergies and Air Liquide Register Joint Venture for Green Molecules",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Finanza": {
+    "n": 444,
+    "r1": 0.37,
+    "r5": -0.75,
+    "r20": -2.58,
+    "pct_above_50d": 33.6,
+    "rvol": 0.89,
+    "leaders": [
+     [
+      "FRHC",
+      16.2
+     ],
+     [
+      "VXX",
+      14.2
+     ],
+     [
+      "GPGI",
+      14.0
+     ],
+     [
+      "NAVI",
+      13.7
+     ],
+     [
+      "RKT",
+      13.4
+     ]
+    ],
+    "laggards": [
+     [
+      "CORZ",
+      -23.0
+     ],
+     [
+      "WYFI",
+      -23.6
+     ],
+     [
+      "SNEX",
+      -32.7
+     ]
+    ],
+    "etf": {
+     "symbol": "XLF",
+     "r1": 0.71,
+     "r5": 0.16,
+     "r20": 0.68
+    },
+    "news_count": 88,
+    "headlines": [
+     {
+      "t": "2026-11-26T21:32",
+      "symbols": [
+       "JPM"
+      ],
+      "headline": "JPMorgan Chase Lowers Price Target for Vodafone",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "ELV"
+      ],
+      "headline": "Elevance Health Employee Recognized for AI-Driven Operational Excellence",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "GS"
+      ],
+      "headline": "Goldman Sachs International Discloses Dealings in Permanent TSB Shares",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "MFC"
+      ],
+      "headline": "Manulife Investments Announces 2026 Annual Reinvested Distribution Estimates",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T21:01",
+      "symbols": [
+       "MC"
+      ],
+      "headline": "Jefferies Lowers Price Target for LVMH to 380 Euro",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T20:01",
+      "symbols": [
+       "GS"
+      ],
+      "headline": "The Goldman Sachs Group, Inc. Discloses Major Holding in Hugo Boss AG",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "BEN"
+      ],
+      "headline": "Franklin Templeton to Add Hyperliquid (HYPE) to Crypto ETF",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "DLB"
+      ],
+      "headline": "Dolby Sustainability Leader Discusses Corporate Carbon Credit Strategy",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Immobiliare": {
+    "n": 143,
+    "r1": 1.05,
+    "r5": 1.55,
+    "r20": 3.18,
+    "pct_above_50d": 65.0,
+    "rvol": 0.91,
+    "leaders": [
+     [
+      "IVR",
+      18.0
+     ],
+     [
+      "ARR",
+      11.8
+     ],
+     [
+      "ADAM",
+      10.5
+     ],
+     [
+      "CIM",
+      9.9
+     ],
+     [
+      "MFA",
+      8.6
+     ]
+    ],
+    "laggards": [
+     [
+      "VAC",
+      -8.3
+     ],
+     [
+      "BXDC",
+      -9.6
+     ],
+     [
+      "REAX",
+      -10.0
+     ]
+    ],
+    "etf": {
+     "symbol": "XLRE",
+     "r1": 0.92,
+     "r5": 0.55,
+     "r20": 4.11
+    },
+    "news_count": 8,
+    "headlines": [
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "BN"
+      ],
+      "headline": "Red Box Storage Expands Hong Kong Footprint with Brookfield Support",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "CWK"
+      ],
+      "headline": "Cushman & Wakefield Releases Report on Life Sciences Real Estate Demand in China",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:32",
+      "symbols": [
+       "CWK"
+      ],
+      "headline": "Cushman & Wakefield Releases Life Sciences Industry Report",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:03",
+      "symbols": [
+       "COMP"
+      ],
+      "headline": "Uniserve Announces Grant of Incentive Stock Options",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T13:01",
+      "symbols": [
+       "BN"
+      ],
+      "headline": "Chobani Fails to Dismiss Danone's Cold-Brew Coffee Lawsuit",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T09:02",
+      "symbols": [
+       "SAFE"
+      ],
+      "headline": "Safestore Reports Higher Group Revenue for Fiscal Year 2026",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T08:02",
+      "symbols": [
+       "SPG"
+      ],
+      "headline": "SP Group Reports 2025/26 Financial Results and 2026/27 Outlook",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-25T23:01",
+      "symbols": [
+       "EPRT"
+      ],
+      "headline": "Essential Properties Acquires Real Estate for Kids Campus Schools",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Industria": {
+    "n": 349,
+    "r1": 1.1,
+    "r5": -0.5,
+    "r20": -1.51,
+    "pct_above_50d": 41.3,
+    "rvol": 0.82,
+    "leaders": [
+     [
+      "CDNL",
+      17.8
+     ],
+     [
+      "KRNT",
+      17.5
+     ],
+     [
+      "AXON",
+      14.1
+     ],
+     [
+      "SYM",
+      12.5
+     ],
+     [
+      "DHT",
+      11.9
+     ]
+    ],
+    "laggards": [
+     [
+      "XE",
+      -18.5
+     ],
+     [
+      "DY",
+      -21.3
+     ],
+     [
+      "VOYG",
+      -22.5
+     ]
+    ],
+    "etf": {
+     "symbol": "XLI",
+     "r1": 0.83,
+     "r5": -1.04,
+     "r20": -3.29
+    },
+    "news_count": 51,
+    "headlines": [
+     {
+      "t": "2026-11-26T21:01",
+      "symbols": [
+       "EMBJ"
+      ],
+      "headline": "Latam Airlines Expands Regional Network with Embraer E195-E2",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:03",
+      "symbols": [
+       "BCO"
+      ],
+      "headline": "UK Competition Regulator Consults on Brink's Undertakings Over Proposed Purchase of NCR Atleos",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "AAL"
+      ],
+      "headline": "Potential Impact of Proposed US Duty on Embraer Aircraft",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "IT"
+      ],
+      "headline": "Gartner Releases 2026 Magic Quadrant for Email Security",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "OMC"
+      ],
+      "headline": "AlmapBBDO Announces New Executive Leadership",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "HON"
+      ],
+      "headline": "Honeywell Deploys Autonomous Cooling Platform at Google Data Center",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "SYM"
+      ],
+      "headline": "KeyBanc Analyst Adjusts Symbotic Price Target",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T17:31",
+      "symbols": [
+       "TRN"
+      ],
+      "headline": "Trainline Partners with HTS to Add Accommodation Booking",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Materiali": {
+    "n": 174,
+    "r1": 2.26,
+    "r5": -1.32,
+    "r20": -10.3,
+    "pct_above_50d": 23.6,
+    "rvol": 0.94,
+    "leaders": [
+     [
+      "GPK",
+      9.3
+     ],
+     [
+      "ROCK",
+      8.4
+     ],
+     [
+      "CMP",
+      7.8
+     ],
+     [
+      "IFF",
+      7.5
+     ],
+     [
+      "IPAR",
+      6.7
+     ]
+    ],
+    "laggards": [
+     [
+      "ALOY",
+      -14.2
+     ],
+     [
+      "DC",
+      -23.0
+     ],
+     [
+      "SA",
+      -25.7
+     ]
+    ],
+    "etf": {
+     "symbol": "XLB",
+     "r1": 2.07,
+     "r5": 1.49,
+     "r20": -1.25
+    },
+    "news_count": 19,
+    "headlines": [
+     {
+      "t": "2026-11-26T21:01",
+      "symbols": [
+       "EL"
+      ],
+      "headline": "Equita Sim assesses EssilorLuxottica's exposure to potential US tariffs",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "SKE"
+      ],
+      "headline": "Skeena Gold & Silver Reports Eskay Creek Project Over 80% Complete",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "AEM"
+      ],
+      "headline": "CNESST Releases Findings on Fatal Workplace Accident at Canadian Malartic Mine",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T18:01",
+      "symbols": [
+       "DPC"
+      ],
+      "headline": "DPC Dash Scales Supply Chain Network to Drive Store Expansion",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T17:01",
+      "symbols": [
+       "CE"
+      ],
+      "headline": "Credem Receives Annual SREP Capital Requirement from ECB",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T17:01",
+      "symbols": [
+       "SUZ"
+      ],
+      "headline": "Suzano Launches 'Pode Contar' Initiative to Enhance Rural Supply Chain Risk Management",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T16:31",
+      "symbols": [
+       "EL"
+      ],
+      "headline": "UBS Lowers Price Target for EssilorLuxottica",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T15:01",
+      "symbols": [
+       "UL"
+      ],
+      "headline": "Unilever Hellas Adopts ENTERSOFTONE IMPACT for B2B E-Invoicing",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Salute": {
+    "n": 379,
+    "r1": -0.09,
+    "r5": 3.24,
+    "r20": 1.61,
+    "pct_above_50d": 58.0,
+    "rvol": 0.78,
+    "leaders": [
+     [
+      "KYMR",
+      43.5
+     ],
+     [
+      "INSM",
+      42.2
+     ],
+     [
+      "STOK",
+      32.7
+     ],
+     [
+      "EMBC",
+      30.0
+     ],
+     [
+      "COGT",
+      29.7
+     ]
+    ],
+    "laggards": [
+     [
+      "WRBY",
+      -19.2
+     ],
+     [
+      "SLS",
+      -28.9
+     ],
+     [
+      "CAPR",
+      -75.7
+     ]
+    ],
+    "etf": {
+     "symbol": "XLV",
+     "r1": -0.56,
+     "r5": 1.39,
+     "r20": 2.2
+    },
+    "news_count": 34,
+    "headlines": [
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "IBRX"
+      ],
+      "headline": "Pomerantz LLP Investigates ImmunityBio, Inc. for Potential Securities Fraud",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T17:01",
+      "symbols": [
+       "CON"
+      ],
+      "headline": "BlackRock Increases Voting Rights in Continental AG",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:32",
+      "symbols": [
+       "WST"
+      ],
+      "headline": "West Pharmaceutical Services Updates Full-Year 2026 Guidance and Increases Dividend",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:31",
+      "symbols": [
+       "MDT"
+      ],
+      "headline": "Wells Fargo Maintains Bullish Rating on Medtronic",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:03",
+      "symbols": [
+       "ASPE"
+      ],
+      "headline": "Aspen Neuroscience to Present at the Piper Sandler 38th Annual Healthcare Conference",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:03",
+      "symbols": [
+       "FMS"
+      ],
+      "headline": "Focus Graphite Commences Pilot-Scale Graphite Processing Program with COREM",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:03",
+      "symbols": [
+       "PCRX"
+      ],
+      "headline": "PharmaCorp Rx Inc. Reports Third Quarter 2026 Financial Results",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T14:02",
+      "symbols": [
+       "AVR"
+      ],
+      "headline": "Anteris Technologies Commences Trading on XETRA",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Tecnologia": {
+    "n": 439,
+    "r1": 0.8,
+    "r5": -2.62,
+    "r20": -11.67,
+    "pct_above_50d": 32.1,
+    "rvol": 0.9,
+    "leaders": [
+     [
+      "GRRR",
+      27.5
+     ],
+     [
+      "FCUV",
+      25.6
+     ],
+     [
+      "GLOB",
+      17.7
+     ],
+     [
+      "RBLX",
+      17.5
+     ],
+     [
+      "ZS",
+      16.7
+     ]
+    ],
+    "laggards": [
+     [
+      "RUM",
+      -27.5
+     ],
+     [
+      "CSIQ",
+      -31.4
+     ],
+     [
+      "AMBA",
+      -34.7
+     ]
+    ],
+    "etf": {
+     "symbol": "XLK",
+     "r1": -0.83,
+     "r5": -4.9,
+     "r20": -18.43
+    },
+    "news_count": 75,
+    "headlines": [
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "HPE"
+      ],
+      "headline": "Bernstein Maintains Hold Rating on Hewlett Packard Enterprise and Adjusts Price Target",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "SPCX"
+      ],
+      "headline": "Mexican Government Seeks Meeting with US Authorities Regarding SpaceX Launch Debris",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T20:32",
+      "symbols": [
+       "STNE"
+      ],
+      "headline": "Susquehanna and Other Analysts Adjust StoneCo Price Targets",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:04",
+      "symbols": [
+       "NATL"
+      ],
+      "headline": "UK Competition Regulator Consults on Brink's Undertakings Regarding NCR Atleos Acquisition",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:03",
+      "symbols": [
+       "ASAN"
+      ],
+      "headline": "Asana, Inc. Scheduled Earnings Release",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "GDDY"
+      ],
+      "headline": "GoDaddy Launches Airo AI Builder for Beauty Professionals",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "PLXS"
+      ],
+      "headline": "Plexus Corp. Deploys Dematic AutoStore System at Romania Facility",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "MDB"
+      ],
+      "headline": "RBC Capital Markets Names MongoDB as Preferred Database Provider for Generative AI",
+      "source": "fiscal.ai"
+     }
+    ]
+   },
+   "Utility": {
+    "n": 76,
+    "r1": 0.62,
+    "r5": 0.77,
+    "r20": 3.84,
+    "pct_above_50d": 72.4,
+    "rvol": 0.81,
+    "leaders": [
+     [
+      "PCG",
+      4.0
+     ],
+     [
+      "GFL",
+      3.6
+     ],
+     [
+      "CLH",
+      3.3
+     ],
+     [
+      "CWT",
+      3.1
+     ],
+     [
+      "MSEX",
+      3.1
+     ]
+    ],
+    "laggards": [
+     [
+      "HNRG",
+      -11.3
+     ],
+     [
+      "NNE",
+      -14.4
+     ],
+     [
+      "FRVO",
+      -16.1
+     ]
+    ],
+    "etf": {
+     "symbol": "XLU",
+     "r1": 0.48,
+     "r5": 0.14,
+     "r20": 2.64
+    },
+    "news_count": 4,
+    "headlines": [
+     {
+      "t": "2026-11-26T16:01",
+      "symbols": [
+       "DUK"
+      ],
+      "headline": "Duke Energy Responds to Power Outages Caused by Thanksgiving Week Storms",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-26T12:31",
+      "symbols": [
+       "AWK"
+      ],
+      "headline": "California American Water Announces 'Operation Gobble 2026' Thanksgiving Initiative",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-25T23:01",
+      "symbols": [
+       "EIX"
+      ],
+      "headline": "Edison International Announces Redemption of Series B Preferred Stock",
+      "source": "fiscal.ai"
+     },
+     {
+      "t": "2026-11-25T22:31",
+      "symbols": [
+       "CEG"
+      ],
+      "headline": "Constellation Completes Divestiture of Legacy Calpine PJM Generation Assets to LS Power",
+      "source": "fiscal.ai"
+     }
+    ]
+   }
+  },
+  "positions": [
+   {
+    "symbol": "AAOI",
+    "sector": "Tecnologia",
+    "qty": "21.642715647",
+    "unrealized_pl": "-198.766657",
+    "metrics": {
+     "close": 37.02,
+     "r1": -3.59,
+     "r5": -9.24,
+     "r20": -54.97,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.83
+    },
+    "headlines": [
+     "Applied Optoelectronics to Present at Raymond James TMT & Consumer Conference"
+    ]
+   },
+   {
+    "symbol": "AXTI",
+    "sector": "Tecnologia",
+    "qty": "27.12035565",
+    "unrealized_pl": "-132.671017",
+    "metrics": {
+     "close": 31.98,
+     "r1": 1.27,
+     "r5": -10.19,
+     "r20": -50.33,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.94
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "CDNA",
+    "sector": "Salute",
+    "qty": "12.96318382",
+    "unrealized_pl": "-16.592875",
+    "metrics": {
+     "close": 75.86,
+     "r1": -2.53,
+     "r5": 1.91,
+     "r20": 5.17,
+     "a50": true,
+     "a200": true,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.48
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "HBAN",
+    "sector": "Finanza",
+    "qty": "-63",
+    "unrealized_pl": "53.55",
+    "metrics": {
+     "close": 14.88,
+     "r1": 0.68,
+     "r5": -0.4,
+     "r20": -5.22,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.79
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "KEY",
+    "sector": "Finanza",
+    "qty": "-46",
+    "unrealized_pl": "51.06",
+    "metrics": {
+     "close": 20.22,
+     "r1": 1.25,
+     "r5": -1.27,
+     "r20": -4.62,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 1.36
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "LITE",
+    "sector": "Tecnologia",
+    "qty": "1.828829733",
+    "unrealized_pl": "-128.396326",
+    "metrics": {
+     "close": 476.58,
+     "r1": -2.16,
+     "r5": -13.52,
+     "r20": -47.85,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.85
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "MRNA",
+    "sector": "Salute",
+    "qty": "4.612564376",
+    "unrealized_pl": "18.658718",
+    "metrics": {
+     "close": 220.84,
+     "r1": -2.88,
+     "r5": 12.22,
+     "r20": 3.12,
+     "a50": true,
+     "a200": true,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.69
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "MU",
+    "sector": "Tecnologia",
+    "qty": "1.384132005",
+    "unrealized_pl": "-167.770632",
+    "metrics": {
+     "close": 601.25,
+     "r1": -4.53,
+     "r5": -14.75,
+     "r20": -38.85,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 1.47
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "MXL",
+    "sector": "Tecnologia",
+    "qty": "19.676898858",
+    "unrealized_pl": "-172.566403",
+    "metrics": {
+     "close": 42.05,
+     "r1": 0.38,
+     "r5": -15.1,
+     "r20": -44.04,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.82
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "SNDK",
+    "sector": "Tecnologia",
+    "qty": "1.229801672",
+    "unrealized_pl": "-909.454298",
+    "metrics": {
+     "close": 73.61,
+     "r1": -5.57,
+     "r5": -24.14,
+     "r20": -58.08,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": true,
+     "rvol": 1.09
+    },
+    "headlines": [
+     "Tradr ETFs Announces Launch of Triple Threat Series Including Memory ETF Featuring SanDisk"
+    ]
+   },
+   {
+    "symbol": "SPY",
+    "sector": "ETF",
+    "qty": "6.708443466",
+    "unrealized_pl": "-192.048568",
+    "metrics": {
+     "close": 716.7,
+     "r1": -0.29,
+     "r5": -1.85,
+     "r20": -7.2,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 1.16
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "SSO",
+    "sector": "ETF",
+    "qty": "76.414499847",
+    "unrealized_pl": "-401.365403",
+    "metrics": {
+     "close": 60.18,
+     "r1": -0.61,
+     "r5": -4.19,
+     "r20": -14.96,
+     "a50": false,
+     "a200": false,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.82
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "TWST",
+    "sector": "Salute",
+    "qty": "9.529972362",
+    "unrealized_pl": "29.924113",
+    "metrics": {
+     "close": 108.07,
+     "r1": -0.74,
+     "r5": -7.12,
+     "r20": -37.69,
+     "a50": false,
+     "a200": true,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.61
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "TXG",
+    "sector": "Tecnologia",
+    "qty": "17.893410706",
+    "unrealized_pl": "-3.674895",
+    "metrics": {
+     "close": 55.68,
+     "r1": -2.78,
+     "r5": -2.44,
+     "r20": -33.41,
+     "a50": false,
+     "a200": true,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.63
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "XLF",
+    "sector": "ETF",
+    "qty": "33.709099269",
+    "unrealized_pl": "-67.24881",
+    "metrics": {
+     "close": 56.51,
+     "r1": 0.71,
+     "r5": 0.16,
+     "r20": 0.68,
+     "a50": true,
+     "a200": true,
+     "hi20": false,
+     "lo20": false,
+     "rvol": 0.92
+    },
+    "headlines": []
+   },
+   {
+    "symbol": "XLP261218C00095000",
+    "sector": null,
+    "qty": "1",
+    "unrealized_pl": "-106",
+    "metrics": {},
+    "headlines": []
+   },
+   {
+    "symbol": "XLV261218C00195000",
+    "sector": null,
+    "qty": "1",
+    "unrealized_pl": "-203",
+    "metrics": {},
+    "headlines": []
+   }
+  ],
+  "themes": {
+   "Intelligenza artificiale": {
+    "news_count": 59,
+    "news_avg_prev": 120.9,
+    "heat": 0.49,
+    "basket_r1": -1.96,
+    "basket_r5": -8.07,
+    "basket_r20": -22.11,
+    "movers": [
+     [
+      "ORCL",
+      -5.1
+     ],
+     [
+      "MU",
+      -4.5
+     ],
+     [
+      "META",
+      3.4
+     ],
+     [
+      "AVGO",
+      -0.1
+     ]
+    ],
+    "headlines": [
+     {
+      "t": "2026-11-26T21:31",
+      "symbols": [
+       "ELV"
+      ],
+      "headline": "Elevance Health Employee Recognized for AI-Driven Operational Excellence"
+     },
+     {
+      "t": "2026-11-26T21:01",
+      "symbols": [
+       "PRX"
+      ],
+      "headline": "Prosus CEO Fabricio Bloisi Expresses Optimism for Tencent's AI Prospects"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "GDDY"
+      ],
+      "headline": "GoDaddy Launches Airo AI Builder for Beauty Professionals"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "MOD"
+      ],
+      "headline": "Modexus Solutions Outlines Strategic Growth Targets at 2026 Investor Day"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "MDB"
+      ],
+      "headline": "RBC Capital Markets Names MongoDB as Preferred Database Provider for Generative AI"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "HON"
+      ],
+      "headline": "Honeywell Deploys Autonomous Cooling Platform at Google Data Center"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "MSFT"
+      ],
+      "headline": "Microsoft AI CEO Mustafa Suleyman Issues Warning on AI Safety Thresholds"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "ANT"
+      ],
+      "headline": "Arete Research Initiates Coverage on Anthropic"
+     }
+    ]
+   },
+   "Energia per l'AI": {
+    "news_count": 6,
+    "news_avg_prev": 12.3,
+    "heat": 0.49,
+    "basket_r1": 0.48,
+    "basket_r5": -6.07,
+    "basket_r20": -14.99,
+    "movers": [
+     [
+      "CEG",
+      -3.9
+     ],
+     [
+      "GEV",
+      -0.8
+     ],
+     [
+      "OKLO",
+      1.4
+     ],
+     [
+      "TLN",
+      1.1
+     ]
+    ],
+    "headlines": [
+     {
+      "t": "2026-11-26T21:01",
+      "symbols": [
+       "ENEL"
+      ],
+      "headline": "Arriva Partners with Enel X to Integrate Electric Buses into Virtual Power Plant"
+     },
+     {
+      "t": "2026-11-26T17:03",
+      "symbols": [
+       "RWE"
+      ],
+      "headline": "Germany Mulls Investment in RWE-controlled Power Grid Operator Amprion"
+     },
+     {
+      "t": "2026-11-26T16:32",
+      "symbols": [
+       "ENRGY"
+      ],
+      "headline": "EnergyVision to Acquire OCTA+ Electricity and Gas Business"
+     },
+     {
+      "t": "2026-11-26T13:01",
+      "symbols": [
+       "ISP"
+      ],
+      "headline": "Intesa Sanpaolo Reaffirms Buy Rating on Prysmian"
+     },
+     {
+      "t": "2026-11-25T22:32",
+      "symbols": [
+       "GDYN"
+      ],
+      "headline": "Insider Sells Shares of Grid Dynamics Holdings"
+     },
+     {
+      "t": "2026-11-25T22:01",
+      "symbols": [
+       "NGG"
+      ],
+      "headline": "Analysts Update Price Targets for National Grid plc"
+     }
+    ]
+   },
+   "Petrolio e gas": {
+    "news_count": 13,
+    "news_avg_prev": 17,
+    "heat": 0.76,
+    "basket_r1": 1.03,
+    "basket_r5": 0.29,
+    "basket_r20": -11.32,
+    "movers": [
+     [
+      "XOM",
+      -0.1
+     ],
+     [
+      "COP",
+      0.3
+     ],
+     [
+      "SLB",
+      3.3
+     ],
+     [
+      "HAL",
+      2.3
+     ]
+    ],
+    "headlines": [
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "BNS"
+      ],
+      "headline": "Scotiabank Releases Analysis on Saskatchewan's Budget Dependency on Oil Prices"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "IVZ"
+      ],
+      "headline": "Invesco Comments on Maritime Shipping Costs and Oil Market Outlook"
+     },
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "TRP"
+      ],
+      "headline": "TC Energy Threatens to Cancel Gas Pipeline Expansion Due to Proposed Alberta Legislation"
+     },
+     {
+      "t": "2026-11-26T19:01",
+      "symbols": [
+       "XOM"
+      ],
+      "headline": "European Parliament Delays Methane Reporting Requirements for Fossil Fuel Importers"
+     },
+     {
+      "t": "2026-11-26T17:01",
+      "symbols": [
+       "TE"
+      ],
+      "headline": "Technip Energies Joins MSGBC Oil, Gas & Power 2026 as Silver Sponsor"
+     },
+     {
+      "t": "2026-11-26T14:32",
+      "symbols": [
+       "ENB"
+      ],
+      "headline": "Enbridge in Discussions to Sell Part of its Crude Oil Pipeline Network for CA$1.5 Billion"
+     },
+     {
+      "t": "2026-11-26T14:02",
+      "symbols": [
+       "LGN"
+      ],
+      "headline": "Logan Energy Corp. Files Information Circular and Announces Board and Management Additions for Logan Oil Corp."
+     },
+     {
+      "t": "2026-11-26T13:01",
+      "symbols": [
+       "CVX"
+      ],
+      "headline": "Chevron Partners with TPAO for Offshore Exploration in Guinea Bissau"
+     }
+    ]
+   },
+   "Guerra e difesa": {
+    "news_count": 6,
+    "news_avg_prev": 18.2,
+    "heat": 0.33,
+    "basket_r1": 1.22,
+    "basket_r5": 2.26,
+    "basket_r20": -0.1,
+    "movers": [
+     [
+      "RTX",
+      0.4
+     ],
+     [
+      "GLD",
+      0.6
+     ],
+     [
+      "GD",
+      2.5
+     ],
+     [
+      "LMT",
+      2.1
+     ]
+    ],
+    "headlines": [
+     {
+      "t": "2026-11-26T17:32",
+      "symbols": [
+       "PTSB"
+      ],
+      "headline": "Irish High Court Refuses to Sanction BAWAG Group's Acquisition of Permanent TSB"
+     },
+     {
+      "t": "2026-11-26T16:32",
+      "symbols": [
+       "BA."
+      ],
+      "headline": "BAE Systems Secures $90 Million CV90 Simulators Order in Denmark"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "BAB"
+      ],
+      "headline": "Babcock International Signs £8.7 Billion Submarine Services Gateway Agreement"
+     },
+     {
+      "t": "2026-11-26T13:01",
+      "symbols": [
+       "HAG"
+      ],
+      "headline": "Hensoldt and Argus Interception Expand Drone Defense Partnership"
+     },
+     {
+      "t": "2026-11-26T08:02",
+      "symbols": [
+       "ZRE"
+      ],
+      "headline": "ZREMB-CHOJNICE S.A. Signs Term Sheet for Major Defense Industry Contract"
+     },
+     {
+      "t": "2026-11-25T23:01",
+      "symbols": [
+       "AAL"
+      ],
+      "headline": "American Airlines to Operate Commemorative Flight for WWII Veterans"
+     }
+    ]
+   },
+   "Tassi e Fed": {
+    "news_count": 5,
+    "news_avg_prev": 8.1,
+    "heat": 0.62,
+    "basket_r1": 0.82,
+    "basket_r5": 0.35,
+    "basket_r20": 1.32,
+    "movers": [
+     [
+      "KRE",
+      0.1
+     ],
+     [
+      "IWM",
+      0.6
+     ],
+     [
+      "ITB",
+      2.9
+     ],
+     [
+      "TLT",
+      0.9
+     ]
+    ],
+    "headlines": [
+     {
+      "t": "2026-11-26T16:32",
+      "symbols": [
+       "GLE"
+      ],
+      "headline": "Société Générale Analysts Comment on Canadian Dollar and Rate Hike Expectations"
+     },
+     {
+      "t": "2026-11-26T16:32",
+      "symbols": [
+       "GLE"
+      ],
+      "headline": "Société Générale Research Team Issues Commentary on US Monetary Policy"
+     },
+     {
+      "t": "2026-11-26T13:02",
+      "symbols": [
+       "9432"
+      ],
+      "headline": "NTT UD REIT Investment Determines Interest Rate on 1.5 Billion Yen Loan"
+     },
+     {
+      "t": "2026-11-26T08:02",
+      "symbols": [
+       "SNOR"
+      ],
+      "headline": "SpareBank 1 Nordmøre Interest Rate Adjustment Notice"
+     },
+     {
+      "t": "2026-11-25T23:01",
+      "symbols": [
+       "SAIL"
+      ],
+      "headline": "BTIG Analyst Raises SailPoint Price Target"
+     }
+    ]
+   },
+   "Cina e dazi": {
+    "news_count": 18,
+    "news_avg_prev": 19.1,
+    "heat": 0.94,
+    "basket_r1": 0.23,
+    "basket_r5": 0.89,
+    "basket_r20": -3.57,
+    "movers": [
+     [
+      "NVDA",
+      -3.9
+     ],
+     [
+      "FXI",
+      -0.4
+     ],
+     [
+      "JD",
+      2.5
+     ],
+     [
+      "BABA",
+      1.6
+     ]
+    ],
+    "headlines": [
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "CWK"
+      ],
+      "headline": "Cushman & Wakefield Releases Report on Life Sciences Real Estate Demand in China"
+     },
+     {
+      "t": "2026-11-26T18:01",
+      "symbols": [
+       "DPC"
+      ],
+      "headline": "DPC Dash Scales Supply Chain Network to Drive Store Expansion"
+     },
+     {
+      "t": "2026-11-26T17:32",
+      "symbols": [
+       "DOLE"
+      ],
+      "headline": "Dole plc Launches Co-Branded 'Little Prince' Banana Product in China"
+     },
+     {
+      "t": "2026-11-26T14:31",
+      "symbols": [
+       "DELL"
+      ],
+      "headline": "Dell Technologies Suspends Server Shipments to Select Southeast Asian Markets"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "RIO"
+      ],
+      "headline": "Rio Tinto Enters Partnership with XCMG at bauma CHINA 2026"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "601398"
+      ],
+      "headline": "ICBC Included in FSB List of Global Systemically Important Banks"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "AZN"
+      ],
+      "headline": "AstraZeneca and HUTCHMED Seek Regulatory Approval for Combination Therapy in China"
+     },
+     {
+      "t": "2026-11-26T14:01",
+      "symbols": [
+       "BABA"
+      ],
+      "headline": "Alibaba Qwen3-32B Model Successfully Tested for In-Orbit Training"
+     }
+    ]
+   },
+   "Cripto": {
+    "news_count": 5,
+    "news_avg_prev": 11.1,
+    "heat": 0.45,
+    "basket_r1": 1.13,
+    "basket_r5": -7.43,
+    "basket_r20": -27.16,
+    "movers": [
+     [
+      "MARA",
+      0.2
+     ],
+     [
+      "HOOD",
+      0.2
+     ],
+     [
+      "MSTR",
+      3.1
+     ],
+     [
+      "RIOT",
+      1.9
+     ]
+    ],
+    "headlines": [
+     {
+      "t": "2026-11-26T19:02",
+      "symbols": [
+       "BEN"
+      ],
+      "headline": "Franklin Templeton to Add Hyperliquid (HYPE) to Crypto ETF"
+     },
+     {
+      "t": "2026-11-26T16:31",
+      "symbols": [
+       "BSEL"
+      ],
+      "headline": "Banca Sella S.p.A. Joins Consortium for Euro Stablecoin Development"
+     },
+     {
+      "t": "2026-11-26T16:31",
+      "symbols": [
+       "HSBC"
+      ],
+      "headline": "HSBC's Hong Kong Dollar Stablecoin 'RedCoin' Reaches 100,000 Users"
+     },
+     {
+      "t": "2026-11-26T14:02",
+      "symbols": [
+       "STAN"
+      ],
+      "headline": "Standard Chartered's Zodia Custody Unit Suffers Security Breach"
+     },
+     {
+      "t": "2026-11-26T13:01",
+      "symbols": [
+       "V"
+      ],
+      "headline": "Visa Announces Plans for New 'Visa Flex Card' in Partnership with NBX"
+     }
+    ]
+   }
+  },
+  "red_flags": {
+   "IBRX": {
+    "grave": 1,
+    "attenzione": 0,
+    "headlines": [
+     "Pomerantz LLP Investigates ImmunityBio, Inc. for Potential Securities Fraud"
+    ]
+   },
+   "AER": {
+    "grave": 1,
+    "attenzione": 0,
+    "headlines": [
+     "Norse Atlantic Airways Faces Potential Bankruptcy and Flight Suspension"
+    ]
+   },
+   "PANW": {
+    "grave": 1,
+    "attenzione": 0,
+    "headlines": [
+     "Palo Alto Networks Sued by Former Executive Over Alleged Accounting Fraud"
+    ]
+   }
+  },
+  "news_total": 951,
+  "universe": 4208
+ },
+ "assessment": {
+  "market": {
+   "tone": 0,
+   "regime_change_risk": "alto",
+   "summary": "Borsa USA chiusa per il Ringraziamento: i prezzi sono quelli di mercoledì (S&P 500 -0,25% dopo un calo fino a -3,2%). Nessuna notizia nuova rilevante. Domani mezza giornata con pochi scambi; restano inflazione alta, rialzo tassi Fed atteso il 9 dicembre e dazi proposti fino al 20%."
+  },
+  "sectors": {
+   "Tecnologia": {
+    "tone": -1,
+    "trend_change_risk": "alto",
+    "deep_dive": true,
+    "drivers": "Oracle -5,1%, Micron -4,5%, Nvidia -3,9%; le banche di CoreWeave vendono un prestito da 4,5 miliardi $ garantito da chip per Meta (segnale di tensione sui debiti AI); tassi più alti pesano sulle aziende di crescita.",
+    "why": "+0,8% la mediana, ma XLK -4,9% in 5 giorni e -11,7% in 20; solo il 32% dei titoli sopra la media a 50 giorni: i grandi nomi AI restano deboli."
+   },
+   "Salute": {
+    "tone": 1,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Effetto dell'acquisto di Insmed da parte di Sanofi; Bayer prende in licenza un farmaco cinese per fino a 3,25 miliardi $.",
+    "why": "Fermo oggi (-0,1%) ma +3,2% in 5 giorni, 58% sopra la media a 50 giorni."
+   },
+   "Immobiliare": {
+    "tone": 1,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "Titoli di Stato in recupero nel pomeriggio (TLT +0,9%).",
+    "why": "+1,1% oggi, 65% sopra la media a 50 giorni."
+   },
+   "Utility": {
+    "tone": 1,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "Approvato un aumento temporaneo delle tariffe di PG&E per il 2027 (+4%).",
+    "why": "+0,6% oggi, 72% sopra la media a 50 giorni."
+   },
+   "Altro": {
+    "tone": 0,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Gruppo misto.",
+    "why": "+1,3% oggi."
+   },
+   "Consumi di base": {
+    "tone": 1,
+    "trend_change_risk": "basso",
+    "deep_dive": false,
+    "drivers": "Rifugio difensivo.",
+    "why": "+1,7% oggi, +4,5% in 20 giorni, 74% sopra la media a 50 giorni."
+   },
+   "Consumi discrezionali": {
+    "tone": 1,
+    "trend_change_risk": "medio",
+    "deep_dive": true,
+    "drivers": "Abercrombie +20%, Gap +17%; venerdì il Black Friday; nuovi dazi del 20% sono un rischio per chi importa.",
+    "why": "+1% oggi, +4% in 20 giorni, 63% sopra la media a 50 giorni; da capire l'effetto dei nuovi dazi."
+   },
+   "Industria": {
+    "tone": 0,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Axon +14%.",
+    "why": "+1,1% oggi, solo il 41% sopra la media a 50 giorni."
+   },
+   "Comunicazioni": {
+    "tone": 0,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Meta +3,4%.",
+    "why": "+0,8% oggi."
+   },
+   "Finanza": {
+    "tone": 0,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Banche stabili; tassi più alti aiutano i margini ma pesano sui prestiti.",
+    "why": "+0,4% oggi, XLF +0,2% in 5 giorni, solo il 34% sopra la media a 50 giorni."
+   },
+   "Energia": {
+    "tone": -1,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Servizi petroliferi in rialzo (SLB +3,3%); Chevron sotto indagine per emissioni di metano all'impianto Gorgon.",
+    "why": "+1,5% oggi ma -12,6% in 20 giorni, solo il 22% sopra la media a 50 giorni."
+   },
+   "Materiali": {
+    "tone": 0,
+    "trend_change_risk": "medio",
+    "deep_dive": false,
+    "drivers": "Rimbalzo diffuso.",
+    "why": "+2,3% oggi ma -10,3% in 20 giorni."
+   }
+  },
+  "themes": {
+   "Intelligenza artificiale": {
+    "tone": -2,
+    "outlook": "in indebolimento",
+    "impact": "Oracle -5,1%, Micron -4,5%, Nvidia -3,9%; Meta +3,4%. Vendita del prestito CoreWeave garantito da chip: tocca chi finanzia i data center.",
+    "why": "Paniere -2% oggi, -8,1% in 5 giorni, -22% in 20. Il rimbalzo di lunedì è svanito; tassi più alti e debiti AI (citati anche dalla Fed) pesano."
+   },
+   "Energia per l'AI": {
+    "tone": -1,
+    "outlook": "stabile",
+    "impact": "Constellation -3,9%, GE Vernova -0,8%; Oklo e Talen in leggero rialzo.",
+    "why": "Paniere +0,5% oggi, -15% in 20 giorni; poche notizie (0,5x)."
+   },
+   "Petrolio e gas": {
+    "tone": 0,
+    "outlook": "stabile",
+    "impact": "SLB +3,3%, Halliburton +2,3%; Chevron sotto indagine ambientale in Australia.",
+    "why": "Paniere +1% oggi, +0,3% in 5 giorni: si stabilizza."
+   },
+   "Guerra e difesa": {
+    "tone": 1,
+    "outlook": "stabile",
+    "impact": "General Dynamics +2,5%, Lockheed +2,1%; contratti militari in Europa (Germania, Grecia).",
+    "why": "Paniere +1,2% oggi, +2,3% in 5 giorni: tiene bene nel calo del tech."
+   },
+   "Tassi e Fed": {
+    "tone": -1,
+    "outlook": "in rafforzamento",
+    "impact": "Aziende di crescita e tecnologia le più esposte; costruttori +2,9% e titoli di Stato +0,9% nel recupero pomeridiano.",
+    "why": "Fatto confermato: inflazione di fondo 3,3% sopra le attese e PIL +4,3%: il rialzo dei tassi di dicembre è quasi certo per i mercati."
+   },
+   "Cina e dazi": {
+    "tone": -1,
+    "outlook": "in rafforzamento",
+    "impact": "Nuovi dazi del 20% annunciati; proposti dazi del 10% sugli aerei brasiliani (Embraer). Importatori e distributori esposti.",
+    "why": "Il tema torna caldo con i nuovi dazi, anche se il paniere Cina è fermo (+0,2%). Dettagli dei dazi ancora da chiarire."
+   },
+   "Cripto": {
+    "tone": -1,
+    "outlook": "stabile",
+    "impact": "Strategy +3,1%, Riot +1,9%.",
+    "why": "Paniere +1,1% oggi ma -27% in 20 giorni; quasi nessuna notizia."
+   }
+  },
+  "positions": {
+   "AAOI": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Perde circa 199 $, -9% in 5 giorni."
+   },
+   "AXTI": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Perde circa 131 $, +1,3% oggi."
+   },
+   "CDNA": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Perde circa 17 $; ARK riduce la sua quota."
+   },
+   "HBAN": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Guadagna circa 54 $."
+   },
+   "KEY": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Guadagna circa 46 $."
+   },
+   "LITE": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Perde circa 128 $, -13,5% in 5 giorni."
+   },
+   "MRNA": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Guadagna circa 21 $, +12% in 5 giorni."
+   },
+   "MU": {
+    "hold_bias": "chiudere",
+    "why": "Borsa chiusa, invariato da mercoledì. -4,5% oggi, -14,8% in 5 giorni, perde circa 169 $; tema AI e tassi alti contro."
+   },
+   "MXL": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Perde circa 173 $, ferma oggi."
+   },
+   "SNDK": {
+    "hold_bias": "chiudere",
+    "why": "Borsa chiusa, invariato da mercoledì. -5,6% oggi, -24% in 5 giorni: perde circa 909 $, la perdita più grande; un dirigente contabile vende azioni."
+   },
+   "SPY": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Perde circa 194 $; il mercato ha recuperato quasi tutto il calo di metà giornata."
+   },
+   "SSO": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Raddoppia l'S&P 500: perde circa 399 $."
+   },
+   "TWST": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Guadagna circa 31 $."
+   },
+   "TXG": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. In pari (-4 $)."
+   },
+   "XLF": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Perde circa 66 $; finanza stabile."
+   },
+   "XLP261218C00095000": {
+    "hold_bias": "tenere",
+    "why": "Borsa chiusa, invariato da mercoledì. Opzione sui beni di prima necessità: perde 106 $ ma il settore è tra i più forti (+1,7% oggi)."
+   },
+   "XLV261218C00195000": {
+    "hold_bias": "neutro",
+    "why": "Borsa chiusa, invariato da mercoledì. Opzione sulla sanità: perde 203 $, XLV +1,4% in 5 giorni."
+   }
+  },
+  "watch": [
+   "NVDA",
+   "MU",
+   "ORCL",
+   "CRWV",
+   "META",
+   "ANF",
+   "XLP",
+   "XLY",
+   "TLT",
+   "SNDK"
+  ],
+  "assessed_at": "2026-11-26T21:36:58+00:00"
+ }
+}
