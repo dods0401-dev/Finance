@@ -1,16 +1,14 @@
 # Market context
 
-**Updated:** 2026-11-27 00:06 UTC (8-hour refresh).
+**Updated:** 2026-11-27 00:06 UTC (8-hour refresh). Verify against official schedules /
 company IR before trading.
 
 ## Next 48 hours (US, times ET)
-
 **Fri 27 Nov** — **half day: stocks close 13:00 ET (eligible options 13:15), bonds 14:00 ET.** Black Friday shopping headlines;
 thin volume can exaggerate moves. No major US data scheduled.
 - S&P 500 futures traded higher during Thanksgiving: about +0.5% to ~7,235 (BeInCrypto) — a mild positive start.
 
 **Sat 28 – Sun 29 Nov** — closed. Next week: Fed decision on 9 Dec is the big event (hike almost fully priced).
-
 
 ## What happened Wednesday 25 Nov
 - Close: S&P 500 7,182.78 (-0.25%) after falling as much as -3.2% intraday; Nasdaq -0.62%; Dow +0.33% to 50,183 — dip buyers
