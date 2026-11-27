@@ -1,15 +1,16 @@
 # Market context
 
-**Updated:** 2026-11-26 16:06 UTC (8-hour refresh; US holiday, still no new dated market news found). Verify against official schedules /
+**Updated:** 2026-11-27 00:06 UTC (8-hour refresh).
 company IR before trading.
 
 ## Next 48 hours (US, times ET)
-**Thu 26 Nov** — US markets closed (Thanksgiving).
 
-**Fri 27 Nov** — **half day: stocks close 13:00 ET, bonds 14:00 ET.** Black Friday shopping headlines;
+**Fri 27 Nov** — **half day: stocks close 13:00 ET (eligible options 13:15), bonds 14:00 ET.** Black Friday shopping headlines;
 thin volume can exaggerate moves. No major US data scheduled.
+- S&P 500 futures traded higher during Thanksgiving: about +0.5% to ~7,235 (BeInCrypto) — a mild positive start.
 
-**Next week** — Fed decision on 9 Dec is the big event (hike almost fully priced).
+**Sat 28 – Sun 29 Nov** — closed. Next week: Fed decision on 9 Dec is the big event (hike almost fully priced).
+
 
 ## What happened Wednesday 25 Nov
 - Close: S&P 500 7,182.78 (-0.25%) after falling as much as -3.2% intraday; Nasdaq -0.62%; Dow +0.33% to 50,183 — dip buyers
@@ -32,8 +33,8 @@ thin volume can exaggerate moves. No major US data scheduled.
    https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-25-220645995.html
 3. World stocks tumble as Trump tariffs rattle markets, AI rally fades — The Korea Times, 26 Nov 2026,
    https://www.koreatimes.co.kr/world/20261126/world-stocks-tumble-as-trump-tariffs-rattle-markets-ai-rally-fades
-4. Financial & forex market recap, 25 Nov 2026 — Babypips,
-   https://www.babypips.com/news/daily-financial-forex-market-recap-2026-11-25
+4. A green Black Friday? Futures rise after Thanksgiving close as Nvidia faces test — BeInCrypto, 26–27 Nov 2026,
+   https://beincrypto.com/sp-500-futures-black-friday-nvidia/
 5. PCE inflation hits 3.8%, Q3 GDP revised up to 4.3% — Benzinga, 25 Nov 2026,
    https://www.benzinga.com/markets/economic-data/26/11/63619838/pce-inflation-october-gdp-second-estimate
 
