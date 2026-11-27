@@ -1,6 +1,6 @@
 # Market context
 
-**Updated:** 2026-11-27 00:06 UTC (8-hour refresh). Verify against official schedules /
+**Updated:** 2026-11-27 08:06 UTC (8-hour refresh; no dated Friday Asia or futures reports found yet). Verify against official schedules /
 company IR before trading.
 
 ## Next 48 hours (US, times ET)
