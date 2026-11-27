@@ -1,44 +1,47 @@
 # Market context
 
-**Updated:** 2026-11-27 08:06 UTC (8-hour refresh; no dated Friday Asia or futures reports found yet). Verify against official schedules /
-company IR before trading.
+**Updated:** 2026-11-27 16:06 UTC (8-hour refresh). Intraday snapshots; verify against
+official schedules / company IR before trading.
 
 ## Next 48 hours (US, times ET)
-**Fri 27 Nov** — **half day: stocks close 13:00 ET (eligible options 13:15), bonds 14:00 ET.** Black Friday shopping headlines;
-thin volume can exaggerate moves. No major US data scheduled.
-- S&P 500 futures traded higher during Thanksgiving: about +0.5% to ~7,235 (BeInCrypto) — a mild positive start.
+**Fri 27 Nov (rest of session)** — half day: stocks close 13:00 ET (eligible options 13:15), bonds 14:00 ET. Black Friday.
 
-**Sat 28 – Sun 29 Nov** — closed. Next week: Fed decision on 9 Dec is the big event (hike almost fully priced).
+**Sat 28 – Sun 29 Nov** — markets closed.
 
-## What happened Wednesday 25 Nov
-- Close: S&P 500 7,182.78 (-0.25%) after falling as much as -3.2% intraday; Nasdaq -0.62%; Dow +0.33% to 50,183 — dip buyers
-  stepped in before the holiday.
-- **October PCE 3.8% a year (core 3.3%, above ~3.2%)**, Q3 GDP revised up to 4.3% → Fed hike on 9 Dec seen as almost certain.
-- **Tariff proposals (not enacted)**: USTR proposed new Section 301 tariffs on 14 trading partners, up to 20% on China and
-  reportedly 15% on the EU and Japan (rates for non-China partners differ by source).
-- Fed Beige Book: 8 of 12 districts growing slightly to moderately; rising input costs (energy, transport, health, insurance, tariffs).
-- Nvidia -3.9% to $149.30 (was -8% intraday), about -27% in November.
+**Coming up** — early-December data (ISM surveys, November jobs report; dates to confirm) and the **Fed decision on 9 Dec**
+(a rate hike is almost fully priced after hot October inflation).
+
+## Today, Friday 27 Nov
+- Holiday-thin gains: around midday Dow about +0.9%, S&P 500 about +1.1%, Nasdaq about +1.2/+1.4%;
+  pre-open futures had been stronger (S&P +1.7%, Nasdaq 100 +2.4%). Nvidia gave back early gains; gold and silver up.
+- On the week the S&P 500 is up nearly 4%, Dow and Nasdaq more than 4% — after the previous week's -8.6%.
+
+## Recap of the week
+- Mon: Nvidia reinstated Jensen Huang → NVDA +31.5%, S&P 500 +4.7% (best day since April 2025).
+- Tue: chips sold again; Dell beat and raised its outlook after the close.
+- Wed: hot October inflation (core PCE 3.3%), GDP 4.3%, tariff proposals up to 20% → S&P 500 -3.2% intraday, closed -0.25%.
+- Thu: closed (Thanksgiving).
 
 ## Risk mood (3 lines)
-- Strong intraday recovery shows buyers still active, but tech/AI keeps weakening (AI basket ~-22% in 20 days).
-- Hot inflation + likely hike + tariff proposals = higher-rates, higher-costs backdrop; VIX ~28.
-- Friday's half day is thin: avoid reading too much into its moves.
+- Partial recovery after the AI crash, but tech remains below key averages and Nvidia is still ~-27% in November.
+- Higher rates are coming (Fed hike expected 9 Dec) and tariff proposals add cost pressure.
+- Today's thin half day says little; Monday's first full session of December is the real test.
 
 ## Headlines that matter for day trading
-1. Dow erases losses to end positive, S&P 500 and Nasdaq recover ground amid AI sell-off — Yahoo Finance, 25 Nov 2026,
-   https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-25-dow-sp-500-nasdaq-pce-inflation-data-091428237.html
-2. Nvidia slides 3.9% as the market considers hot PCE inflation and new tariff proposals — Yahoo Finance, 25 Nov 2026,
-   https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-25-220645995.html
-3. World stocks tumble as Trump tariffs rattle markets, AI rally fades — The Korea Times, 26 Nov 2026,
-   https://www.koreatimes.co.kr/world/20261126/world-stocks-tumble-as-trump-tariffs-rattle-markets-ai-rally-fades
-4. A green Black Friday? Futures rise after Thanksgiving close as Nvidia faces test — BeInCrypto, 26–27 Nov 2026,
-   https://beincrypto.com/sp-500-futures-black-friday-nvidia/
+1. Dow, S&P 500, Nasdaq gain on Black Friday as AI jitters steady — Yahoo Finance, 27 Nov 2026,
+   https://finance.yahoo.com/markets/live/stock-market-today-firday-november-27-dow-sp-500-nasdaq-black-friday-holiday-091152065.html
+2. Markets off to a strong Black Friday start — 24/7 Wall St., 27 Nov 2026,
+   https://247wallst.com/investing/2026/11/27/stock-market-today-markets-off-to-a-strong-black-friday-start/
+3. Markets reopen for shortened Black Friday trading — TipRanks, 27 Nov 2026,
+   https://www.tipranks.com/news/stock-market-today-nov-27-markets-reopen-for-shortened-black-friday-trading
+4. Stock market news for Nov 27, 2026 (Wednesday recap) — Zacks via Yahoo Finance, 27 Nov 2026,
+   https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-27-075400531.html
 5. PCE inflation hits 3.8%, Q3 GDP revised up to 4.3% — Benzinga, 25 Nov 2026,
    https://www.benzinga.com/markets/economic-data/26/11/63619838/pce-inflation-october-gdp-second-estimate
 
 ## Practical notes (from existing rules, no change)
-- Friday half day: flat-by-close moves to ~12:50 ET; the entry window is shorter.
-- Tariff headlines can hit importers/retailers suddenly; check news before any retail setup.
+- Today: flat-by-close at ~12:50 ET; short entry window, thin volume.
+- Big weekly swings (−8.6% then about +4%) mean wide daily ranges: the max-loss rule allows fewer shares.
 
 ## Proposals for the user
 - None this run.
