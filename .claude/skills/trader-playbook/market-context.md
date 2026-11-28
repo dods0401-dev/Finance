@@ -1,47 +1,43 @@
 # Market context
 
-**Updated:** 2026-11-27 16:06 UTC (8-hour refresh). Intraday snapshots; verify against
-official schedules / company IR before trading.
+**Updated:** 2026-11-28 00:06 UTC (8-hour refresh). Verify against official schedules /
+company IR before trading.
 
-## Next 48 hours (US, times ET)
-**Fri 27 Nov (rest of session)** — half day: stocks close 13:00 ET (eligible options 13:15), bonds 14:00 ET. Black Friday.
+## Next 48 hours
+**Sat 28 – Sun 29 Nov** — US markets closed. Watch weekend headlines on Black Friday sales, tariffs and the Fed.
 
-**Sat 28 – Sun 29 Nov** — markets closed.
+**Mon 30 Nov** (just after the window) — first full session after the holiday.
 
-**Coming up** — early-December data (ISM surveys, November jobs report; dates to confirm) and the **Fed decision on 9 Dec**
-(a rate hike is almost fully priced after hot October inflation).
+**Next week** — November jobs report (date to confirm, normally the first Friday: 4 Dec) and early-December surveys;
+then the **Fed decision on 9 Dec** (traders heavily favour a rate increase, per CME FedWatch).
 
-## Today, Friday 27 Nov
-- Holiday-thin gains: around midday Dow about +0.9%, S&P 500 about +1.1%, Nasdaq about +1.2/+1.4%;
-  pre-open futures had been stronger (S&P +1.7%, Nasdaq 100 +2.4%). Nvidia gave back early gains; gold and silver up.
-- On the week the S&P 500 is up nearly 4%, Dow and Nasdaq more than 4% — after the previous week's -8.6%.
-
-## Recap of the week
-- Mon: Nvidia reinstated Jensen Huang → NVDA +31.5%, S&P 500 +4.7% (best day since April 2025).
-- Tue: chips sold again; Dell beat and raised its outlook after the close.
-- Wed: hot October inflation (core PCE 3.3%), GDP 4.3%, tariff proposals up to 20% → S&P 500 -3.2% intraday, closed -0.25%.
-- Thu: closed (Thanksgiving).
+## What happened Friday 27 Nov (half day)
+- Close: **S&P 500 7,297.49 (+1.60%)**, Dow 50,774.94 (+1.18%), Nasdaq Composite 24,129.50 (+2.31%).
+- **Week: S&P 500 about +5.6%, best week since April 2025**, one week after -8.6%; Dow's best week since 2022 (one source says
+  Oct 2022); Nasdaq about +6.7%. One Yahoo figure of +1.7% for the week conflicts with the others.
+- Leaders: Sandisk +16%, Dell +6.7%, Amazon +4%, Anthropic about +11%; very low volume (half day).
+- The S&P 500 is still more than 10% below last month's record.
 
 ## Risk mood (3 lines)
-- Partial recovery after the AI crash, but tech remains below key averages and Nvidia is still ~-27% in November.
-- Higher rates are coming (Fed hike expected 9 Dec) and tariff proposals add cost pressure.
-- Today's thin half day says little; Monday's first full session of December is the real test.
+- Strong relief week after the AI crash; breadth improved (many more 20-day highs than lows on Friday).
+- But volume was thin, rates are heading higher (December hike nearly priced) and tariff proposals are pending.
+- Monday's full session and next week's jobs report are the tests of whether the rebound holds.
 
 ## Headlines that matter for day trading
-1. Dow, S&P 500, Nasdaq gain on Black Friday as AI jitters steady — Yahoo Finance, 27 Nov 2026,
+1. Dow, S&P 500, Nasdaq end holiday week with gains as AI stocks rebound — Yahoo Finance, 27 Nov 2026,
    https://finance.yahoo.com/markets/live/stock-market-today-firday-november-27-dow-sp-500-nasdaq-black-friday-holiday-091152065.html
-2. Markets off to a strong Black Friday start — 24/7 Wall St., 27 Nov 2026,
-   https://247wallst.com/investing/2026/11/27/stock-market-today-markets-off-to-a-strong-black-friday-start/
-3. Markets reopen for shortened Black Friday trading — TipRanks, 27 Nov 2026,
-   https://www.tipranks.com/news/stock-market-today-nov-27-markets-reopen-for-shortened-black-friday-trading
-4. Stock market news for Nov 27, 2026 (Wednesday recap) — Zacks via Yahoo Finance, 27 Nov 2026,
-   https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-27-075400531.html
-5. PCE inflation hits 3.8%, Q3 GDP revised up to 4.3% — Benzinga, 25 Nov 2026,
-   https://www.benzinga.com/markets/economic-data/26/11/63619838/pce-inflation-october-gdp-second-estimate
+2. Unusually large Black Friday gain caps best week for stocks since April 2025 — TheStreet Pro, 27 Nov 2026,
+   https://pro.thestreet.com/market-commentary/not-your-typical-black-friday-unusually-large-gain-caps-best-week-for-stocks-since-april-2025
+3. S&P 500 posts weekly gains as Wall Street rebounds from steep losses — Seeking Alpha via TradingView, 27 Nov 2026,
+   https://www.tradingview.com/news/seekingalpha:4316117dc094b:0-s-p-500-posts-weekly-gains-as-wall-street-rebounds-from-steep-losses/
+4. Wall Street rallies on Black Friday as S&P 500 caps best week since April 2025 — N Globe News, 27 Nov 2026,
+   https://nglobenews.com/en/article/us-stocks-black-friday-close-best-week-2026-11-27
+5. Dow gains nearly 600 points in half-day session; Anthropic jumps nearly 11% — TradingKey, 27 Nov 2026,
+   https://www.tradingkey.com/analysis/stocks/us-stocks/262325775-nasdaq-leads-black-friday-rally-dow-posts-best-week-since-2022-tradingkey
 
 ## Practical notes (from existing rules, no change)
-- Today: flat-by-close at ~12:50 ET; short entry window, thin volume.
-- Big weekly swings (−8.6% then about +4%) mean wide daily ranges: the max-loss rule allows fewer shares.
+- After a +5.6% week built on thin volume, Monday gaps can reverse: wait for the opening range, keep the stop.
+- Daily ranges are still wide (VIX ~24): the max-loss rule allows fewer shares.
 
 ## Proposals for the user
 - None this run.
