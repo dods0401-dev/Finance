@@ -1,6 +1,6 @@
 # Market context
 
-**Updated:** 2026-11-28 00:06 UTC (8-hour refresh). Verify against official schedules /
+**Updated:** 2026-11-28 08:06 UTC (8-hour refresh). Verify against official schedules /
 company IR before trading.
 
 ## Next 48 hours
@@ -8,8 +8,13 @@ company IR before trading.
 
 **Mon 30 Nov** (just after the window) — first full session after the holiday.
 
-**Next week** — November jobs report (date to confirm, normally the first Friday: 4 Dec) and early-December surveys;
-then the **Fed decision on 9 Dec** (traders heavily favour a rate increase, per CME FedWatch).
+**Next week (30 Nov – 4 Dec)** — per Newsquawk and calendars:
+- Tue 1 Dec: ISM manufacturing (expected ~55.2 vs 55.5). Earnings: Marvell, Okta.
+- Wed 2 Dec: Salesforce, Canadian banks.
+- Thu 3 Dec: ISM services; RBC, TD.
+- **Fri 4 Dec: November jobs report** (Barclays sees ~+100K; hourly pay +0.3% m/m, 3.0% y/y).
+- **Nvidia hearings** flagged during the week (details to confirm).
+Then the **Fed decision on 9 Dec** (traders heavily favour a rate increase, per CME FedWatch).
 
 ## What happened Friday 27 Nov (half day)
 - Close: **S&P 500 7,297.49 (+1.60%)**, Dow 50,774.94 (+1.18%), Nasdaq Composite 24,129.50 (+2.31%).
@@ -30,8 +35,8 @@ then the **Fed decision on 9 Dec** (traders heavily favour a rate increase, per 
    https://pro.thestreet.com/market-commentary/not-your-typical-black-friday-unusually-large-gain-caps-best-week-for-stocks-since-april-2025
 3. S&P 500 posts weekly gains as Wall Street rebounds from steep losses — Seeking Alpha via TradingView, 27 Nov 2026,
    https://www.tradingview.com/news/seekingalpha:4316117dc094b:0-s-p-500-posts-weekly-gains-as-wall-street-rebounds-from-steep-losses/
-4. Wall Street rallies on Black Friday as S&P 500 caps best week since April 2025 — N Globe News, 27 Nov 2026,
-   https://nglobenews.com/en/article/us-stocks-black-friday-close-best-week-2026-11-27
+4. Week in focus Nov 30th–Dec 4th 2026: US NFP, ISM PMIs, NVDA hearings — Newsquawk, Nov 2026,
+   https://www.newsquawk.com/headlines/week-in-focus-nov-30th-dec-4th-2026-highlights-include-us-nfp-ism-pmis-nvda-hearings-and-the-spanish-election
 5. Dow gains nearly 600 points in half-day session; Anthropic jumps nearly 11% — TradingKey, 27 Nov 2026,
    https://www.tradingkey.com/analysis/stocks/us-stocks/262325775-nasdaq-leads-black-friday-rally-dow-posts-best-week-since-2022-tradingkey
 
